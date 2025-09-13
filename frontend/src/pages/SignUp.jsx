@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { Link, Navigate } from "react-router-dom";
+import { Eye, EyeOff, Mail, Lock, User, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
+import { useAuthStore } from "../store/useAuthStore";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,14 +14,33 @@ const Signup = () => {
     confirmPassword: "",
   });
 
-  const handleSubmit = (e) => {
+  const { signUp, isSigningUp } = useAuthStore();
+
+  const validateForm = () => {
+    if (!formData.fullName.trim()) return toast.error("Full name is required"); // .trim():- Removes any leading and trailing whitespace from the string. For example:- " John Doe ".trim() = "John Doe"
+    if (!formData.email.trim()) return toast.error("Email is required");
+    if (!/\S+@\S+\.\S+/.test(formData.email))
+      return toast.error("Invalid email format");
+    if (!formData.password) return toast.error("passsword is required");
+    if (!formData.password.length > 6)
+      return toast.error("Password must be atleast of 6 charecters");
+    if (formData.password !== formData.confirmPassword)
+      return toast.error("Passwords do not match");
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match. Please try again.");
-      return;
+    const success = validateForm();
+    if (success) {
+      const { confirmPassword: _, ...signUpData } = formData;
+      try {
+        await signUp(signUpData);
+        Navigate("/");
+      } catch (error) {
+        console.error("Signup failed:", error);
+      }
     }
-    alert("Account Created! Please check your email for verification.");
-    console.log("Signup data:", formData);
   };
 
   const handleChange = (field, value) => {
@@ -31,11 +52,7 @@ const Signup = () => {
       <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-50 px-6 py-10">
         <div className="w-full max-w-md bg-white">
           <div className="flex items-center space-x-2 mb-6">
-            <img
-              src="/logo.png"
-              alt="JalSetu Logo"
-              className="w-8 h-8"
-            />
+            <img src="/logo.png" alt="JalSetu Logo" className="w-8 h-8" />
             <h2 className="text-xl font-bold text-blue-600">JalSetu 2.0</h2>
           </div>
 
@@ -140,9 +157,7 @@ const Signup = () => {
                 />
                 <button
                   type="button"
-                  onClick={() =>
-                    setShowConfirmPassword(!showConfirmPassword)
-                  }
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   {showConfirmPassword ? (
@@ -156,8 +171,16 @@ const Signup = () => {
             <button
               type="submit"
               className="w-full py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 font-medium"
+              disabled={isSigningUp}
             >
-              Create Account
+              {isSigningUp ? (
+                <>
+                  <Loader2 className="size-5 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                "Create Account"
+              )}
             </button>
             <div className="text-center">
               <span className="text-sm text-gray-600">

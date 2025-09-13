@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
+import { useAuthStore } from "../store/useAuthStore";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -9,11 +10,22 @@ const Login = () => {
     password: "",
     rememberMe: false,
   });
+  const { login, isLoggingIn } = useAuthStore();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Login Successful! Welcome back to JalSetu 2.0");
-    console.log("Login data:", formData);
+    const { rememberMe: _, ...loginData } = formData;
+
+    try {
+      const result = await login(loginData);
+      if (result && result.success) {
+        // Navigate to home page after successful login
+        navigate("/", { replace: true });
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   };
 
   const handleChange = (field, value) => {
@@ -48,7 +60,7 @@ const Login = () => {
                   value={formData.email}
                   onChange={(e) => handleChange("email", e.target.value)}
                   required
-                  className="w-full rounded-lg px-10 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                  className="w-full rounded-lg px-10 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 border border-gray-300"
                 />
               </div>
             </div>
@@ -69,7 +81,7 @@ const Login = () => {
                   value={formData.password}
                   onChange={(e) => handleChange("password", e.target.value)}
                   required
-                  className="w-full rounded-lg px-10 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                  className="w-full rounded-lg px-10 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 border border-gray-300"
                 />
                 <button
                   type="button"
@@ -105,9 +117,17 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition"
+              className="w-full py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              disabled={isLoggingIn}
             >
-              Sign in
+              {isLoggingIn ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                "Sign in"
+              )}
             </button>
 
             <p className="text-center text-sm text-gray-600">

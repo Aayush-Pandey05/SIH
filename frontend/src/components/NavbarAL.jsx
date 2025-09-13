@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { assets } from "../assets/assets";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
 
 const NavbarAL = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const { logout, authUser } = useAuthStore();
+  const navigate = useNavigate();
 
   const profileMenuRef = useRef(null);
   const profileButtonRef = useRef(null);
@@ -25,6 +28,14 @@ const NavbarAL = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [profileMenuRef, profileButtonRef]);
+
+  const handleLogout = async () => {
+    setIsProfileMenuOpen(false);
+    const result = await logout();
+    if (result.success) {
+      navigate("/", { replace: true });
+    }
+  };
 
   const getNavLinkClass = ({ isActive }) =>
     isActive
@@ -59,7 +70,6 @@ const NavbarAL = () => {
         <NavLink to="/support" className={getNavLinkClass}>
           Support
         </NavLink>
-        
       </ul>
 
       {/* Profile & Mobile Menu Button */}
@@ -87,8 +97,12 @@ const NavbarAL = () => {
                   alt="Profile"
                   className="w-16 h-16 rounded-full mb-2"
                 />
-                <p className="font-semibold text-gray-800">John Doe</p>
-                <p className="text-sm text-gray-500">johndoe@example.com</p>
+                <p className="font-semibold text-gray-800">
+                  {authUser?.fullName || "User"}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {authUser?.email || "user@example.com"}
+                </p>
               </div>
               <Link
                 to="/account"
@@ -98,9 +112,7 @@ const NavbarAL = () => {
                 Account
               </Link>
               <button
-                onClick={() => {
-                  setIsProfileMenuOpen(false);
-                }}
+                onClick={handleLogout}
                 className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
               >
                 Logout
@@ -147,24 +159,26 @@ const NavbarAL = () => {
           <NavLink
             onClick={() => setIsMobileMenuOpen(false)}
             className="py-3 pl-6 border-t"
-            to="/alerts"
+            to="/govschemes"
           >
-            Alerts
+            Government Schemes
           </NavLink>
           <NavLink
             onClick={() => setIsMobileMenuOpen(false)}
             className="py-3 pl-6 border-t"
-            to="/government"
+            to="/support"
           >
-            Government
+            Support
           </NavLink>
-          <NavLink
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="py-3 pl-6 border-t"
-            to="/webar"
+          <button
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              handleLogout();
+            }}
+            className="py-3 pl-6 border-t text-left"
           >
-            WebAR
-          </NavLink>
+            Logout
+          </button>
         </div>
       </div>
     </div>
