@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-
 import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 
@@ -29,21 +28,25 @@ const NavbarAL = () => {
 
   const getNavLinkClass = ({ isActive }) =>
     isActive
-      ? "text-gray-900 font-semibold"
+      ? "relative text-gray-900 font-semibold after:content-[''] after:absolute after:left-0 after:bottom-[-6px] after:w-full after:h-[2px] after:bg-blue-500"
       : "text-gray-500 hover:text-gray-900";
 
   return (
     <div className="fixed h-20 top-0 left-0 w-full z-50 bg-white flex items-center justify-between px-6 md:px-10 font-medium border-b border-gray-200">
-      <Link to="/home" className="flex items-center gap-2">
+      <Link to="/home" className="flex items-center gap-2 object-fill">
         <img
           src={assets.logo}
           alt="JalSetu Logo"
-          className="h-8 w-8 object-contain"
+          className="h-10 w-10 object-contain rounded-full"
         />
         <span className="text-2xl font-bold text-gray-800">JalSetu</span>
       </Link>
 
-      <ul className="hidden md:flex gap-8 text-base">
+      {/* Desktop Nav */}
+      <ul className="hidden md:flex gap-8 text-base relative">
+        <NavLink to="/home" className={getNavLinkClass}>
+          Home
+        </NavLink>
         <NavLink to="/dashboard" className={getNavLinkClass}>
           Dashboard
         </NavLink>
@@ -51,17 +54,15 @@ const NavbarAL = () => {
           Map Roof
         </NavLink>
         <NavLink to="/govschemes" className={getNavLinkClass}>
-          Government Schemes 
+          Government Schemes
         </NavLink>
         <NavLink to="/support" className={getNavLinkClass}>
           Support
         </NavLink>
         
-        <NavLink to="/webar" className={getNavLinkClass}>
-          WebAR
-        </NavLink>
       </ul>
 
+      {/* Profile & Mobile Menu Button */}
       <div className="flex items-center gap-6">
         <div className="relative hidden md:block">
           <button

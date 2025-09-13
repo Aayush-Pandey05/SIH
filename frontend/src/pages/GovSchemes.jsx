@@ -2,7 +2,7 @@ import React from 'react'
 
 const GovSchemes = () => {
   return (
-    <div>
+    <div className='text-black'>
       Government Schemes
     </div>
   )

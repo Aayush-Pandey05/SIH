@@ -45,11 +45,11 @@ const featuresData = [
   {
     icon: (
       <svg className="w-8 h-8 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12.793V21M3 12.793V21M3 12.793l4.52-4.52a2.828 2.828 0 014.001 0L16.207 13M21 12.793l-4.52-4.52a2.828 2.828 0 00-4.001 0L7.793 13m0 0l-4.273 4.273M7.793 13l4.273 4.273M12 3v4m0 0l-2-2m2 2l2-2" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.653-.122-1.28-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.653.122-1.28.356-1.857m0 0a5.002 5.002 0 019.288 0M12 14a5 5 0 110-10 5 5 0 010 10z" />
       </svg>
     ),
-    title: 'WebAR',
-    description: 'Visualize your RWH system on your own roof in 3D.',
+    title: 'Community Impact',
+    description: 'Track your neighborhood\'s collective water savings on a live map.',
   },
 ];
 
