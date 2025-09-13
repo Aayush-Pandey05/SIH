@@ -50,12 +50,13 @@ const NavbarAL = () => {
         <NavLink to="/map-roof" className={getNavLinkClass}>
           Map Roof
         </NavLink>
-        <NavLink to="/alerts" className={getNavLinkClass}>
-          Alerts
+        <NavLink to="/govschemes" className={getNavLinkClass}>
+          Government Schemes 
         </NavLink>
-        <NavLink to="/government" className={getNavLinkClass}>
-          Government
+        <NavLink to="/support" className={getNavLinkClass}>
+          Support
         </NavLink>
+        
         <NavLink to="/webar" className={getNavLinkClass}>
           WebAR
         </NavLink>
