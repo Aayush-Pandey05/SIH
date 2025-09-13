@@ -65,7 +65,7 @@ const HeroSection = () => {
           <Droplet className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-blue-500" fill="currentColor" />
         </div>
       </div>
-      <h1 className="hero-text text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
+      <h1 className="hero-text text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-black">
         Welcome to <span className="text-blue-600">JalSetu </span>
       </h1>
       <p className="hero-text text-base sm:text-lg md:text-xl text-gray-600 max-w-xl sm:max-w-2xl mx-auto mb-8 px-2 sm:px-0">
