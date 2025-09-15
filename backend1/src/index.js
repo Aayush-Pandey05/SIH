@@ -1,6 +1,7 @@
 import express from "express";
 import authRoutes from "./routes/auth.route.js";
 import processRoutes from "./routes/process.route.js";
+import dataRoutes from "./routes/data.route.js"
 import dotenv from "dotenv";
 import { connectDb } from "./lib/db.js";
 import cookieParser from "cookie-parser";
@@ -21,6 +22,7 @@ app.use(
 
 app.use("/api/auth", authRoutes);
 app.use("/api/processing", processRoutes);
+app.use("/api/data", dataRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
