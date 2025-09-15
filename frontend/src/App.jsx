@@ -9,6 +9,7 @@ import About from "./pages/About";
 import RoofAIPage from "./pages/RoofAIPage";
 import Support from "./pages/Support";
 import SignUp from "./pages/SignUp";
+import ContactUs from './components/ContactUs'
 import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/useAuthStore";
 import { Loader } from "lucide-react";
@@ -54,6 +55,7 @@ const App = () => {
           element={authUser ? <GovSchemes /> : <LoginPage />}
         />
         <Route path="/about" element={<About />} />
+        <Route path="/contactus" element={<ContactUs />} />
       </Routes>
       <Toaster />
     </div>

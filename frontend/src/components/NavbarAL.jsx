@@ -44,18 +44,18 @@ const NavbarAL = () => {
 
   return (
     <div className="fixed h-20 top-0 left-0 w-full z-50 bg-white flex items-center justify-between px-6 md:px-10 font-medium border-b border-gray-200">
-      <Link to="/home" className="flex items-center gap-2 object-fill">
+      <Link to="/" className="flex items-center gap-2 object-fill">
         <img
           src={assets.logo}
           alt="JalSetu Logo"
-          className="h-10 w-10 object-contain rounded-full"
+          className="h-8 w-8 object-contain rounded-full border border-gray-300"
         />
         <span className="text-2xl font-bold text-gray-800">JalSetu</span>
       </Link>
 
       {/* Desktop Nav */}
       <ul className="hidden md:flex gap-8 text-base relative">
-        <NavLink to="/home" className={getNavLinkClass}>
+        <NavLink to="/" className={getNavLinkClass}>
           Home
         </NavLink>
         <NavLink to="/dashboard" className={getNavLinkClass}>
@@ -145,9 +145,16 @@ const NavbarAL = () => {
           <NavLink
             onClick={() => setIsMobileMenuOpen(false)}
             className="py-3 pl-6 border-t"
+            to="/"
+          >
+            Home
+          </NavLink>
+          <NavLink
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="py-3 pl-6 border-t"
             to="/dashboard"
           >
-            Dashboard
+              Dashboard
           </NavLink>
           <NavLink
             onClick={() => setIsMobileMenuOpen(false)}
