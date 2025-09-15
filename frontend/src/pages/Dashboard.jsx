@@ -2,6 +2,7 @@ import React from 'react';
 // At the top of your file
 import Logo from '../assets/Logo.png'; // adjust the path if needed
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import NavbarAL from '../components/NavbarAL';
 
 // --- DUMMY DATA ---
 const chartData = [
@@ -90,25 +91,25 @@ const alertsData = [
 ];
 
 // --- SUB-COMPONENTS ---
-const Header = () => (
-    <header className="sticky top-0 z-50 flex items-center justify-between p-4 bg-white border-b shadow-sm">
-<div className="flex items-center space-x-2">
-    <img src={Logo} alt="JalSetu Logo" className="h-8 w-8 object-contain" />
-    <h1 className="text-xl font-bold text-gray-800">JalSetu 2.0</h1>
-</div>
-        <div className="flex items-center space-x-4">
-            <div className="relative">
-                <BellIcon />
-                <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
-            </div>
-            <img 
-                className="h-9 w-9 rounded-full"
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=40&h=40&auto=format&fit=crop" 
-                alt="User Avatar"
-            />
-        </div>
-    </header>
-);
+// const Header = () => (
+//     <header className="sticky top-0 z-50 flex items-center justify-between p-4 bg-white border-b shadow-sm">
+// <div className="flex items-center space-x-2">
+//     <img src={Logo} alt="JalSetu Logo" className="h-8 w-8 object-contain" />
+//     <h1 className="text-xl font-bold text-gray-800">JalSetu 2.0</h1>
+// </div>
+//         <div className="flex items-center space-x-4">
+//             <div className="relative">
+//                 <BellIcon />
+//                 <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+//             </div>
+//             <img 
+//                 className="h-9 w-9 rounded-full"
+//                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=40&h=40&auto=format&fit=crop" 
+//                 alt="User Avatar"
+//             />
+//         </div>
+//     </header>
+// );
 
 
 const StatCard = ({ title, value }) => (
@@ -193,14 +194,14 @@ const ActionButton = ({ icon, text }) => (
 export default function Dashboard() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-gray-900">
-      <Header />
-      <main className="p-4 sm:p-6 lg:p-8">
+    <NavbarAL/>
+    <main className="p-4 sm:p-6 lg:p-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Dashboard</h2>
         
         {/* Stat Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             {statCardsData.map((card, index) => (
-                 <StatCard key={index} {...card} />
+                <StatCard key={index} {...card} />
             ))}
         </div>
 
