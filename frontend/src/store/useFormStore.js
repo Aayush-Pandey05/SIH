@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 export const useFormStore = create((set) => ({
     isSubmittingContact: false,
     isSubmittingFeedback: false,
-    
+    isSubmittingUserData: false,
 
     submitContactForm: async (formData) => {
         set({ isSubmittingContact: true });
@@ -34,4 +34,23 @@ export const useFormStore = create((set) => ({
             set({ isSubmittingFeedback: false });
         }
     },
+    submitUserDataForm: async (latitude, longitude, area, district) => {
+    set({ isSubmittingUserData: true });
+    try {
+      const response = await axiosInstance.post("/processing", {
+        latitude,
+        longitude,
+        area,
+        district,
+      });
+      toast.success("User data form submitted successfully");
+      return response.data;
+    } catch (error) {
+      toast.error("Failed to submit user data form");
+      console.error("Error submitting user data form:", error);
+      throw error; // Re-throw so calling component can handle it
+    } finally {
+      set({ isSubmittingUserData: false });
+    }
+  },
 }))

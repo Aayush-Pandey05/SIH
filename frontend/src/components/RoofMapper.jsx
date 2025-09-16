@@ -6,6 +6,7 @@ import L from "leaflet";
 import "leaflet-draw";
 import axios from "axios";
 import Modal from "./Modal";
+import { useFormStore } from "../store/useFormStore";
 
 const DrawingComponent = ({ onPolygonComplete, onPolygonDelete }) => {
   const map = useMap();
@@ -84,6 +85,7 @@ const RoofMapper = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const mapRef = useRef();
 
+  const { isSubmittingUserData, submitUserDataForm } = useFormStore();
   // NEW: This useEffect hook modifies the page background
   useEffect(() => {
     // Store the original body background to restore it later
@@ -176,24 +178,19 @@ const RoofMapper = () => {
     setDistrictName("");
   };
 
-  const sendToApi = async () => {
+  const handleSubmit = async () => {
     if (!area || !latLng || !districtName) {
       alert("Please draw a polygon first.");
       return;
     }
     const data = {
-      dimensions: { area },
+      area: { area },
       latitude: latLng.lat,
       longitude: latLng.lng,
       district: districtName,
     };
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/processing",
-        data
-      );
-      if (response.status === 200) alert("Data sent successfully!");
-      else alert("Error sending data.");
+      await submitUserDataForm(latLng.lat, latLng.lng, area, districtName);
     } catch (error) {
       console.error("API error:", error);
     }
@@ -229,8 +226,9 @@ const RoofMapper = () => {
 
         <div className="flex flex-col gap-3 mt-6">
           <button
-            onClick={sendToApi}
+            onClick={handleSubmit}
             className="px-4 py-2 bg-[#00a63e] text-white text-sm lg:text-base rounded-lg shadow-md hover:bg-[#008c34] hover:shadow-lg hover:scale-105 transition-all"
+            disabled={isSubmittingUserData}
           >
             Send
           </button>
@@ -238,6 +236,7 @@ const RoofMapper = () => {
           <button
             onClick={() => setIsModalOpen(true)}
             className="px-4 py-2 bg-gradient-to-r from-cyan-700 to-cyan-600 text-white text-sm lg:text-base rounded-lg shadow-md hover:from-cyan-800 hover:to-cyan-700 hover:shadow-lg hover:scale-105 transition-all"
+            disabled={isSubmittingUserData}
           >
             Enter Data Manually
           </button>
@@ -291,18 +290,7 @@ const RoofMapper = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={async (data) => {
-          try {
-            const response = await axios.post(
-              "http://localhost:3000/api/processing",
-              data
-            );
-            if (response.status === 200) alert("Data sent successfully!");
-            else alert("Error sending data.");
-          } catch (error) {
-            console.error("API error:", error);
-          }
-        }}
+        onSubmit={handleSubmit}
       />
     </div>
   );

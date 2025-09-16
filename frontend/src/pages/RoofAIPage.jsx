@@ -3,6 +3,7 @@ import RoofMapper from "../components/RoofMapper";
 import { Droplet } from "lucide-react";
 import rechargePitImage from "../assets/recharge_pit.png";
 import NavbarAL from "../components/NavbarAL";
+import { useDataStore } from "../store/useDataStore";
 
 const RecommendationCard = ({ data }) => {
   if (!data) return null;
@@ -188,6 +189,8 @@ export default function JalSetuPage() {
       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
     </svg>
   );
+
+  const {fetchUserData, isLoadingData, userData} = useDataStore();
 
   useEffect(() => {
     const fetchData = async () => {
