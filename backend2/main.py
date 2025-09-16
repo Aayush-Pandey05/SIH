@@ -58,7 +58,7 @@ class FinalReport(BaseModel):
     payback_period_years: float = Field(description="The payback period for the investment in years.")
 
 
-# --- 3. PRODUCTION Tool Functions (FULLY ASYNC) ---
+# --- 3. PRODUCTION Tool Functions (FULLY ASYNC) with Accurate Calculations ---
 async def get_hydrogeological_data(latitude: float, longitude: float) -> dict:
     print(f"TOOL EXECUTED: Fetching REAL hydrogeological data for {latitude}, {longitude}...")
     start_date = "1990-01-01"
@@ -89,26 +89,75 @@ async def get_hydrogeological_data(latitude: float, longitude: float) -> dict:
 
 async def calculate_harvesting_potential(roof_area_sqm: float, annual_rainfall_mm: int) -> dict:
     print(f"TOOL EXECUTED: Calculating harvesting potential for {roof_area_sqm} sqm roof...")
-    runoff_liters = int(roof_area_sqm * annual_rainfall_mm * 0.8)
-    potential_savings_inr = int((runoff_liters / 1000) * 15)
+    
+    # More accurate runoff coefficient based on roof material
+    # 0.85 is more accurate for concrete/metal roofs (was 0.8)
+    runoff_coefficient = 0.85
+    
+    runoff_liters = int(roof_area_sqm * annual_rainfall_mm * runoff_coefficient)
+    
+    # More accurate water cost calculation for India:
+    # Municipal water cost varies: ₹12-25 per 1000L
+    # Using ₹18 as more realistic average (was ₹15)
+    water_cost_per_1000l = 18
+    potential_savings_inr = int((runoff_liters / 1000) * water_cost_per_1000l)
+    
     return {"runoff_liters": runoff_liters, "annual_savings_inr": potential_savings_inr}
 
 async def recommend_recharge_structure(roof_area_sqm: float, groundwater_depth_meters: float, runoff_liters: int) -> dict:
     print(f"TOOL EXECUTED: Recommending structure...")
+    
+    # Structure selection logic (keeping your current logic)
     if groundwater_depth_meters > 10:
-        structure_type, dims, cost = "Recharge Shaft", "1m diameter, 18m depth", 95000
+        structure_type = "Recharge Shaft"
+        dims = "1m diameter, 18m depth"
+        cost = 95000
+        # Calculate actual capacity for shaft: π × r² × depth × porosity
+        radius = 0.5  # 1m diameter = 0.5m radius
+        depth = 18
+        porosity = 0.4  # Typical for shaft with filter material
+        capacity_liters = int(3.14159 * radius * radius * depth * porosity * 1000)
     elif roof_area_sqm > 200:
-        structure_type, dims, cost = "Recharge Trench", "1.5m width, 2m depth, 10m length", 70000
+        structure_type = "Recharge Trench"
+        dims = "1.5m width, 2m depth, 10m length"
+        cost = 70000
+        # Calculate actual capacity for trench: width × depth × length × porosity
+        width, depth, length = 1.5, 2, 10
+        porosity = 0.35  # Typical for trench with gravel/sand
+        capacity_liters = int(width * depth * length * porosity * 1000)
     else:
-        structure_type, dims, cost = "Recharge Pit", "2m x 2m x 3m", 45000
-    annual_savings = int((runoff_liters / 1000) * 15)
+        structure_type = "Recharge Pit"
+        dims = "2m x 2m x 3m"
+        cost = 45000
+        # Calculate actual capacity for pit: length × width × depth × porosity
+        length, width, depth = 2, 2, 3
+        porosity = 0.4  # Typical for pit with filter layers
+        capacity_liters = int(length * width * depth * porosity * 1000)
+    
+    # More accurate annual savings calculation with updated water cost
+    water_cost_per_1000l = 18  # Updated rate
+    annual_savings = int((runoff_liters / 1000) * water_cost_per_1000l)
+    
+    # More precise payback calculation
     payback = round(cost / annual_savings, 1) if annual_savings > 0 else float('inf')
+    
+    # More realistic subsidy amounts based on typical government schemes:
+    # Small structures (pit): ₹10,000-15,000
+    # Medium structures (trench): ₹15,000-25,000  
+    # Large structures (shaft): ₹20,000-35,000
+    if structure_type == "Recharge Pit":
+        subsidy_amount = 12000
+    elif structure_type == "Recharge Trench":
+        subsidy_amount = 20000
+    else:  # Recharge Shaft
+        subsidy_amount = 30000
+    
     return {
         "suggested_structure": structure_type,
         "recommended_dimensions": dims,
         "estimated_cost_inr": cost,
-        "capacity_liters": 10000,
-        "subsidy_available_inr": 15000,
+        "capacity_liters": capacity_liters,  # Now calculated based on actual dimensions
+        "subsidy_available_inr": subsidy_amount,  # Now varies by structure type
         "payback_period_years": payback,
         "annual_savings_inr": annual_savings,
     }
@@ -240,4 +289,3 @@ async def get_agent_recommendation(payload: AgentInput):
     except Exception as e:
         print(f"An unexpected error occurred in the agent executor: {e}")
         raise HTTPException(status_code=500, detail="An internal error occurred while processing the request.")
-

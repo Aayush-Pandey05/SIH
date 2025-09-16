@@ -6,7 +6,7 @@ const dataSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
-    ai_recommendation:{
+    ai_recommendation: {
         type: String,
         required: true,
     },
@@ -26,7 +26,13 @@ const dataSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-});
+    gwl: {
+        type: Number,
+        required: false,
+    },
+}, // Removed the extra closing brace here
+{ timestamps: true }
+);
 
 const Data = mongoose.model("Data", dataSchema);
 

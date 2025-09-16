@@ -1,14 +1,44 @@
 // src/pages/ContactPage.js
 import React, { useState, useEffect, useRef } from "react";
-import { Send, Mail, Phone, MapPin } from "lucide-react";
+import { Send, Mail, Phone, MapPin, Loader2 } from "lucide-react";
 import Header from "../components/Header";
 import FullScreenMenu from "../components/FullScreen";
+import toast from "react-hot-toast";
+import { useFormStore } from "../store/useFormStore";
 
 const ContactPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const observerRef = useRef();
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    message: "",
+  });
+
+  const validateForm = () => {
+    if (!formData.fullName.trim()) return toast.error("Full name is required");
+    if (!formData.email.trim()) return toast.error("Email is required");
+    if (!/\S+@\S+\.\S+/.test(formData.email))
+      return toast.error("Invalid email format");
+    if (!formData.message.trim()) return toast.error("Message is required");
+    return true;
+  };
+
+  const { isSubmittingContact, submitContactForm } = useFormStore();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm) {
+      try {
+        await submitContactForm(formData);
+        setFormData({ fullName: "", email: "", message: "" });
+      } catch (error) {
+        console.error("Signup failed:", error);
+      }
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,7 +118,7 @@ const ContactPage = () => {
 
           {/* Contact Form */}
           <div className="bg-slate-800/70 backdrop-blur-md p-10 rounded-2xl border border-slate-700 shadow-xl">
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label
                   htmlFor="name"
@@ -98,6 +128,10 @@ const ContactPage = () => {
                 </label>
                 <input
                   type="text"
+                  value={formData.fullName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, fullName: e.target.value })
+                  }
                   id="name"
                   className="w-full px-4 py-3 text-white bg-slate-700/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
                   placeholder="Your Name"
@@ -113,6 +147,10 @@ const ContactPage = () => {
                 </label>
                 <input
                   type="email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   id="email"
                   className="w-full px-4 py-3 text-white bg-slate-700/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
                   placeholder="you@example.com"
@@ -128,6 +166,10 @@ const ContactPage = () => {
                 </label>
                 <textarea
                   id="message"
+                  value={formData.message}
+                  onChange={(e) =>
+                    setFormData({ ...formData, message: e.target.value })
+                  }
                   rows="5"
                   className="w-full px-4 py-3 text-white bg-slate-700/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
                   placeholder="Your feedback or question..."
@@ -138,8 +180,16 @@ const ContactPage = () => {
                 <button
                   type="submit"
                   className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg shadow-md text-base font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 focus:outline-none transition"
+                  disabled={isSubmittingContact}
                 >
-                  Send Message <Send className="w-4 h-4" />
+                  {isSubmittingContact ? (
+                    <>
+                      <Loader2 className="animate-spin" />
+                      <span>Sending....</span>
+                    </>
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
                 </button>
               </div>
             </form>
