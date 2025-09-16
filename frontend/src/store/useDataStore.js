@@ -13,6 +13,7 @@ export const useDataStore = create((set) => ({
             if(response.data.success){
                 set({
                     userData: response.data.data,
+                    isLoadingData: false
                 })
                 return response.data.data;
             } else{

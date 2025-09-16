@@ -6,7 +6,11 @@ import NavbarAL from "../components/NavbarAL";
 import { useDataStore } from "../store/useDataStore";
 
 const RecommendationCard = ({ data }) => {
-  if (!data) return null;
+  // ✅ Check if data is an array and has at least one element
+  if (!data || !Array.isArray(data) || data.length === 0) return null;
+  
+  // ✅ Get the first object from the array
+  const recommendation = data[0];
 
   const AiIcon = ({ className }) => (
     <svg
@@ -77,22 +81,36 @@ const RecommendationCard = ({ data }) => {
       <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm h-full">
         <img
           src={rechargePitImage}
-          alt={`Recommended Structure: ${data.structure}`}
+          alt={`Recommended Structure: ${recommendation.structure_type || 'N/A'}`}
           className="w-full object-cover rounded-md mb-4"
         />
         <h3 className="text-lg font-semibold text-slate-900">
           Recommended Structure:{" "}
-          <span className="text-blue-600">{data.structure}</span>
+          <span className="text-blue-600">{recommendation.structure_type || 'N/A'}</span>
         </h3>
-        <p className="text-sm text-slate-600 mt-2 mb-4">{data.description}</p>
+        <p className="text-sm text-slate-600 mt-2 mb-4">
+          {recommendation.ai_recommendation || 'No recommendation available'}
+        </p>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm text-slate-700 border-t border-slate-200 pt-4 gap-2">
           <div className="flex items-center">
             <RupeeIcon className="w-4 h-4 mr-2 text-slate-500" />
-            <span>Cost: ₹{data.cost.toLocaleString("en-IN")}</span>
+            <span>
+              Cost: ₹{
+                recommendation.estimated_cost_inr && typeof recommendation.estimated_cost_inr === 'number' 
+                  ? recommendation.estimated_cost_inr.toLocaleString("en-IN")
+                  : 'N/A'
+              }
+            </span>
           </div>
           <div className="flex items-center">
             <DropletIcon className="w-4 h-4 mr-2 text-slate-500" />
-            <span>Capacity: {data.capacity.toLocaleString("en-IN")} L</span>
+            <span>
+              Capacity: {
+                recommendation.structure_capacity_liters && typeof recommendation.structure_capacity_liters === 'number'
+                  ? recommendation.structure_capacity_liters.toLocaleString("en-IN")
+                  : 'N/A'
+              } L
+            </span>
           </div>
         </div>
       </div>
@@ -120,7 +138,11 @@ const GroundwaterLevelCard = ({ level }) => {
 };
 
 const RoiPreviewCard = ({ data }) => {
-  if (!data) return null;
+  // ✅ Check if data is an array and has at least one element
+  if (!data || !Array.isArray(data) || data.length === 0) return null;
+  
+  // ✅ Get the first object from the array
+  const roiData = data[0];
 
   const RoiIcon = ({ className }) => (
     <svg
@@ -151,14 +173,18 @@ const RoiPreviewCard = ({ data }) => {
         <div className="flex flex-col">
           <p className="text-sm text-slate-500">Est. Annual Savings</p>
           <p className="text-2xl sm:text-3xl font-bold text-green-600">
-            ₹{data.annualSavings.toLocaleString("en-IN")}
+            ₹{
+              roiData.annual_savings_inr && typeof roiData.annual_savings_inr === 'number'
+                ? roiData.annual_savings_inr.toLocaleString("en-IN")
+                : 'N/A'
+            }
           </p>
         </div>
 
         <div className="flex flex-col">
           <p className="text-sm text-slate-500">Payback Period</p>
           <p className="text-2xl sm:text-3xl font-bold text-amber-600">
-            {data.paybackPeriod} Years
+            {roiData.payback_period_years || 'N/A'} Years
           </p>
         </div>
       </div>
@@ -168,72 +194,23 @@ const RoiPreviewCard = ({ data }) => {
 
 // --- Main Page Component ---
 export default function JalSetuPage() {
-  const [pageData, setPageData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Note: SearchIcon is defined but not used in the JSX below.
-  const SearchIcon = ({ className }) => (
-    <svg
-      className={className}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="11" cy="11" r="8"></circle>
-      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    </svg>
-  );
-
-  const {fetchUserData, isLoadingData, userData} = useDataStore();
+  const { fetchUserData, isLoadingData, userData } = useDataStore();
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+    fetchUserData();
+  }, [fetchUserData]);
 
-      const mockApiData = {
-        roofArea: 150,
-        recommendation: {
-          structure: "Recharge Pit",
-          description:
-            "Based on your soil type (sandy loam), rainfall (800mm/year), and groundwater depth (15m), a recharge pit is the most effective structure.",
-          cost: 15000,
-          capacity: 10000,
-          imageUrl:
-            "https://placehold.co/600x400/e2e8f0/475569?text=Recharge+Pit",
-        },
-        roi: {
-          annualSavings: 2500,
-          paybackPeriod: 6,
-          chartData: [50, 60, 75, 90, 80, 85, 95],
-          disclaimer:
-            "Based on average water consumption and local rates. Actual savings may vary.",
-        },
-      };
+  console.log({ userData });
 
-      setPageData(mockApiData);
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
+  if (isLoadingData) {
     return (
-      // UPDATED: Loading screen with the new solid background color
       <div className="bg-slate-800 min-h-screen flex items-center justify-center">
         <p className="text-lg text-slate-300">Loading Recommendations...</p>
       </div>
     );
   }
+
   return (
-    // UPDATED: Main page container with the new solid background color
     <div className="bg-slate-800 min-h-screen p-4 sm:p-6 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
         <NavbarAL />
@@ -250,14 +227,17 @@ export default function JalSetuPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
           <div>
-            <RecommendationCard data={pageData?.recommendation} />
+            <RecommendationCard data={userData} />
           </div>
           <div className="flex flex-col gap-6 h-full">
             <div className="flex-1">
-              <RoiPreviewCard data={pageData?.roi} />
+              <RoiPreviewCard data={userData} />
             </div>
             <div className="flex-1">
-              <GroundwaterLevelCard level={15} />
+              {/* ✅ Access gwl from the first element of the array */}
+              <GroundwaterLevelCard 
+                level={userData && Array.isArray(userData) && userData.length > 0 ? userData[0].gwl : null} 
+              />
             </div>
           </div>
         </div>
