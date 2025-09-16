@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import DashboardContent from './DashboardContent';
 import NavbarAL from '../components/NavbarAL';
 
+import HeaderAL from '../components/HeaderAL';
+import FullScreenMenuAL from '../components/FullScreenMenuAL';
+import Footer from '../components/Footer';
+
+const navLinks = ["Home", "Dashboard", "Map Roof", "Government Schemes", "Support"];
+const navRoutes = ["/", "/dashboard", "/map-roof", "/govschemes", "/support"];
+
 export default function Dashboard() {
     const [chartData, setChartData] = useState([]);
     const [alertsData, setAlertsData] = useState([]);
@@ -9,7 +16,10 @@ export default function Dashboard() {
     const [locationName, setLocationName] = useState('Bangalore');
     const [searchQuery, setSearchQuery] = useState('Bangalore');
     const roofArea = 150;
-
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+      const [time, setTime] = useState("");
+    
+      
     const handleSearchSubmit = (e) => {
         e.preventDefault();
         const newLocation = locationName;
@@ -17,6 +27,18 @@ export default function Dashboard() {
             setSearchQuery(newLocation);
         }
     };
+
+    useEffect(() => {
+        const updateTime = () => {
+          const options = { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", hour12: true };
+          setTime(new Intl.DateTimeFormat('en-US', options).format(new Date()));
+        };
+    
+        updateTime();
+        const timerId = setInterval(updateTime, 60000);
+    
+        return () => clearInterval(timerId);
+      }, []);
 
     useEffect(() => {
         const fetchLocationAndWeather = async () => {
@@ -105,10 +127,14 @@ export default function Dashboard() {
     ];
 
     return (
-        <div className="min-h-screen font-sans text-slate-50 bg-blue-950 bg-gradient-to-tr from-blue-900 via-blue-950 to-blue-950 ">
-            <NavbarAL />
-            <main className="p-4 sm:p-6 lg:p-8 mt-18">
-                <form onSubmit={handleSearchSubmit} className="mb-6 flex space-x-2">
+        <div> 
+            <HeaderAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} time={time} />
+            <FullScreenMenuAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} navLinks={navLinks} navRoutes={navRoutes} />
+        <div className="h-full font-sans text-slate-50 bg-blue-950 bg-gradient-to-tr from-blue-900 via-blue-950 to-blue-950 ">
+            {/* <NavbarAL /> */}
+            
+            <main className="p-12 sm:p-6 lg:p-8 pt-28">
+                <form onSubmit={handleSearchSubmit} className=" mt-22 mb-6 flex space-x-2">
                     <input
                         type="text"
                         value={locationName}
@@ -126,6 +152,7 @@ export default function Dashboard() {
                     alertsData={alertsData}
                 />
             </main>
+        </div><Footer/>
         </div>
     );
 };

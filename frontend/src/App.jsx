@@ -42,7 +42,6 @@ const App = () => {
           path="/dashboard"
           element={authUser ? <Dashboard /> : <LoginPage />}
         />
-        {/* <Route path="/home" element={<Home2 />} /> */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUp />} />
         <Route
