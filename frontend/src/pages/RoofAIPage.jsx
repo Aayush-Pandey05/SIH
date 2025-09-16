@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import RoofMapper from "../components/RoofMapper";
-import { Droplet } from "lucide-react";
+import { Droplet, TrendingUp } from "lucide-react";
 import rechargePitImage from "../assets/recharge_pit.png";
 import NavbarAL from "../components/NavbarAL";
 import { useDataStore } from "../store/useDataStore";
+import HeaderAL from '../components/HeaderAL';
+import FullScreenMenuAL from '../components/FullScreenMenuAL';
+import Footer from '../components/Footer';
 
 const RecommendationCard = ({ data }) => {
   // ✅ Check if data is an array and has at least one element
@@ -73,7 +76,7 @@ const RecommendationCard = ({ data }) => {
   );
 
   return (
-    <div className="mb-12">
+    <div className="m-1">
       <h2 className="text-xl font-bold text-slate-200 flex items-center mb-4">
         <AiIcon className="w-6 h-6 mr-2 text-blue-500" />
         AI Recommendation
@@ -122,18 +125,18 @@ const GroundwaterLevelCard = ({ level }) => {
   if (level === undefined || level === null) return null;
 
   return (
-    <div className="mb-12">
-      <h2 className="text-xl font-bold text-slate-200 flex items-center mb-4">
-        <Droplet className="w-6 h-6 mr-2 text-blue-500" />
-        Groundwater Level
-      </h2>
-      <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm flex flex-col gap-2">
-        <p className="text-sm text-slate-500">Current Level</p>
-        <p className="text-2xl sm:text-3xl font-bold text-blue-600">
-          {level} m
-        </p>
+    <div className="groundwater-section ">
+        <h2 className="text-xl font-bold text-slate-200 flex items-center mb-5">
+          <Droplet className="w-6 h-6 mr-3  text-blue-400" />
+          Groundwater Level
+        </h2>
+        <div className="bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl border border-slate-700 shadow-lg flex flex-col gap-6">
+          <p className="text-sm text-slate-400">Current Level in Your Area</p>
+          <p className="text-2xl sm:text-3xl font-bold text-blue-400">
+            {level} m
+          </p>
+        </div>
       </div>
-    </div>
   );
 };
 
@@ -164,12 +167,12 @@ const RoiPreviewCard = ({ data }) => {
   );
 
   return (
-    <div className="mb-10">
+    <div className="mt-1">
       <h2 className="text-xl font-bold text-slate-200 flex items-center mb-4">
-        <RoiIcon className="w-6 h-6 mr-2 text-blue-500" />
-        ROI Preview
+        <TrendingUp className="w-6 h-6 mr-3 text-cyan-400" />
+        Your Personalized ROI Preview
       </h2>
-      <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm flex flex-col gap-6">
+      <div className="bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl border border-slate-700 shadow-lg grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="flex flex-col">
           <p className="text-sm text-slate-500">Est. Annual Savings</p>
           <p className="text-2xl sm:text-3xl font-bold text-green-600">
@@ -180,7 +183,6 @@ const RoiPreviewCard = ({ data }) => {
             }
           </p>
         </div>
-
         <div className="flex flex-col">
           <p className="text-sm text-slate-500">Payback Period</p>
           <p className="text-2xl sm:text-3xl font-bold text-amber-600">
@@ -192,9 +194,45 @@ const RoiPreviewCard = ({ data }) => {
   );
 };
 
-// --- Main Page Component ---
+//Header 
+const navLinks = ["Home", "Dashboard", "Map Roof", "Government Schemes", "Support"];
+const navRoutes = ["/", "/dashboard", "/map-roof", "/govschemes", "/support"];
+
 export default function JalSetuPage() {
   const { fetchUserData, isLoadingData, userData } = useDataStore();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [time, setTime] = useState("");
+  
+  useEffect(() => {
+    const updateTime = () => {
+      const options = { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", hour12: true };
+      setTime(new Intl.DateTimeFormat('en-US', options).format(new Date()));
+    };
+
+    updateTime();
+    const timerId = setInterval(updateTime, 60000);
+
+    return () => clearInterval(timerId);
+  }, []);
+
+  // Note: SearchIcon is defined but not used in the JSX below.
+  const SearchIcon = ({ className }) => (
+    <svg
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+  );
 
   useEffect(() => {
     fetchUserData();
@@ -204,16 +242,19 @@ export default function JalSetuPage() {
 
   if (isLoadingData) {
     return (
-      <div className="bg-slate-800 min-h-screen flex items-center justify-center">
+      <div className="bg-slate-950 min-h-screen flex items-center justify-center">
         <p className="text-lg text-slate-300">Loading Recommendations...</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-slate-800 min-h-screen p-4 sm:p-6 md:p-8 font-sans">
+    <div>
+      <HeaderAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} time={time} />
+      <FullScreenMenuAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} navLinks={navLinks} navRoutes={navRoutes} />
+      <div className="bg-slate-900 min-h-screen p-4 sm:p-6 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
-        <NavbarAL />
+        
         <div className="text-center mb-6 pt-20">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-100">
             Roof Mapping + AI Recommendation
@@ -242,6 +283,8 @@ export default function JalSetuPage() {
           </div>
         </div>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 }
