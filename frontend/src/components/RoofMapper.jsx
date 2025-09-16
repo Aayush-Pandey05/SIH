@@ -5,7 +5,7 @@ import "leaflet-draw/dist/leaflet.draw.css";
 import L from "leaflet";
 import "leaflet-draw";
 import axios from "axios";
-import Modal from "./Modal"; 
+import Modal from "./Modal";
 
 const DrawingComponent = ({ onPolygonComplete, onPolygonDelete }) => {
   const map = useMap();
@@ -13,7 +13,7 @@ const DrawingComponent = ({ onPolygonComplete, onPolygonDelete }) => {
 
   const calculateArea = (latLngs) => {
     let area = 0;
-    const R = 6371000;
+    const R = 6371000; // Earth's radius in meters
     if (latLngs.length < 3) return 0;
 
     for (let i = 0; i < latLngs.length; i++) {
@@ -83,6 +83,22 @@ const RoofMapper = () => {
   const [typingTimeout, setTypingTimeout] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const mapRef = useRef();
+
+  // NEW: This useEffect hook modifies the page background
+  useEffect(() => {
+    // Store the original body background to restore it later
+    const originalStyle = document.body.style.background;
+
+    // Apply the new gradient background to the entire page body
+    document.body.style.background =
+      "linear-gradient(to bottom right, #0f172a, #2563eb, #06b6d4)"; // slate-950, blue-600, cyan-600
+
+    // This is a cleanup function that runs when the component is removed
+    return () => {
+      // Restore the original background
+      document.body.style.background = originalStyle;
+    };
+  }, []); // The empty array ensures this effect runs only once when the component mounts
 
   const MapController = () => {
     const map = useMap();
@@ -184,60 +200,71 @@ const RoofMapper = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-[600px] lg:h-[600px] md:h-[500px] sm:h-[400px] w-full border border-slate-200 shadow-sm rounded-lg">
-      <div className="w-full lg:w-72 p-4 lg:p-8 border-b lg:border-b-0 lg:border-r border-gray-300 box-border text-black flex flex-col justify-between h-auto lg:h-full">
-        <div className="flex flex-row lg:flex-col justify-around lg:justify-start gap-4 lg:gap-0">
-          <div className="mb-0 lg:mb-4 flex-1 lg:flex-none">
-            <p className="text-xs lg:text-sm text-gray-600">Roof Area</p>
-            <p className="font-semibold text-sm lg:text-base">{area.toFixed(2)} sq.m</p>
-          </div>
-          <div className="mb-0 lg:mb-4 flex-1 lg:flex-none">
-            <p className="text-xs lg:text-sm text-gray-600">Latitude, Longitude</p>
+    <div className="relative flex flex-col lg:flex-row h-[600px] w-full shadow-xl rounded-2xl overflow-hidden bg-gradient-to-br from-blue-600 via-cyan-500 to-indigo-700">
+      {/* Sidebar */}
+      <div className="relative z-10 w-full lg:w-72 p-6 border-b lg:border-b-0 lg:border-r border-white/20 bg-white/20 backdrop-blur-lg text-white flex flex-col justify-between h-auto lg:h-full rounded-b-2xl lg:rounded-bl-2xl lg:rounded-br-none">
+        <div className="flex flex-row lg:flex-col justify-around lg:justify-start gap-6 lg:gap-4">
+          <div>
+            <p className="text-xs lg:text-sm text-cyan-100">Roof Area</p>
             <p className="font-semibold text-sm lg:text-base">
-              {latLng?.lat?.toFixed(4) ?? "N/A"}, {latLng?.lng?.toFixed(4) ?? "N/A"}
+              {area.toFixed(2)} sq.m
             </p>
           </div>
-          <div className="mb-0 lg:mb-4 flex-1 lg:flex-none">
-            <p className="text-xs lg:text-sm text-gray-600">District</p>
-            <p className="font-semibold text-sm lg:text-lg">{districtName || "N/A"}</p>
+          <div>
+            <p className="text-xs lg:text-sm text-cyan-100">
+              Latitude, Longitude
+            </p>
+            <p className="font-semibold text-sm lg:text-base">
+              {latLng?.lat?.toFixed(4) ?? "N/A"},{" "}
+              {latLng?.lng?.toFixed(4) ?? "N/A"}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs lg:text-sm text-cyan-100">District</p>
+            <p className="font-semibold text-sm lg:text-lg">
+              {districtName || "N/A"}
+            </p>
           </div>
         </div>
 
-        <div className="flex flex-row lg:flex-col gap-2 mt-4 lg:mt-0">
+        <div className="flex flex-col gap-3 mt-6">
           <button
             onClick={sendToApi}
-            className="flex-1 lg:flex-none px-3 lg:px-4 py-2 bg-blue-600 text-white text-sm lg:text-base rounded cursor-pointer hover:scale-105 hover:bg-blue-500 transition-transform"
+            className="px-4 py-2 bg-[#00a63e] text-white text-sm lg:text-base rounded-lg shadow-md hover:bg-[#008c34] hover:shadow-lg hover:scale-105 transition-all"
           >
             Send
           </button>
+
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex-1 lg:flex-none px-3 lg:px-4 py-2 bg-green-600 text-white text-sm lg:text-base rounded cursor-pointer hover:scale-105 hover:bg-green-500 transition-transform"
+            className="px-4 py-2 bg-gradient-to-r from-cyan-700 to-cyan-600 text-white text-sm lg:text-base rounded-lg shadow-md hover:from-cyan-800 hover:to-cyan-700 hover:shadow-lg hover:scale-105 transition-all"
           >
-            <span className="hidden sm:inline">Enter Data Manually</span>
-            <span className="sm:hidden">Manual Entry</span>
+            Enter Data Manually
           </button>
         </div>
       </div>
 
-      <div className="flex-1 relative min-h-[300px]">
-        <div className="absolute top-2 left-2 right-2 z-1000 px-2 lg:px-16">
+      {/* Map */}
+      <div className="relative z-10 flex-1 min-h-[300px] rounded-tr-2xl rounded-br-2xl overflow-hidden">
+        <div className="absolute top-4 left-16 right-12 z-50">
           <input
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
             placeholder="Search location..."
-            className="w-full p-2 text-sm lg:text-base rounded border border-gray-400 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 text-sm lg:text-base rounded-lg border border-white/40 bg-white/80 text-gray-900 placeholder-gray-500 shadow-md focus:outline-none focus:ring-2 focus:ring-teal-400"
           />
           {suggestions.length > 0 && (
-            <ul className="bg-white border border-gray-400 text-gray-900 rounded max-h-32 lg:max-h-52 overflow-y-auto mt-1 shadow-lg">
+            <ul className="bg-white/90 border border-cyan-300 text-gray-800 rounded-lg max-h-40 lg:max-h-52 overflow-y-auto mt-1 shadow-lg backdrop-blur-sm">
               {suggestions.map((suggestion) => (
                 <li
                   key={suggestion.place_id}
                   onClick={() => handleSuggestionClick(suggestion)}
-                  className="p-2 text-sm lg:text-base cursor-pointer border-b border-gray-200 hover:bg-blue-100 hover:text-blue-900"
+                  className="p-2 text-sm lg:text-base cursor-pointer border-b border-gray-200 hover:bg-cyan-100 hover:text-teal-800"
                 >
-                  <span className="block truncate">{suggestion.display_name}</span>
+                  <span className="block truncate">
+                    {suggestion.display_name}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -251,7 +278,7 @@ const RoofMapper = () => {
         >
           <MapController />
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution="&copy; OpenStreetMap contributors"
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <DrawingComponent
@@ -260,6 +287,7 @@ const RoofMapper = () => {
           />
         </MapContainer>
       </div>
+
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

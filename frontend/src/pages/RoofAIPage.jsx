@@ -69,8 +69,8 @@ const RecommendationCard = ({ data }) => {
 
   return (
     <div className="mb-12">
-      <h2 className="text-xl font-bold text-slate-800 flex items-center mb-4">
-        <AiIcon className="w-6 h-6 mr-2 text-blue-600" />
+      <h2 className="text-xl font-bold text-slate-200 flex items-center mb-4">
+        <AiIcon className="w-6 h-6 mr-2 text-blue-500" />
         AI Recommendation
       </h2>
       <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm h-full">
@@ -104,8 +104,8 @@ const GroundwaterLevelCard = ({ level }) => {
 
   return (
     <div className="mb-12">
-      <h2 className="text-xl font-bold text-slate-800 flex items-center mb-4">
-        <Droplet className="w-6 h-6 mr-2 text-blue-600" />
+      <h2 className="text-xl font-bold text-slate-200 flex items-center mb-4">
+        <Droplet className="w-6 h-6 mr-2 text-blue-500" />
         Groundwater Level
       </h2>
       <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm flex flex-col gap-2">
@@ -142,8 +142,8 @@ const RoiPreviewCard = ({ data }) => {
 
   return (
     <div className="mb-10">
-      <h2 className="text-xl font-bold text-slate-800 flex items-center mb-4">
-        <RoiIcon className="w-6 h-6 mr-2 text-blue-600" />
+      <h2 className="text-xl font-bold text-slate-200 flex items-center mb-4">
+        <RoiIcon className="w-6 h-6 mr-2 text-blue-500" />
         ROI Preview
       </h2>
       <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm flex flex-col gap-6">
@@ -167,10 +167,10 @@ const RoiPreviewCard = ({ data }) => {
 
 // --- Main Page Component ---
 export default function JalSetuPage() {
-  // State to hold data from the database
   const [pageData, setPageData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Note: SearchIcon is defined but not used in the JSX below.
   const SearchIcon = ({ className }) => (
     <svg
       className={className}
@@ -223,20 +223,22 @@ export default function JalSetuPage() {
 
   if (loading) {
     return (
-      <div className="bg-slate-50 min-h-screen flex items-center justify-center">
-        <p className="text-lg text-slate-600">Loading Recommendations...</p>
+      // UPDATED: Loading screen with the new solid background color
+      <div className="bg-slate-800 min-h-screen flex items-center justify-center">
+        <p className="text-lg text-slate-300">Loading Recommendations...</p>
       </div>
     );
-  } 
+  }
   return (
-    <div className="bg-slate-50 min-h-screen p-4 sm:p-6 md:p-8 font-sans">
+    // UPDATED: Main page container with the new solid background color
+    <div className="bg-slate-800 min-h-screen p-4 sm:p-6 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto">
         <NavbarAL />
         <div className="text-center mb-6 pt-20">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-100">
             Roof Mapping + AI Recommendation
           </h1>
-          <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-3xl mx-auto">
+          <p className="mt-2 text-sm sm:text-base text-slate-300 max-w-3xl mx-auto">
             Draw a polygon on the map to mark your roof area. Our AI will
             recommend the best rainwater harvesting structure for you.
           </p>
