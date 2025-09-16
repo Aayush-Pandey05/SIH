@@ -36,7 +36,6 @@ const App = () => {
 
   return (
     <div>
-<<<<<<< Updated upstream
       <Routes>
         <Route path="/" element={authUser ? <Home2 /> : <Home />} />
         <Route
@@ -61,33 +60,6 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/contactus" element={<ContactUs />} />
       </Routes>
-=======
-      <NavbarAL />
-      <div className="main-content-wrapper">
-        <Routes>
-          <Route path="/" element={authUser ? <Home2 /> : <Home />} />
-          <Route
-            path="/dashboard"
-            element={authUser ? <Dashboard /> : <LoginPage />}
-          />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route
-            path="/map-roof"
-            element={authUser ? <RoofAIPage /> : <LoginPage />}
-          />
-          <Route
-            path="/support"
-            element={authUser ? <Support /> : <LoginPage />}
-          />
-          <Route
-            path="/govschemes"
-            element={authUser ? <GovSchemes /> : <LoginPage />}
-          />
-          <Route path="/about" element={<About />} />
-        </Routes>
-      </div>
->>>>>>> Stashed changes
       <Toaster />
     </div>
   );
