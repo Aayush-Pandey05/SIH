@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 export const useFormStore = create((set) => ({
     isSubmittingContact: false,
     isSubmittingFeedback: false,
+    
 
     submitContactForm: async (formData) => {
         set({ isSubmittingContact: true });

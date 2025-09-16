@@ -12,32 +12,13 @@ export const processRequest = async (req, res) => {
   }
 
   try {
-    // Check if user has existing data and handle accordingly
     const existingData = await Data.findOne({ userId: userId }).sort({ createdAt: -1 });
     
     if (existingData) {
       console.log("Found existing data for user:", userId);
-      
-      // Option A: Return existing data instead of processing again
-      /*
-      return res.status(200).json({
-        ai_recommendation: existingData.ai_recommendation,
-        annual_savings_inr: existingData.annual_savings_inr || 0,
-        payback_period_years: existingData.payback_period_years || 0,
-        gwl: existingData.gwl,
-        gwl_unit: existingData.gwl ? "mbgl" : null,
-        gwl_available: existingData.gwl !== null,
-        dataId: existingData._id,
-        message: "Returning existing data for this user",
-        isExisting: true
-      });
-      */
-      
-      // Option B: Update existing record instead of creating new one
       console.log("Will update existing record instead of creating new one");
     }
 
-    // Create the payload for the enhanced endpoint
     const agentInputString = `Please generate a feasibility report for a rooftop located at latitude ${latitude}, longitude ${longitude}, with an area of ${area} square meters and district ${district}.`;
 
     const payload = {
@@ -48,13 +29,11 @@ export const processRequest = async (req, res) => {
       area: parseFloat(area)
     };
 
-    // Call the enhanced FastAPI endpoint
     const fastApiUrl = "http://localhost:5000/get-recommendation-with-gwl";
     console.log("Forwarding request to enhanced FastAPI with payload:", payload);
 
     const response = await axios.post(fastApiUrl, payload);
 
-    // Extract and properly format AI recommendation
     let aiRecommendationString = "";
     let annualSavings = 0;
     let paybackPeriod = 0;
@@ -75,7 +54,6 @@ export const processRequest = async (req, res) => {
       aiRecommendationString = "Unable to generate recommendation due to processing error.";
     }
 
-    // Extract GWL data
     const gwlData = response.data.gwl_data;
     let gwlPrediction = null;
     
@@ -86,10 +64,8 @@ export const processRequest = async (req, res) => {
       console.log("GWL prediction not available:", gwlData?.error || "No GWL data");
     }
 
-    // Update existing record or create new one
     let savedData;
     if (existingData) {
-      // Update existing record
       existingData.ai_recommendation = aiRecommendationString;
       existingData.latitude = parseFloat(latitude);
       existingData.longitude = parseFloat(longitude);
@@ -102,7 +78,6 @@ export const processRequest = async (req, res) => {
       savedData = await existingData.save();
       console.log("Data updated successfully:", savedData._id);
     } else {
-      // Create new record
       const newDataEntry = new Data({
         userId: userId,
         ai_recommendation: aiRecommendationString,
@@ -119,7 +94,6 @@ export const processRequest = async (req, res) => {
       console.log("New data created successfully:", savedData._id);
     }
 
-    // Return enhanced response
     return res.status(200).json({
       ai_recommendation: aiRecommendationString,
       annual_savings_inr: annualSavings,
