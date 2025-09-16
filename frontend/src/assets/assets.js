@@ -5,11 +5,16 @@ import menu_icon from './menu_icon.png'
 import user from './user.png'
 import img2 from './img2.jpg'
 import bgsignup from './download.jpeg'
+import img3 from './Img3.png'
+import Support from './Support.png'
 export const assets = {
     logo,
     dropdown_icon,
     profile_icon,
     menu_icon,
     user,
-    img2, bgsignup
+    img2, bgsignup,
+    img3,
+    Support,
 }
+export default assets

@@ -17,9 +17,9 @@ const HowItWorksSection = ({ visibleElements, stepVisuals }) => {
     },
     { 
       step: "03", 
-      title: "Visualize & Implement", 
-      description: "Bring your plan to life with WebAR. Use your smartphone's camera to place dimensionally-accurate 3D models of tanks and recharge pits right in your own space before construction.", 
-      includes: ["Real-Scale WebAR Models", "On-site Placement Tool", "Implementation Checklist"] 
+      title: "Connect & Act", 
+      description: "Turn your personalized plan into reality. JalSetu bridges the gap between planning and implementation by connecting you with verified local professionals and guiding you through the process of accessing government support.", 
+      includes: ["Verified Vendor Marketplace", "Simplified Subsidy Applications", "Step-by-Step Implementation Guide"] 
     }
   ];
 

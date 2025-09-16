@@ -1,22 +1,19 @@
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Search } from "lucide-react";
 import FAQItem from "./FAQItem";
 
-const Data = [
+const faqData = [
   {
-    question: "How do I get started with JalSetu ?",
-    answer:
-      "To get started with JalSetu, sign up for an account, complete your profile, and explore the dashboard. You can access tutorials and guides in the 'Learn' section for detailed instructions.",
+    question: "How do I get started with JalSetu?",
+    answer: "To get started, sign up for an account, complete your profile, and explore the dashboard. You can access tutorials and guides in the 'Learn' section for detailed instructions.",
   },
   {
     question: "What are the benefits of rainwater harvesting?",
-    answer:
-      "Rainwater harvesting helps in conserving water, reducing soil erosion, recharging groundwater levels, and decreasing reliance on municipal water sources. It's a sustainable practice that promotes water security.",
+    answer: "Rainwater harvesting helps in conserving water, reducing soil erosion, recharging groundwater levels, and decreasing reliance on municipal water sources. It's a sustainable practice that promotes water security.",
   },
   {
     question: "How can I contact support?",
-    answer:
-      'You can contact our support team via email at support@jalsetu.com, call us at +91 123 456 7890, or browse our Knowledge Base for self-service articles. All options are listed in the "Contact Us" section below.',
+    answer: 'You can contact our support team via email at support@jalsetu.com, call us at +91 123 456 7890, or browse our Knowledge Base. All options are listed in the "Contact Us" section.',
   },
 ];
 
@@ -26,8 +23,8 @@ const FAQSection = () => {
 
   const filteredFaqs = useMemo(() => {
     const lowercasedQuery = searchQuery.toLowerCase();
-    if (!lowercasedQuery) return Data;
-    return Data.filter(
+    if (!lowercasedQuery) return faqData;
+    return faqData.filter(
       (faq) =>
         faq.question.toLowerCase().includes(lowercasedQuery) ||
         faq.answer.toLowerCase().includes(lowercasedQuery)
@@ -35,28 +32,21 @@ const FAQSection = () => {
   }, [searchQuery]);
 
   return (
-    <div className="max-w-3xl mx-auto mb-16 md:mb-20">
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 faq-section-title">
-        Frequently Asked Questions
-      </h2>
-
+    <div className="max-w-3xl mx-auto mb-20 faq-section">
+      <h2 className="text-3xl font-bold text-center mb-10">Frequently Asked Questions</h2>
       
-      <div className="max-w-2xl mx-auto mb-12 md:mb-16 search-bar">
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <Search className="text-gray-400" />
-          </div>
-          <input
-            type="search"
-            placeholder="Search for answers"
-            className="w-full py-3 md:py-4 pl-12 pr-4 text-base md:text-lg border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+      <div className="relative mb-8">
+        <input 
+          type="search" 
+          placeholder="Search for answers..."
+          className="w-full pl-12 pr-4 py-4 text-white bg-slate-800/50 border border-slate-700 rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-4">
         {filteredFaqs.length > 0 ? (
           filteredFaqs.map((faq, index) => (
             <FAQItem
@@ -68,7 +58,7 @@ const FAQSection = () => {
             />
           ))
         ) : (
-          <p className="text-center text-gray-600">
+          <p className="text-center text-slate-400">
             No results found for "{searchQuery}"
           </p>
         )}

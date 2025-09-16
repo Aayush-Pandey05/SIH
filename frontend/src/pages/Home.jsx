@@ -16,7 +16,7 @@ import Footer from '../components/Footer'
 const Home = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  // const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [visibleElements, setVisibleElements] = useState(new Set());
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const observerRef = useRef();
@@ -75,11 +75,7 @@ const Home = () => {
     { text: "The platform's focus on ROI and providing clear, actionable steps made it easy to convince our local community to invest in rainwater harvesting. We're now better prepared for the dry season.", author: "S. Gupta, Community Leader" }
   ];
 
-  const stepVisuals = [
-    "https://images.unsplash.com/photo-1534349762237-7227568a3556?q=80&w=800&h=600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1559336197-ded8aaa24de3?q=80&w=800&h=600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1620912189839-12a83ab5b3d6?q=80&w=800&h=600&auto=format&fit=crop"
-  ];
+ 
 
   return (
     <div className="min-h-screen bg-blue-50 text-white overflow-hidden relative font-sans">
