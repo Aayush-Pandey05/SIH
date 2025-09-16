@@ -32,6 +32,7 @@ const Modal = ({ isOpen, onClose, onSubmit }) => {
       alert("Please fill all fields");
       return;
     }
+    
     onSubmit({
       dimensions: { area: parseFloat(area) },
       latitude: parseFloat(lat),

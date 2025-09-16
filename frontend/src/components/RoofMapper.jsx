@@ -6,6 +6,7 @@ import L from "leaflet";
 import "leaflet-draw";
 import axios from "axios";
 import Modal from "./Modal"; 
+import { useFormStore } from "../store/useFormStore";
 
 const DrawingComponent = ({ onPolygonComplete, onPolygonDelete }) => {
   const map = useMap();
@@ -84,6 +85,8 @@ const RoofMapper = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const mapRef = useRef();
 
+  const {submitUserDataForm, isSubmittingUserData} = useFormStore();
+
   const MapController = () => {
     const map = useMap();
     mapRef.current = map;
@@ -108,6 +111,7 @@ const RoofMapper = () => {
       setSuggestions([]);
     }
   };
+
 
   const handleSearchChange = (e) => {
     const query = e.target.value;
@@ -160,24 +164,19 @@ const RoofMapper = () => {
     setDistrictName("");
   };
 
-  const sendToApi = async () => {
+  const handleSubmit = async () => {
     if (!area || !latLng || !districtName) {
       alert("Please draw a polygon first.");
       return;
     }
     const data = {
-      dimensions: { area },
+      area: { area },
       latitude: latLng.lat,
       longitude: latLng.lng,
       district: districtName,
     };
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/processing",
-        data
-      );
-      if (response.status === 200) alert("Data sent successfully!");
-      else alert("Error sending data.");
+      await submitUserDataForm(latLng.lat, latLng.lng, area, districtName);
     } catch (error) {
       console.error("API error:", error);
     }
@@ -205,14 +204,16 @@ const RoofMapper = () => {
 
         <div className="flex flex-row lg:flex-col gap-2 mt-4 lg:mt-0">
           <button
-            onClick={sendToApi}
+            onClick={handleSubmit}
             className="flex-1 lg:flex-none px-3 lg:px-4 py-2 bg-blue-600 text-white text-sm lg:text-base rounded cursor-pointer hover:scale-105 hover:bg-blue-500 transition-transform"
+            disabled={isSubmittingUserData}
           >
             Send
           </button>
           <button
             onClick={() => setIsModalOpen(true)}
             className="flex-1 lg:flex-none px-3 lg:px-4 py-2 bg-green-600 text-white text-sm lg:text-base rounded cursor-pointer hover:scale-105 hover:bg-green-500 transition-transform"
+            disabled={isSubmittingUserData}
           >
             <span className="hidden sm:inline">Enter Data Manually</span>
             <span className="sm:hidden">Manual Entry</span>
