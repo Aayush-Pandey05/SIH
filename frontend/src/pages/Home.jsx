@@ -89,7 +89,7 @@ const Home = () => {
       
       <main>
         <HeroSection visibleElements={visibleElements} />
-        {<Feature/> }
+        {/* {<Feature/> } */}
         <ValuePropsSection visibleElements={visibleElements} />
         
         

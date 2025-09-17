@@ -7,6 +7,7 @@ import "leaflet-draw";
 import axios from "axios";
 import Modal from "./Modal";
 import { useFormStore } from "../store/useFormStore";
+import { Loader2 } from "lucide-react";
 
 const DrawingComponent = ({ onPolygonComplete, onPolygonDelete }) => {
   const map = useMap();
@@ -183,14 +184,10 @@ const RoofMapper = () => {
       alert("Please draw a polygon first.");
       return;
     }
-    const data = {
-      area: { area },
-      latitude: latLng.lat,
-      longitude: latLng.lng,
-      district: districtName,
-    };
     try {
       await submitUserDataForm(latLng.lat, latLng.lng, area, districtName);
+      // Reload the page after successful submission
+      window.location.reload();
     } catch (error) {
       console.error("API error:", error);
     }
@@ -227,10 +224,21 @@ const RoofMapper = () => {
         <div className="flex flex-col gap-3 mt-6">
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 bg-[#00a63e] text-white text-sm lg:text-base rounded-lg shadow-md hover:bg-[#008c34] hover:shadow-lg hover:scale-105 transition-all"
+            className={`px-4 py-2 text-white text-sm lg:text-base rounded-lg shadow-md transition-all flex items-center justify-center gap-2 ${
+              isSubmittingUserData
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-[#00a63e] hover:bg-[#008c34] hover:shadow-lg hover:scale-105"
+            }`}
             disabled={isSubmittingUserData}
           >
-            Send
+            {isSubmittingUserData ? (
+              <>
+                <Loader2 className="size-5 animate-spin" />
+                <span>Sending...</span>
+              </>
+            ) : (
+              "Send"
+            )}
           </button>
 
           <button
