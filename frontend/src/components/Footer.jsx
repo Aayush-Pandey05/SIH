@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
+import assets from "../assets/assets";
 
 const Footer = () => {
   const footerRef = useRef(null);
@@ -38,7 +39,7 @@ const Footer = () => {
       );
     }, footerRef);
 
-    return () => ctx.revert(); // cleanup on unmount
+    return () => ctx.revert(); 
   }, []);
 
   return (
@@ -60,7 +61,10 @@ const Footer = () => {
         {/* Grid section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           <div ref={(el) => (linksRef.current[0] = el)}>
-            <h2 className="text-lg font-bold mb-2">JalSetu</h2>
+           <div className="flex gap-2">
+              <img src={assets.logo} alt="JalSetu Logo" className="h-8 w-8 rounded-full"/>
+            <h2 className="text-m text-xl font-bold mb-2">JalSetu</h2>
+           </div>
             <p className="text-sm text-white/80">Every Drop Counts.</p>
             <p className="text-sm text-white/80 mt-1">Every Citizen Matters.</p>
           </div>
@@ -70,7 +74,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-white/80">
               <li>
                 <Link
-                  to="/home"
+                  to="/"
                   className="hover:underline hover:text-white transition-colors"
                 >
                   Home
@@ -84,14 +88,6 @@ const Footer = () => {
                   About
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/features"
-                  className="hover:underline hover:text-white transition-colors"
-                >
-                  Features
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -99,20 +95,20 @@ const Footer = () => {
             <h3 className="text-base font-semibold mb-3">Govt. Policies</h3>
             <ul className="space-y-2 text-sm text-white/80">
               <li>
-                <Link
-                  to="/resources"
+                <a
+                  href="https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=1914351"
                   className="hover:underline hover:text-white transition-colors"
                 >
                   Resources & Policies
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
-                  to="/articles"
+                <a
+                  href="https://www.researchgate.net/publication/357226990_A_Review_of_Indian_Traditional_Method_of_Rain_Water_Harvesting"
                   className="hover:underline hover:text-white transition-colors"
                 >
                   Knowledge Articles
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
@@ -122,7 +118,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-white/80">
               <li>
                 <Link
-                  to="/feedback"
+                  to="/about"
                   className="hover:underline hover:text-white transition-colors"
                 >
                   Provide Feedback
