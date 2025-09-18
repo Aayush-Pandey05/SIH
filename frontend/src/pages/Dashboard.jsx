@@ -18,10 +18,9 @@ const navRoutes = ["/", "/dashboard", "/map-roof", "/govschemes", "/support"];
 
 export default function Dashboard() {
   const { fetchUserData, userData, isLoadingData } = useDataStore();
-  const roofArea = 150; // Default roof area value
   const [chartData, setChartData] = useState([]);
   const [alertsData, setAlertsData] = useState([]);
-  const [totalRainfall, setTotalRainfall] = useState("0");
+  const [totalRainfall, setTotalRainfall] = useState("N/A");
   const [locationName, setLocationName] = useState("Bangalore");
   const [searchQuery, setSearchQuery] = useState("Bangalore");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -120,35 +119,38 @@ export default function Dashboard() {
           });
         }
 
-        const newChartData = Object.keys(monthlyRainfall).map((key) => {
-          const data = monthlyRainfall[key];
-          const precipitation = data.totalPrecipitation;
-          // Use user's roof area if available, otherwise default to 150
-          const currentRoofArea =
-            userData && userData[0] ? userData[0].area : 150;
-          const storageCapacity =
-            userData && userData[0]
-              ? userData[0].structure_capacity_liters
-              : 10500;
+        // Check if user data is available
+        const hasUserData = userData && userData[0];
+        
+        if (hasUserData) {
+          const newChartData = Object.keys(monthlyRainfall).map((key) => {
+            const data = monthlyRainfall[key];
+            const precipitation = data.totalPrecipitation;
+            const currentRoofArea = userData[0].area;
+            const storageCapacity = userData[0].structure_capacity_liters;
 
-          // Calculate potential runoff for the month
-          const monthlyRunoff = precipitation * currentRoofArea * 0.85; // 85% efficiency factor
+            // Calculate potential runoff for the month
+            const monthlyRunoff = precipitation * currentRoofArea * 0.85; // 85% efficiency factor
 
-          // Realistic water saved is limited by storage capacity
-          const realisticWaterSaved = Math.min(monthlyRunoff, storageCapacity);
+            // Realistic water saved is limited by storage capacity
+            const realisticWaterSaved = Math.min(monthlyRunoff, storageCapacity);
 
-          total += realisticWaterSaved;
-          return {
-            name: data.date.toLocaleDateString("en-US", { month: "short" }),
-            value: Math.round(realisticWaterSaved),
-            date: data.date,
-          };
-        });
+            total += realisticWaterSaved;
+            return {
+              name: data.date.toLocaleDateString("en-US", { month: "short" }),
+              value: Math.round(realisticWaterSaved),
+              date: data.date,
+            };
+          });
 
-        newChartData.sort((a, b) => a.date - b.date);
-
-        setChartData(newChartData);
-        setTotalRainfall(total.toLocaleString());
+          newChartData.sort((a, b) => a.date - b.date);
+          setChartData(newChartData);
+          setTotalRainfall(total.toLocaleString());
+        } else {
+          // No user data available, set empty chart and N/A for total
+          setChartData([]);
+          setTotalRainfall("N/A");
+        }
 
         // Step 4: Fetch forecast for alerts
         const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${newLat}&longitude=${newLon}&daily=precipitation_sum&timezone=auto`;
@@ -156,29 +158,39 @@ export default function Dashboard() {
         const forecastData = await forecastResponse.json();
         const todayPrecipitation =
           forecastData.daily?.precipitation_sum[0] || 0;
+        
+        // Only show alerts if user data is available
         const newAlertsData = [];
-
-        const monsoonThreshold = 50000;
-        if (total > monsoonThreshold && todayPrecipitation > 0) {
-          newAlertsData.push({
-            color: "blue",
-            title: "Prepare for the upcoming monsoon season",
-            subtitle: "Pre-Rain Alert",
-          });
+        if (hasUserData) {
+          const monsoonThreshold = 50000;
+          if (total > monsoonThreshold && todayPrecipitation > 0) {
+            newAlertsData.push({
+              color: "blue",
+              title: "Prepare for the upcoming monsoon season",
+              subtitle: "Pre-Rain Alert",
+            });
+          } else {
+            newAlertsData.push({
+              color: "green",
+              title: "Rainwater harvesting system is active",
+              subtitle: "Post-Rain Alert",
+            });
+          }
         } else {
           newAlertsData.push({
-            color: "green",
-            title: "Rainwater harvesting system is active",
-            subtitle: "Post-Rain Alert",
+            color: "gray",
+            title: "No user data available",
+            subtitle: "Please configure your roof details",
           });
         }
         setAlertsData(newAlertsData);
+        
       } catch (error) {
         console.error("Error:", error.message);
         setChartData([]);
         setTotalRainfall("N/A");
         setAlertsData([
-          { color: "blue", title: "Error", subtitle: error.message },
+          { color: "red", title: "Error", subtitle: error.message },
         ]);
       }
     };
@@ -203,15 +215,13 @@ export default function Dashboard() {
   const statCardsData = [
     {
       title: "Roof Area (m²)",
-      value: userRecommendation
-        ? Math.round(userRecommendation.area)
-        : roofArea,
+      value: userRecommendation ? Math.round(userRecommendation.area) : "N/A",
     },
     {
       title: "Water Saved (Liters)",
       value: userRecommendation
         ? userRecommendation.structure_capacity_liters.toLocaleString()
-        : totalRainfall,
+        : "N/A",
     },
     {
       title: "Groundwater Level (m)",
@@ -221,7 +231,7 @@ export default function Dashboard() {
       title: "Savings (₹)",
       value: userRecommendation
         ? userRecommendation.annual_savings_inr.toLocaleString()
-        : "1,200",
+        : "N/A",
     },
   ];
 
