@@ -1,38 +1,107 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { MenuIcon, XIcon, ArrowRightIcon } from "./IconAL";
+import gsap from "gsap";
+import { Navigate, NavLink, useLocation } from "react-router-dom"; // ✅ added useLocation
 
+import { MenuIcon, XIcon } from "./IconAL";
 import assets from "../assets/assets";
 import { useAuthStore } from "../store/useAuthStore";
 
 const InitialAvatar = ({ name, className }) => {
   const getInitials = (name) => {
     if (!name || typeof name !== "string") return "?";
-
-    const names = name.split(" ");
-    const firstName = names[0] || "";
-    const lastName = names.length > 1 ? names[names.length - 1] : "";
-
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    const parts = name.split(" ");
+    return `${parts[0]?.[0] || ""}${parts[1]?.[0] || ""}`.toUpperCase();
   };
 
   return (
     <div
-      className={`flex items-center justify-center m-5 rounded-full bg-cyan-600 text-white font-bold ${className}`}
+      className={`flex items-center justify-center rounded-full bg-cyan-600 text-white font-bold ${className}`}
     >
       <span>{getInitials(name)}</span>
     </div>
   );
 };
 
-const HeaderAL = ({ isMenuOpen, setIsMenuOpen, time }) => {
+const navLinks = [
+  { name: "Home", path: "/" },
+  { name: "Dashboard", path: "/dashboard" },
+  { name: "Government Schemes", path: "/govschemes" },
+  { name: "Map Roof AI", path: "/map-roof" },
+  { name: "Support", path: "/support" },
+];
+
+const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const profileMenuRef = useRef(null);
-  const profileButtonRef = useRef(null);
 
   const { logout, authUser } = useAuthStore();
-  const navigate = useNavigate();
+  const location = useLocation(); // ✅ track route changes
 
+  const headerRef = useRef(null);
+  const logoRef = useRef(null);
+  const navRef = useRef(null);
+  const buttonRef = useRef(null);
+  const profileMenuRef = useRef(null);
+  const profileButtonRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+
+  // ✅ Scroll / Hero detection
+  useEffect(() => {
+    const hero = document.getElementById("hero");
+
+    if (!hero) {
+      // No hero → treat as transparent at top
+      setIsScrolled(false);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsScrolled(!entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, [location.pathname]);
+
+  // ✅ GSAP animation on mount
+  useEffect(() => {
+    const headerEl = headerRef.current;
+    const logoEl = logoRef.current;
+    const navItems = navRef.current?.children || [];
+    const buttonEl = buttonRef.current;
+
+    const tl = gsap.timeline();
+    tl.from(headerEl, { y: -50, opacity: 0, duration: 0.8, ease: "power3.out" })
+      .from([logoEl, buttonEl], {
+        opacity: 0,
+        y: -20,
+        duration: 0.5,
+        ease: "power3.out",
+      }, "-=0.3")
+      .from(navItems, {
+        opacity: 0,
+        y: -20,
+        duration: 0.4,
+        ease: "power3.out",
+        stagger: 0.1,
+      }, "-=0.3");
+  }, []);
+
+  // ✅ GSAP mobile menu slide
+  useEffect(() => {
+    if (isMenuOpen) {
+      gsap.fromTo(
+        mobileMenuRef.current,
+        { x: "100%" },
+        { x: "0%", duration: 0.6, ease: "power3.out" }
+      );
+    }
+  }, [isMenuOpen]);
+
+  // ✅ Close profile menu on outside click
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -45,107 +114,143 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen, time }) => {
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = async () => {
     setIsProfileMenuOpen(false);
-    const result = await logout();
-    if (result.success) {
-      navigate("/", { replace: true });
-    }
+    await logout();
+    Navigate("/", { replace: true });
   };
 
   return (
-    <header className="fixed w-full z-50 bg-black/30 backdrop-blur-md shadow-lg py-3 transition-all duration-300">
-      <div className="max-w-7xl mx-auto sm:px-6 relative flex items-center justify-between h-16">
-        <div className="flex items-center">
-          <div className="bg-black/20 rounded-full flex items-center space-x-2 pr-3 hover:bg-black/30 transition-colors">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-3 text-white rounded-full hover:bg-white/10"
+    <>
+      <header
+        ref={headerRef}
+        className={`fixed z-50 top-5 left-4 right-4 p-2 rounded-3xl transition-all duration-700 ${
+          isScrolled ? "bg-white shadow-lg" : "bg-black/80"
+        }`}
+      >
+        <div className="px-4 sm:px-6 flex items-center justify-between h-16">
+          {/* Logo */}
+          <div ref={logoRef} className="flex items-center space-x-2 cursor-pointer group">
+            <img src={assets.logo} alt="JalSetu Logo" className="h-8 w-8 rounded-full" />
+            <span
+              className={`text-2xl font-bold group-hover:text-blue-400 transition-colors duration-700 font-[font17] ${
+                isScrolled ? "text-black" : "text-white"
+              }`}
             >
-              {isMenuOpen ? <XIcon /> : <MenuIcon />}
-            </button>
-            <div className="text-sm whitespace-nowrap text-gray-200">
-              <span className="font-medium hidden sm:inline">
-                {time}, Bengaluru, IN
-              </span>
+              JalSetu
+            </span>
+          </div>
+
+          {/* Desktop Nav */}
+          <nav ref={navRef} className="hidden md:flex items-center gap-3 space-x-10">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.name}
+                to={link.path}
+                className={({ isActive }) =>
+                  `text-xl sm:text-lg md:text-base lg:text-[2.3vh] font-medium transition-colors duration-700 hover:text-gray-400 ${
+                    isActive
+                      ? isScrolled
+                        ? "text-blue-500 font-bold"
+                        : "text-gray-300"
+                      : isScrolled
+                      ? "text-black"
+                      : "text-white"
+                  }`
+                }
+              >
+                {link.name}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* Right Section */}
+          <div ref={buttonRef} className="flex items-center space-x-4">
+            {/* Profile Dropdown */}
+            <div className="relative">
+              <button
+                ref={profileButtonRef}
+                onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                className={`group flex items-center space-x-3 px-3 py-1 rounded-full transition-colors duration-700 ${
+                  isScrolled ? "bg-white text-black" : "bg-black text-white"
+                }`}
+              >
+                <InitialAvatar name={authUser?.fullName} className="w-8 h-8" />
+                <span className="font-semibold hidden sm:inline">
+                  {authUser?.fullName || "User"}
+                </span>
+              </button>
+
+              {isProfileMenuOpen && (
+                <div
+                  ref={profileMenuRef}
+                  className="absolute right-0 mt-3 w-56 bg-slate-950 backdrop-blur-lg 
+                        rounded-xl shadow-2xl border border-gray-700 overflow-hidden z-50"
+                >
+                  <div className="flex flex-col items-center p-4 border-b border-gray-700">
+                    <InitialAvatar name={authUser?.fullName} className="w-12 h-12 p-2 border-2 border-slate-600" />
+                    <p className="font-semibold text-white text-center">
+                      {authUser?.fullName || "User"}
+                    </p>
+                    <p className="text-sm text-slate-300 text-center">
+                      {authUser?.email || "user@example.com"}
+                    </p>
+                  </div>
+                  <div className="py-2">
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-red-400 hover:bg-slate-700/50"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Menu Toggle */}
+            <div
+              className={`rounded-full md:hidden transition-colors duration-700 ${
+                isScrolled ? "bg-white" : "bg-black"
+              }`}
+            >
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className={`p-2 rounded-full transition-colors duration-700 ${
+                  isScrolled ? "text-black hover:bg-gray-200" : "text-white hover:bg-gray-800"
+                }`}
+              >
+                {isMenuOpen ? <XIcon /> : <MenuIcon />}
+              </button>
             </div>
           </div>
         </div>
+      </header>
 
+      {/* Mobile Menu Overlay */}
+      {isMenuOpen && (
         <div
-          className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 hidden md:block ${
-            isMenuOpen ? "opacity-0" : "opacity-100"
-          }`}
+          ref={mobileMenuRef}
+          className="fixed inset-0 bg-black/90 z-40 flex flex-col items-center justify-center space-y-8 md:hidden"
         >
-          <Link
-            to="/"
-            className="flex items-center space-x-2 cursor-pointer group"
-          >
-            <img
-              src={assets.logo}
-              alt="JalSetu Logo"
-              className="h-8 w-8 rounded-full"
-            />
-            <span className="text-2xl font-bold text-white group-hover:text-blue-950 transition-colors">
-              JalSetu
-            </span>
-          </Link>
-        </div>
-
-        <div className="flex items-center">
-          <div className="relative">
-            <button
-              ref={profileButtonRef}
-              onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-              className="group bg-black/20 rounded-full flex items-center space-x-3 pl-2 pr-4 py-2 font-medium hover:bg-black/30 transition-colors"
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.name}
+              to={link.path}
+              onClick={() => setIsMenuOpen(false)}
+              className={`text-2xl font-semibold transition-colors duration-700 ${
+                isScrolled ? "text-black" : "text-white"
+              }`}
             >
-              <div className="p-2 bg-white/40 rounded-full">
-                <ArrowRightIcon />
-              </div>
-              <span className="font-semibold text-white hidden sm:inline">
-                {authUser?.fullName || "User"}
-              </span>
-            </button>
-
-            {isProfileMenuOpen && (
-              <div
-                ref={profileMenuRef}
-                className="absolute right-2 top-full mt-3 w-56 sm:w-60 bg-slate-950 backdrop-blur-lg 
-             rounded-xl shadow-2xl border border-gray-700 overflow-hidden z-50"
-              >
-                <div className="flex flex-col items-center p-4 border-b border-gray-700">
-                  <InitialAvatar
-                    name={authUser?.fullName}
-                    className="w-12 h-12 sm:w-10 sm:h-10 p-2 border-2 border-slate-600 
-                 group-hover:border-cyan-400 transition"
-                  />
-                  <p className="font-semibold text-white text-center break-words">
-                    {authUser?.fullName || "User"}
-                  </p>
-                  <p className="text-sm text-slate-200 text-center break-all">
-                    {authUser?.email || "user@example.com"}
-                  </p>
-                </div>
-
-                <div className="py-2">
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full text-left px-4 py-2 text-red-400 hover:bg-slate-700/50"
-                  >
-                    Logout
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+              {link.name}
+            </NavLink>
+          ))}
         </div>
-      </div>
-    </header>
+      )}
+    </>
   );
 };
 

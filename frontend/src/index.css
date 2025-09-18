@@ -4,7 +4,84 @@
 
 
 body{
-
     font-family: 'DM Sans', sans-serif;
 }
+@font-face {
+  font-family: font2;
 
+  src: url(../public/Fonts/rP2Yp2ywxg089UriI5-g4vlH9VoD8Cmcqbu0-K4.woff2);
+}
+@font-face {
+  font-family: font3;
+
+  src: url(../public/Fonts/CTX3fHUepJxbyoY195f0xCdXUU.woff2);
+}
+@font-face {
+  font-family: font4;
+
+  src: url(../public/Fonts/vQyevYAyHtARFwPqUzQGpnDs.woff2);
+}
+@font-face {
+  font-family: font5;
+
+  src: url(../public/Fonts/vTfDj4yYivAGDJ2dFv3eIWjT2E.woff2);
+}
+@font-face {
+  font-family: font6;
+
+  src: url(../public/Fonts/W5ftAo3F5IVVlvZOqGOOelvgo.woff2);
+}
+@font-face {
+  font-family: font7;
+
+  src: url(../public/Fonts/F7.woff2);
+}
+@font-face {
+  font-family: font8;
+
+  src: url(../public/Fonts/F8.woff2);
+}
+@font-face {
+  font-family: font9;
+
+  src: url(../public/Fonts/F9.woff2);
+}
+@font-face {
+  font-family: font10;
+
+  src: url(../public/Fonts/F10.woff2);
+}
+@font-face {
+  font-family: font11;
+
+  src: url(../public/Fonts/F11.woff2);
+}
+@font-face {
+  font-family: font12;
+
+  src: url(../public/Fonts/F12.woff2);
+}@font-face {
+  font-family: font13;
+
+  src: url(../public/Fonts/F13.woff2);
+}
+@font-face {
+  font-family: font14;
+
+  src: url(../public/Fonts/F11.woff2);
+}
+@font-face {
+  font-family: font15;
+
+  src: url(../public/Fonts/F12.woff2);
+}
+@font-face {
+  font-family: font16;
+
+  src: url(../public/Fonts/F13.woff2);
+}
+@font-face {
+  font-family: font17;
+
+  src: url(../public/Fonts/F14.woff2);
+}

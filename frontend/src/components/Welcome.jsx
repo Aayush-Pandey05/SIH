@@ -1,5 +1,5 @@
-import React from "react";
-import { assets } from "../assets/assets";
+import React from 'react';
+import { assets } from '../assets/assets';
 
 const WelcomeSection = ({ visibleElements }) => {
   const features = [
@@ -9,11 +9,7 @@ const WelcomeSection = ({ visibleElements }) => {
   ];
 
   return (
-    <section
-      id="features-section"
-      className="py-30 px-6 bg-gray-900"
-      data-animate="welcome"
-    >
+    <section id='feature'className="py-30 px-6 bg-gray-900" data-animate="welcome">
       <div className="max-w-6xl mx-auto">
         <div
           className={`grid md:grid-cols-2 gap-12 items-center transition-all duration-1000 ease-out ${
@@ -22,6 +18,7 @@ const WelcomeSection = ({ visibleElements }) => {
               : "opacity-0 -translate-x-10"
           }`}
         >
+  
           <div className="space-y-6">
             <div className="space-y-4">
               <h2 className="text-sm font-semibold text-gray-100 uppercase tracking-wider">
@@ -60,11 +57,12 @@ const WelcomeSection = ({ visibleElements }) => {
             </div>
           </div>
 
-          <div className="relative bg-gradient-to-br from-gray-700 to-gray-800 border border-cyan-500/20 rounded-3xl h-96 flex items-center justify-center group hover:shadow-2xl hover:shadow-cyan-400/10 hover:scale-105 transition-all duration-500 cursor-pointer overflow-hidden">
-            <img
+          {/* Right Side (Image Card) */}
+          <div className="relative bg-gradient-to-br from-gray-700 to-gray-800 border border-cyan-500/20 rounded-3xl  flex items-center justify-center group hover:shadow-2xl hover:shadow-cyan-400/10 hover:scale-105 transition-all duration-500 cursor-pointer overflow-hidden">
+            <img 
               src={assets.img2}
               alt="AI Analysis Dashboard"
-              className="w-full h-96 object-cover cursor-pointer rounded-3xl"
+              className="w-full  object-cover cursor-pointer rounded-3xl"
             />
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl cursor-pointer"></div>
           </div>

@@ -76,6 +76,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth"})}
                   className="hover:text-cyan-900 transition-all duration-300 "
                 >
                   Home
@@ -84,6 +85,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/about"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth"})}
                   className=" hover:text-cyan-900 transition-all duration-200"
                 >
                   About
@@ -99,7 +101,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-white/80">
               <li>
                 <a
-                  href="https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=1914351"
+                  href="https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=1914351" target='_blank' 
                   className="hover:text-cyan-900 transition-all duration-300 "
                 >
                   Resources & Policies
@@ -107,7 +109,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="https://www.researchgate.net/publication/357226990_A_Review_of_Indian_Traditional_Method_of_Rain_Water_Harvesting"
+                  href="https://www.researchgate.net/publication/357226990_A_Review_of_Indian_Traditional_Method_of_Rain_Water_Harvesting" target='_blank' 
                   className="hover:text-cyan-900 transition-all duration-300 "
                 >
                   Knowledge Articles
@@ -121,17 +123,11 @@ const Footer = () => {
               Support
             </h3>
             <ul className="space-y-2 text-sm text-white/80">
-              <li>
-                <Link
-                  to="/about"
-                  className="hover:text-cyan-900 transition-all duration-300 "
-                >
-                  Provide Feedback
-                </Link>
-              </li>
+        
               <li>
                 <Link
                   to="/contactus"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth"})}
                   className="hover:text-cyan-900 transition-all duration-300 "
                 >
                   Contact Us

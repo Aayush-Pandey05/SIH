@@ -2,19 +2,16 @@ import React from "react";
 import { Mail, Phone, BookOpen } from "lucide-react";
 
 const ContactCard = ({ icon, title, description, linkText, linkHref }) => (
-  <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 flex flex-col items-center text-center gap-4 hover:border-cyan-400 transition-colors">
-    <div className="bg-slate-900/50 p-4 rounded-full border border-slate-700">
-      {icon}
+    <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 flex flex-col items-center text-center gap-4 hover:border-cyan-400 transition-colors">
+        <div className="bg-slate-900/50 p-4 rounded-full border border-slate-700">
+            {icon}
+        </div>
+        <h3 className="text-xl font-bold text-white mt-2">{title}</h3>
+        <p className="text-slate-400 text-sm flex-grow">{description}</p>
+        <a href={linkHref} target='_blank' className="font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-4">
+            {linkText}
+        </a>
     </div>
-    <h3 className="text-xl font-bold text-white mt-2">{title}</h3>
-    <p className="text-slate-400 text-sm flex-grow">{description}</p>
-    <a
-      href={linkHref}
-      className="font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-4"
-    >
-      {linkText}
-    </a>
-  </div>
 );
 
 const ContactSection = () => (
@@ -46,7 +43,7 @@ const ContactSection = () => (
         title="Knowledge Base"
         description="Explore our articles and guides for self-service."
         linkText="Browse Articles"
-        linkHref="#"
+        linkHref="https://nwm.gov.in/catchtherain"
       />
     </div>
   </div>

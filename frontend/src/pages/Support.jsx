@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -23,28 +23,9 @@ const navRoutes = ["/", "/dashboard", "/map-roof", "/govschemes", "/support"];
 const SupportPage = () => {
   const mainRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [time, setTime] = useState("");
-
-  useEffect(() => {
-    const updateTime = () => {
-      const options = {
-        timeZone: "Asia/Kolkata",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      };
-      setTime(new Intl.DateTimeFormat("en-US", options).format(new Date()));
-    };
-
-    updateTime();
-    const timerId = setInterval(updateTime, 60000);
-
-    return () => clearInterval(timerId);
-  }, []);
-
-  useGSAP(
-    () => {
-      const tl = gsap.timeline({
+  
+  useGSAP(() => {
+    const tl = gsap.timeline({ 
         defaults: { ease: "power3.out", duration: 0.8 },
         scrollTrigger: {
           trigger: mainRef.current,
@@ -61,19 +42,10 @@ const SupportPage = () => {
 
   return (
     <div>
-      <HeaderAL
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        time={time}
-      />
-      <FullScreenMenuAL
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        navLinks={navLinks}
-        navRoutes={navRoutes}
-      />
-
-      <div ref={mainRef} className="bg-slate-900 text-white min-h-screen">
+      <HeaderAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+      <FullScreenMenuAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} navLinks={navLinks} navRoutes={navRoutes} />
+      
+      <div ref={mainRef} className="bg-slate-900 text-white min-h-screen" id="hero">
         <div className="relative h-[50vh] sm:h-[65vh] flex items-center justify-center text-center px-4 support-hero">
           <div
             className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
