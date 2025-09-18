@@ -1,8 +1,8 @@
-// components/HeroSection.js
 import React, { useEffect, useRef } from "react";
-import { MainWaterDropIcon, ArrowRightIcon } from "./IconAL";
+import { ArrowRightIcon } from "./IconAL";
 import { gsap } from "gsap";
 import { assets } from "../assets/assets";
+
 const HeroSectionAL = ({ visibleElements }) => {
   const logoRef = useRef(null);
 
@@ -31,7 +31,7 @@ const HeroSectionAL = ({ visibleElements }) => {
   }, [visibleElements]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full min-h-screen overflow-hidden">
       <video
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
         src="/VideoAL2.mp4"
@@ -41,41 +41,40 @@ const HeroSectionAL = ({ visibleElements }) => {
         playsInline
       ></video>
 
-      <div className="absolute  inset-0 bg-black/50 z-10"></div>
+      <div className="absolute inset-0 bg-black/50 z-10"></div>
 
-      {/* Hero Content */}
       <section
         id="hero"
-        className="relative pt-24 sm:pt-28 lg:pt-32 z-20 flex items-center justify-center px-4 sm:px-6 lg:px-12"
+        className="relative z-20 flex items-center justify-center min-h-screen px-4 sm:px-6 lg:px-12 pt-20 sm:pt-24"
         data-animate="hero"
       >
         <div
-          className={`w-full max-w-md sm:max-w-2xl md:max-w-3xl mx-auto flex flex-col items-center text-center transition-all duration-1000 
-      ${
-        visibleElements.has("hero")
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-10"
-      } bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl 
-      p-4 sm:p-6 md:p-8 lg:p-10`}
+          className={`w-full max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto flex flex-col items-center text-center transition-all duration-1000 
+            ${
+              visibleElements.has("hero")
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
+            } bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl 
+            p-4 sm:p-6 md:p-8 lg:p-10`}
         >
           <div
             ref={logoRef}
             className="p-2 sm:p-3 rounded-full mb-6 border flex items-center justify-center"
           >
             <img
-              className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover"
+              className="w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover"
               src={assets.logo}
               alt="JalSetu Logo"
             />
           </div>
 
           {/* Title */}
-          <h1 className="text-2xl font-[font15] sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-black drop-shadow-lg leading-tight">
+          <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-black drop-shadow-lg leading-tight">
             Welcome to <span className="text-blue-950">JalSetu</span>
           </h1>
 
           {/* Description */}
-          <p className="text-sm font-[font6] sm:text-base md:text-lg lg:text-xl text-white font-medium leading-relaxed mb-6 sm:mb-8 px-1 sm:px-2 md:px-4">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white font-medium leading-relaxed mb-6 sm:mb-8 px-2 md:px-4">
             JalSetu is your comprehensive solution for planning, optimizing, and
             adopting Rainwater Harvesting (RWH). We combine GIS mapping, AI/ML,
             smart alerts, government integration, and WebAR visualization to
@@ -84,7 +83,7 @@ const HeroSectionAL = ({ visibleElements }) => {
 
           {/* CTA Button */}
           <a href="/map-roof" className="w-full sm:w-auto">
-            <button className="w-full sm:w-auto group flex items-center justify-center sm:justify-start space-x-2 sm:space-x-3 px-5 sm:px-8 py-3 sm:py-4 bg-cyan-500 hover:bg-blue-950 text-white text-sm sm:text-lg font-semibold rounded-lg shadow-lg hover:scale-105 transition-all">
+            <button className="w-full sm:w-auto group flex items-center justify-center space-x-2 px-5 sm:px-8 py-3 sm:py-4 bg-cyan-500 hover:bg-blue-950 text-white text-sm sm:text-lg font-semibold rounded-lg shadow-lg hover:scale-105 transition-all">
               <span>Map Your Roof to Get Started</span>
               <ArrowRightIcon className="w-4 h-4 sm:w-6 sm:h-6" />
             </button>
@@ -92,12 +91,6 @@ const HeroSectionAL = ({ visibleElements }) => {
         </div>
       </section>
 
-      <a href="/map-roof" className="w-full sm:w-auto">
-        <button className="w-full sm:w-auto group flex items-center justify-center sm:justify-start space-x-2 sm:space-x-3 px-5 sm:px-8 py-3 sm:py-4 bg-cyan-500 hover:bg-blue-950 text-white text-sm sm:text-lg font-semibold rounded-lg shadow-lg hover:scale-105 transition-all">
-          <span>Map Your Roof to Get Started</span>
-          <ArrowRightIcon className="w-4 h-4 sm:w-6 sm:h-6" />
-        </button>
-      </a>
     </div>
   );
 };
