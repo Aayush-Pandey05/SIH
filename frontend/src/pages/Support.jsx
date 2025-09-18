@@ -73,7 +73,6 @@ const SupportPage = () => {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 };

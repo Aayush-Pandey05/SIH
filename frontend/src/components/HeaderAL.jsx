@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
-import { Navigate, NavLink, useLocation } from "react-router-dom"; // ✅ added useLocation
+import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom"; // ✅ added useLocation
 
 import { MenuIcon, XIcon } from "./IconAL";
 import assets from "../assets/assets";
@@ -116,6 +116,7 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  const Navigate = useNavigate();
 
   const handleLogout = async () => {
     setIsProfileMenuOpen(false);

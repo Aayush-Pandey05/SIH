@@ -151,7 +151,7 @@ const Header = () => {
             {/* Join JalSetu */}
             <NavLink
               to="/signup"
-              className={`group flex items-center space-x-3 pl-3 pr-3 py-1 font-[font6] rounded-full transition-colors duration-700 ${
+              className={`group flex items-center space-x-3 pl-5 pr-3 py-1 font-[font6] rounded-full transition-colors duration-700 ${
                 isScrolled ? "bg-white text-black" : "bg-black text-white"
               }`}
             >
