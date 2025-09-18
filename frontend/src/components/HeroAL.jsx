@@ -44,12 +44,13 @@ const HeroSectionAL = ({ visibleElements }) => {
       <div className="absolute  inset-0 bg-black/50 z-10"></div>
 
       {/* Hero Content */}
-      <section id='hero'
-  className="relative pt-24 sm:pt-28 lg:pt-32 z-20 flex items-center justify-center px-4 sm:px-6 lg:px-12"
-  data-animate="hero"
->
-  <div
-    className={`w-full max-w-md sm:max-w-2xl md:max-w-3xl mx-auto flex flex-col items-center text-center transition-all duration-1000 
+      <section
+        id="hero"
+        className="relative pt-24 sm:pt-28 lg:pt-32 z-20 flex items-center justify-center px-4 sm:px-6 lg:px-12"
+        data-animate="hero"
+      >
+        <div
+          className={`w-full max-w-md sm:max-w-2xl md:max-w-3xl mx-auto flex flex-col items-center text-center transition-all duration-1000 
       ${
         visibleElements.has("hero")
           ? "opacity-100 translate-y-0"
@@ -68,28 +69,20 @@ const HeroSectionAL = ({ visibleElements }) => {
             />
           </div>
 
-    {/* Title */}
-    <h1 className="text-2xl font-[font15] sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-black drop-shadow-lg leading-tight">
-      Welcome to <span className="text-blue-950">JalSetu</span>
-    </h1>
+          {/* Title */}
+          <h1 className="text-2xl font-[font15] sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-black drop-shadow-lg leading-tight">
+            Welcome to <span className="text-blue-950">JalSetu</span>
+          </h1>
 
-    {/* Description */}
-    <p className="text-sm font-[font6] sm:text-base md:text-lg lg:text-xl text-white font-medium leading-relaxed mb-6 sm:mb-8 px-1 sm:px-2 md:px-4">
-      JalSetu is your comprehensive solution for planning, optimizing, and adopting Rainwater
-      Harvesting (RWH). We combine GIS mapping, AI/ML, smart alerts, government integration,
-      and WebAR visualization to make RWH accessible and efficient for every Indian citizen.
-    </p>
+          {/* Description */}
+          <p className="text-sm font-[font6] sm:text-base md:text-lg lg:text-xl text-white font-medium leading-relaxed mb-6 sm:mb-8 px-1 sm:px-2 md:px-4">
+            JalSetu is your comprehensive solution for planning, optimizing, and
+            adopting Rainwater Harvesting (RWH). We combine GIS mapping, AI/ML,
+            smart alerts, government integration, and WebAR visualization to
+            make RWH accessible and efficient for every Indian citizen.
+          </p>
 
-    {/* CTA Button */}
-    <a href="/map-roof" className="w-full sm:w-auto">
-      <button className="w-full sm:w-auto group flex items-center justify-center sm:justify-start space-x-2 sm:space-x-3 px-5 sm:px-8 py-3 sm:py-4 bg-cyan-500 hover:bg-blue-950 text-white text-sm sm:text-lg font-semibold rounded-lg shadow-lg hover:scale-105 transition-all">
-        <span>Map Your Roof to Get Started</span>
-        <ArrowRightIcon className="w-4 h-4 sm:w-6 sm:h-6" />
-      </button>
-    </a>
-  </div>
-</section>
-
+          {/* CTA Button */}
           <a href="/map-roof" className="w-full sm:w-auto">
             <button className="w-full sm:w-auto group flex items-center justify-center sm:justify-start space-x-2 sm:space-x-3 px-5 sm:px-8 py-3 sm:py-4 bg-cyan-500 hover:bg-blue-950 text-white text-sm sm:text-lg font-semibold rounded-lg shadow-lg hover:scale-105 transition-all">
               <span>Map Your Roof to Get Started</span>
@@ -97,7 +90,15 @@ const HeroSectionAL = ({ visibleElements }) => {
             </button>
           </a>
         </div>
-      
+      </section>
+
+      <a href="/map-roof" className="w-full sm:w-auto">
+        <button className="w-full sm:w-auto group flex items-center justify-center sm:justify-start space-x-2 sm:space-x-3 px-5 sm:px-8 py-3 sm:py-4 bg-cyan-500 hover:bg-blue-950 text-white text-sm sm:text-lg font-semibold rounded-lg shadow-lg hover:scale-105 transition-all">
+          <span>Map Your Roof to Get Started</span>
+          <ArrowRightIcon className="w-4 h-4 sm:w-6 sm:h-6" />
+        </button>
+      </a>
+    </div>
   );
 };
 

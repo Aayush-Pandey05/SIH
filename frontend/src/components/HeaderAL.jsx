@@ -145,7 +145,7 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
           </div>
 
           {/* Desktop Nav */}
-          <nav ref={navRef} className="hidden md:flex items-center gap-3 space-x-10">
+          <nav ref={navRef} className="hidden lg:flex items-center gap-3 space-x-6">
             {navLinks.map((link) => (
               <NavLink
                 key={link.name}
@@ -213,7 +213,7 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
 
             {/* Mobile Menu Toggle */}
             <div
-              className={`rounded-full md:hidden transition-colors duration-700 ${
+              className={`rounded-full lg:hidden transition-colors duration-700 ${
                 isScrolled ? "bg-white" : "bg-black"
               }`}
             >
