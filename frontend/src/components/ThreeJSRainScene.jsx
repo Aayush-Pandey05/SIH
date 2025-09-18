@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from "react";
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from "lucide-react";
 import * as THREE from "three";
 const ThreeJSRainScene = () => {
   const mountRef = useRef();
