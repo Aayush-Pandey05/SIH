@@ -15,7 +15,7 @@ const DrawingComponent = ({ onPolygonComplete, onPolygonDelete }) => {
 
   const calculateArea = (latLngs) => {
     let area = 0;
-    const R = 6371000; // Earth's radius in meters
+    const R = 6371000; 
     if (latLngs.length < 3) return 0;
 
     for (let i = 0; i < latLngs.length; i++) {
@@ -87,21 +87,21 @@ const RoofMapper = () => {
   const mapRef = useRef();
 
   const { isSubmittingUserData, submitUserDataForm } = useFormStore();
-  // NEW: This useEffect hook modifies the page background
+
   useEffect(() => {
-    // Store the original body background to restore it later
+
     const originalStyle = document.body.style.background;
 
-    // Apply the new gradient background to the entire page body
+   
     document.body.style.background =
-      "linear-gradient(to bottom right, #0f172a, #2563eb, #06b6d4)"; // slate-950, blue-600, cyan-600
+      "linear-gradient(to bottom right, #0f172a, #2563eb, #06b6d4)";
 
-    // This is a cleanup function that runs when the component is removed
+    
     return () => {
       // Restore the original background
       document.body.style.background = originalStyle;
     };
-  }, []); // The empty array ensures this effect runs only once when the component mounts
+  }, []); 
 
   const MapController = () => {
     const map = useMap();
@@ -186,7 +186,6 @@ const RoofMapper = () => {
     }
     try {
       await submitUserDataForm(latLng.lat, latLng.lng, area, districtName);
-      // Reload the page after successful submission
       window.location.reload();
     } catch (error) {
       console.error("API error:", error);

@@ -1,4 +1,3 @@
-// src/pages/ContactPage.js
 import React, { useState, useEffect, useRef } from "react";
 import { Send, Mail, Phone, MapPin, Loader2 } from "lucide-react";
 import Header from "../components/Header";

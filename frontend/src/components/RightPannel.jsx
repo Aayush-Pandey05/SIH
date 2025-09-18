@@ -1,7 +1,6 @@
 import React from "react";
 import ThreeJSWaterScene from "./ThreeJSWaterScene";
 
-
 const RightPannel = () => {
   return (
     <div className="hidden lg:flex w-1/2 relative">

@@ -3,9 +3,9 @@ import { Target, Cpu, Send, BarChart4, Loader2 } from "lucide-react";
 import Header from "../components/Header";
 import FullScreenMenu from "../components/FullScreen";
 import { useFormStore } from "../store/useFormStore";
+import toast from "react-hot-toast";
 
 const AboutPage = () => {
-  // State and effects from your ContactPage for the header and menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -50,7 +50,6 @@ const AboutPage = () => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
-    // This observer logic is for scroll-triggered animations
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {

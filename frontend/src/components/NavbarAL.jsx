@@ -53,7 +53,6 @@ const NavbarAL = () => {
         <span className="text-2xl font-bold text-gray-800">JalSetu</span>
       </Link>
 
-      {/* Desktop Nav */}
       <ul className="hidden md:flex gap-8 text-base relative">
         <NavLink to="/" className={getNavLinkClass}>
           Home
@@ -72,7 +71,6 @@ const NavbarAL = () => {
         </NavLink>
       </ul>
 
-      {/* Profile & Mobile Menu Button */}
       <div className="flex items-center gap-6">
         <div className="relative hidden md:block">
           <button
@@ -129,7 +127,6 @@ const NavbarAL = () => {
         />
       </div>
 
-      {/* Sidebar Menu for small screens */}
       <div
         className={`fixed top-0 right-0 h-full overflow-hidden bg-white transition-all duration-300 shadow-xl ${
           isMobileMenuOpen ? "w-4/5 sm:w-80" : "w-0"
@@ -154,7 +151,7 @@ const NavbarAL = () => {
             className="py-3 pl-6 border-t"
             to="/dashboard"
           >
-              Dashboard
+            Dashboard
           </NavLink>
           <NavLink
             onClick={() => setIsMobileMenuOpen(false)}

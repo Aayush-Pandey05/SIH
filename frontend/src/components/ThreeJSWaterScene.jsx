@@ -115,7 +115,6 @@ const ThreeJSWaterScene = () => {
     const particles = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particles);
 
-    // Create geometric water drops
     const dropGeometry = new THREE.SphereGeometry(0.1, 8, 8);
     const dropMaterial = new THREE.MeshPhongMaterial({
       color: 0x06b6d4,
@@ -136,7 +135,6 @@ const ThreeJSWaterScene = () => {
       scene.add(drop);
     }
 
-    // Lighting
     const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
     scene.add(ambientLight);
 
@@ -151,24 +149,20 @@ const ThreeJSWaterScene = () => {
     camera.position.set(0, 12, 18);
     camera.lookAt(0, 0, 0);
 
-    // Animation loop
     const animate = () => {
       animationIdRef.current = requestAnimationFrame(animate);
 
       const time = Date.now() * 0.001;
       material.uniforms.time.value = time;
 
-      // Rotate particles slowly
       particles.rotation.y = time * 0.05;
       particles.rotation.x = time * 0.02;
 
-      // Animate water drops
       drops.forEach((drop, index) => {
         drop.position.y = 5 + Math.sin(time + index) * 3;
         drop.rotation.y = time + index;
       });
 
-      // Subtle camera movement
       camera.position.x = Math.sin(time * 0.1) * 3;
       camera.position.z = 18 + Math.cos(time * 0.1) * 2;
       camera.lookAt(0, 0, 0);
@@ -178,7 +172,6 @@ const ThreeJSWaterScene = () => {
 
     animate();
 
-    // Handle resize
     const handleResize = () => {
       updateSize();
     };

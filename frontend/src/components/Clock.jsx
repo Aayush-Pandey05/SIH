@@ -1,4 +1,4 @@
-// components/Clock.js
+
 import React, { useState, useEffect } from 'react';
 
 const Clock = ({ isMenuOpen }) => {

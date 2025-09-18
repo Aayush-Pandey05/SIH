@@ -4,7 +4,6 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import RightPanelSignup from "../components/RightPanelSignup";
 
-
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -47,17 +46,17 @@ const Signup = () => {
   };
 
   const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (validateForm()) {
-            const { confirmPassword: _, ...signUpData } = formData;
-            try {
-                await signUp(signUpData);
-                Navigate("/");
-            } catch (error) {
-                console.error("Signup failed:", error);
-            }
-        }
-    };
+    e.preventDefault();
+    if (validateForm()) {
+      const { confirmPassword: _, ...signUpData } = formData;
+      try {
+        await signUp(signUpData);
+        Navigate("/");
+      } catch (error) {
+        console.error("Signup failed:", error);
+      }
+    }
+  };
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -65,9 +64,7 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen flex bg-slate-950">
-      {/* Left Panel - Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center px-8 py-8 relative">
-        {/* Subtle background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900/50 via-slate-800/30 to-slate-700/50"></div>
 
         <div className="relative z-10 w-full max-w-md space-y-6">

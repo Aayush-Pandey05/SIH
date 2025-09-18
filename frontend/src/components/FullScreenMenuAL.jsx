@@ -1,8 +1,12 @@
-// components/FullScreenMenu.js
 import React from "react";
 import { Link } from "react-router-dom";
 
-const FullScreenMenuAL = ({ isMenuOpen, setIsMenuOpen, navLinks, navRoutes }) => {
+const FullScreenMenuAL = ({
+  isMenuOpen,
+  setIsMenuOpen,
+  navLinks,
+  navRoutes,
+}) => {
   return (
     <div
       className={`fixed inset-0 z-40 bg-gray-900/95 backdrop-blur-xl transition-all duration-400 ${
@@ -15,11 +19,10 @@ const FullScreenMenuAL = ({ isMenuOpen, setIsMenuOpen, navLinks, navRoutes }) =>
         }`}
       >
         <div className="flex flex-col items-start space-y-8">
-          {navLinks.map((link,index) => (
+          {navLinks.map((link, index) => (
             <Link
               key={link}
-              // UPDATED: Use the 'to' prop and get the correct route using the index
-              to={navRoutes[index]} 
+              to={navRoutes[index]}
               onClick={() => setIsMenuOpen(false)}
               className="text-5xl font-extrabold text-gray-200 hover:text-cyan-400 transition-all hover:translate-x-2"
             >

@@ -1,25 +1,27 @@
-// components/WelcomeSection.js
-import React from 'react';
-import { assets } from '../assets/assets';
+import React from "react";
+import { assets } from "../assets/assets";
 
 const WelcomeSection = ({ visibleElements }) => {
   const features = [
     "Personalized Solutions",
     "Data-Driven Decisions",
-    "Measurable Community Impact"
+    "Measurable Community Impact",
   ];
 
   return (
-    <section id='features-section'className="py-30 px-6 bg-gray-900" data-animate="welcome">
+    <section
+      id="features-section"
+      className="py-30 px-6 bg-gray-900"
+      data-animate="welcome"
+    >
       <div className="max-w-6xl mx-auto">
         <div
           className={`grid md:grid-cols-2 gap-12 items-center transition-all duration-1000 ease-out ${
-            visibleElements.has('welcome')
-              ? 'opacity-100 translate-x-0'
-              : 'opacity-0 -translate-x-10'
+            visibleElements.has("welcome")
+              ? "opacity-100 translate-x-0"
+              : "opacity-0 -translate-x-10"
           }`}
         >
-          {/* Left Side */}
           <div className="space-y-6">
             <div className="space-y-4">
               <h2 className="text-sm font-semibold text-gray-100 uppercase tracking-wider">
@@ -58,9 +60,8 @@ const WelcomeSection = ({ visibleElements }) => {
             </div>
           </div>
 
-          {/* Right Side (Image Card) */}
           <div className="relative bg-gradient-to-br from-gray-700 to-gray-800 border border-cyan-500/20 rounded-3xl h-96 flex items-center justify-center group hover:shadow-2xl hover:shadow-cyan-400/10 hover:scale-105 transition-all duration-500 cursor-pointer overflow-hidden">
-            <img 
+            <img
               src={assets.img2}
               alt="AI Analysis Dashboard"
               className="w-full h-96 object-cover cursor-pointer rounded-3xl"

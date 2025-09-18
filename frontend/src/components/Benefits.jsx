@@ -1,4 +1,4 @@
-// components/BenefitsSection.js
+
 import React from 'react';
 
 const BenefitsSection = ({ visibleElements, benefits }) => (

@@ -5,7 +5,6 @@ import { MenuIcon, XIcon, ArrowRightIcon } from "./IconAL";
 import assets from "../assets/assets";
 import { useAuthStore } from "../store/useAuthStore";
 
-// --- Initial Avatar Component ---
 const InitialAvatar = ({ name, className }) => {
   const getInitials = (name) => {
     if (!name || typeof name !== "string") return "?";
@@ -34,7 +33,6 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen, time }) => {
   const { logout, authUser } = useAuthStore();
   const navigate = useNavigate();
 
-  // Close profile menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -63,7 +61,6 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen, time }) => {
   return (
     <header className="fixed w-full z-50 bg-black/30 backdrop-blur-md shadow-lg py-3 transition-all duration-300">
       <div className="max-w-7xl mx-auto sm:px-6 relative flex items-center justify-between h-16">
-        {/* Left Section */}
         <div className="flex items-center">
           <div className="bg-black/20 rounded-full flex items-center space-x-2 pr-3 hover:bg-black/30 transition-colors">
             <button
@@ -80,13 +77,15 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen, time }) => {
           </div>
         </div>
 
-        {/* Center Logo */}
         <div
           className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 hidden md:block ${
             isMenuOpen ? "opacity-0" : "opacity-100"
           }`}
         >
-          <Link to="/" className="flex items-center space-x-2 cursor-pointer group">
+          <Link
+            to="/"
+            className="flex items-center space-x-2 cursor-pointer group"
+          >
             <img
               src={assets.logo}
               alt="JalSetu Logo"
@@ -98,7 +97,6 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen, time }) => {
           </Link>
         </div>
 
-        {/* Right Section */}
         <div className="flex items-center">
           <div className="relative">
             <button
@@ -114,37 +112,35 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen, time }) => {
               </span>
             </button>
 
-            {/* Dropdown Menu */}
             {isProfileMenuOpen && (
               <div
-  ref={profileMenuRef}
-  className="absolute right-2 top-full mt-3 w-56 sm:w-60 bg-slate-950 backdrop-blur-lg 
+                ref={profileMenuRef}
+                className="absolute right-2 top-full mt-3 w-56 sm:w-60 bg-slate-950 backdrop-blur-lg 
              rounded-xl shadow-2xl border border-gray-700 overflow-hidden z-50"
->
-  <div className="flex flex-col items-center p-4 border-b border-gray-700">
-    <InitialAvatar
-      name={authUser?.fullName}
-      className="w-12 h-12 sm:w-10 sm:h-10 p-2 border-2 border-slate-600 
+              >
+                <div className="flex flex-col items-center p-4 border-b border-gray-700">
+                  <InitialAvatar
+                    name={authUser?.fullName}
+                    className="w-12 h-12 sm:w-10 sm:h-10 p-2 border-2 border-slate-600 
                  group-hover:border-cyan-400 transition"
-    />
-    <p className="font-semibold text-white text-center break-words">
-      {authUser?.fullName || "User"}
-    </p>
-    <p className="text-sm text-slate-200 text-center break-all">
-      {authUser?.email || "user@example.com"}
-    </p>
-  </div>
+                  />
+                  <p className="font-semibold text-white text-center break-words">
+                    {authUser?.fullName || "User"}
+                  </p>
+                  <p className="text-sm text-slate-200 text-center break-all">
+                    {authUser?.email || "user@example.com"}
+                  </p>
+                </div>
 
-  <div className="py-2">
-    <button
-      onClick={handleLogout}
-      className="block w-full text-left px-4 py-2 text-red-400 hover:bg-slate-700/50"
-    >
-      Logout
-    </button>
-  </div>
-</div>
-
+                <div className="py-2">
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-red-400 hover:bg-slate-700/50"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         </div>

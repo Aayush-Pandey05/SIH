@@ -36,7 +36,7 @@ const Footer = () => {
       );
     }, footerRef);
 
-    return () => ctx.revert(); 
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -57,7 +57,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-16 sm:gap-28">
           <div ref={(el) => (linksRef.current[0] = el)}>
             <div className="flex gap-3">
-              <img src={assets.logo} alt="JalSetu Logo" className="h-10 w-10 rounded-full"/>
+              <img
+                src={assets.logo}
+                alt="JalSetu Logo"
+                className="h-10 w-10 rounded-full"
+              />
               <h2 className="text-xl font-bold mb-2">JalSetu</h2>
             </div>
             <p className="text-sm text-white/70 mt-1">Every Drop Counts.</p>
@@ -65,7 +69,9 @@ const Footer = () => {
           </div>
 
           <div ref={(el) => (linksRef.current[1] = el)}>
-            <h3 className="text-base font-semibold mb-3 text-teal-400">Quick Links</h3>
+            <h3 className="text-base font-semibold mb-3 text-teal-400">
+              Quick Links
+            </h3>
             <ul className="space-y-2 text-sm text-white/80">
               <li>
                 <Link
@@ -87,7 +93,9 @@ const Footer = () => {
           </div>
 
           <div ref={(el) => (linksRef.current[2] = el)}>
-            <h3 className="text-base font-semibold mb-3 text-teal-400">Govt. Policies</h3>
+            <h3 className="text-base font-semibold mb-3 text-teal-400">
+              Govt. Policies
+            </h3>
             <ul className="space-y-2 text-sm text-white/80">
               <li>
                 <a
@@ -109,7 +117,9 @@ const Footer = () => {
           </div>
 
           <div ref={(el) => (linksRef.current[3] = el)}>
-            <h3 className="text-base font-semibold mb-3 text-teal-400">Support</h3>
+            <h3 className="text-base font-semibold mb-3 text-teal-400">
+              Support
+            </h3>
             <ul className="space-y-2 text-sm text-white/80">
               <li>
                 <Link

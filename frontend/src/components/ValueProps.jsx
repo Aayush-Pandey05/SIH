@@ -1,11 +1,19 @@
-// components/ValuePropsSection.js
-import React from 'react';
+import React from "react";
 
 const ValuePropsSection = ({ visibleElements }) => {
   const valueProps = [
-    { title: "GIS-Powered Precision", desc: "Draw your rooftop on a satellite map and get precise calculations for harvestable rainwater." },
-    { title: "AI-Driven Recommendations", desc: "Our intelligent system suggests the most effective recharge structures based on your location." },
-    { title: "Immersive WebAR Visualization", desc: "Use your phone to place 3D models of tanks and pits in your own space before you build." }
+    {
+      title: "GIS-Powered Precision",
+      desc: "Draw your rooftop on a satellite map and get precise calculations for harvestable rainwater.",
+    },
+    {
+      title: "AI-Driven Recommendations",
+      desc: "Our intelligent system suggests the most effective recharge structures based on your location.",
+    },
+    {
+      title: "Immersive WebAR Visualization",
+      desc: "Use your phone to place 3D models of tanks and pits in your own space before you build.",
+    },
   ];
 
   return (
@@ -13,10 +21,18 @@ const ValuePropsSection = ({ visibleElements }) => {
       <div className="max-w-6xl mx-auto">
         <div className="grid md:grid-cols-3 gap-8 text-center">
           {valueProps.map((item, index) => (
-            <div key={index} className={`group space-y-4 transition-all duration-800 ease-out hover:scale-105 bg-gray-800/30 hover:bg-gray-800/80 hover:shadow-lg p-6 rounded-2xl ${
-                    visibleElements.has('value-props') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                  }`} style={{ transitionDelay: `${index * 150}ms` }}>
-              <h3 className="text-2xl font-bold group-hover:text-black-400 transition-colors duration-300">{item.title}</h3>
+            <div
+              key={index}
+              className={`group space-y-4 transition-all duration-800 ease-out hover:scale-105 bg-gray-800/30 hover:bg-gray-800/80 hover:shadow-lg p-6 rounded-2xl ${
+                visibleElements.has("value-props")
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-10"
+              }`}
+              style={{ transitionDelay: `${index * 150}ms` }}
+            >
+              <h3 className="text-2xl font-bold group-hover:text-black-400 transition-colors duration-300">
+                {item.title}
+              </h3>
               <p className="text-gray-400">{item.desc}</p>
             </div>
           ))}

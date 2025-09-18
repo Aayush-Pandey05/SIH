@@ -1,5 +1,5 @@
-import React from 'react';
-import { ChevronDown } from 'lucide-react';
+import React from "react";
+import { ChevronDown } from "lucide-react";
 
 const FAQItem = ({ question, answer, isOpen, onClick }) => {
   return (
@@ -9,12 +9,18 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => {
         className="w-full flex justify-between items-center text-left p-6 font-semibold text-white"
       >
         <span>{question}</span>
-        <ChevronDown className={`w-5 h-5 text-cyan-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown
+          className={`w-5 h-5 text-cyan-400 transition-transform duration-300 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
       </button>
-      <div className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96' : 'max-h-0'}`}>
-        <div className="px-6 pb-6 text-slate-300">
-          {answer}
-        </div>
+      <div
+        className={`transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-96" : "max-h-0"
+        }`}
+      >
+        <div className="px-6 pb-6 text-slate-300">{answer}</div>
       </div>
     </div>
   );

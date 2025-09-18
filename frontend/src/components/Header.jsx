@@ -4,10 +4,9 @@ import Clock from "./Clock";
 import { MenuIcon, XIcon, ArrowRightIcon } from "./Icons";
 import { assets } from "../assets/assets";
 
-const Header = ({  isMenuOpen, setIsMenuOpen }) => (
+const Header = ({ isMenuOpen, setIsMenuOpen }) => (
   <header className="fixed w-full z-50 bg-black/30 backdrop-blur-md shadow-lg py-3 transition-all duration-300">
     <div className="max-w-7xl mx-auto sm:px-6 relative flex items-center justify-between h-16">
-      
       {/* Left Section */}
       <div className="flex items-center">
         <div className="bg-black/20 rounded-full flex items-center space-x-2 pr-3 hover:bg-black/30 transition-colors">
@@ -18,7 +17,7 @@ const Header = ({  isMenuOpen, setIsMenuOpen }) => (
             {isMenuOpen ? <XIcon /> : <MenuIcon />}
           </button>
           <div className="text-sm whitespace-nowrap text-gray-200">
-            <Clock/>
+            <Clock />
           </div>
         </div>
       </div>
@@ -40,7 +39,6 @@ const Header = ({  isMenuOpen, setIsMenuOpen }) => (
         </div>
       </div>
 
-      {/* Right Section → Join Button */}
       <div className="flex items-center">
         <NavLink
           to="/signup"

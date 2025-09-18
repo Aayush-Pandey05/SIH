@@ -1,4 +1,3 @@
-// components/Icons.js
 import React from "react";
 
 export const JalSetuLogo = () => (
@@ -33,9 +32,22 @@ export const XIcon = () => (
   </svg>
 );
 
-export const ArrowRightIcon = () => <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>;
+export const ArrowRightIcon = () => (
+  <svg
+    className="w-6 h-6 text-white"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M14 5l7 7m0 0l-7 7m7-7H3"
+    />
+  </svg>
+);
 
-// Feature icons
 export const GisMapIcon = () => (
   <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
@@ -80,7 +92,13 @@ export const MainWaterDropIcon = () => (
       fill="url(#main-drop-gradient)"
     />
     <defs>
-      <linearGradient id="main-drop-gradient" x1="12" y1="2.69" x2="12" y2="21.31">
+      <linearGradient
+        id="main-drop-gradient"
+        x1="12"
+        y1="2.69"
+        x2="12"
+        y2="21.31"
+      >
         <stop stopColor="#67e8f9" />
         <stop offset="1" stopColor="#06b6d4" />
       </linearGradient>
@@ -89,14 +107,16 @@ export const MainWaterDropIcon = () => (
 );
 export const InitialAvatar = ({ name, className }) => {
   const getInitials = (name) => {
-    const names = name.split(' ');
-    const firstName = names[0] || '';
-    const lastName = names.length > 1 ? names[names.length - 1] : '';
+    const names = name.split(" ");
+    const firstName = names[0] || "";
+    const lastName = names.length > 1 ? names[names.length - 1] : "";
     return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
   return (
-    <div className={`flex items-center justify-center rounded-full bg-cyan-500 text-white font-bold ${className}`}>
+    <div
+      className={`flex items-center justify-center rounded-full bg-cyan-500 text-white font-bold ${className}`}
+    >
       <span>{getInitials(name)}</span>
     </div>
   );

@@ -34,12 +34,10 @@ export default function Dashboard() {
     }
   };
 
-  // Fetch user data on mount
   useEffect(() => {
     fetchUserData();
   }, [fetchUserData]);
 
-  // Process userData when it's available
   useEffect(() => {
     if (userData && Array.isArray(userData) && userData.length > 0) {
       const recommendation = userData[0];
@@ -50,7 +48,6 @@ export default function Dashboard() {
     }
   }, [userData]);
 
-  // Time update effect
   useEffect(() => {
     const updateTime = () => {
       const options = {
@@ -67,11 +64,9 @@ export default function Dashboard() {
     return () => clearInterval(timerId);
   }, []);
 
-  // Weather data fetch effect
   useEffect(() => {
     const fetchLocationAndWeather = async () => {
       try {
-        // Step 1: Geocoding
         const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${searchQuery}&count=1`;
         const geoResponse = await fetch(geoUrl);
         const geoData = await geoResponse.json();
@@ -85,7 +80,6 @@ export default function Dashboard() {
         const newLat = geoData.results[0].latitude;
         const newLon = geoData.results[0].longitude;
 
-        // Step 2: Fetch historical data
         const endDate = new Date();
         const startDate = new Date();
         startDate.setFullYear(endDate.getFullYear() - 1);
@@ -97,7 +91,6 @@ export default function Dashboard() {
         const historicalResponse = await fetch(historicalUrl);
         const historicalData = await historicalResponse.json();
 
-        // Step 3: Process data for charts and stats
         const monthlyRainfall = {};
         let total = 0;
         if (
@@ -107,7 +100,7 @@ export default function Dashboard() {
         ) {
           historicalData.daily.time.forEach((dateString, index) => {
             const date = new Date(dateString);
-            const monthKey = `${date.getFullYear()}-${date.getMonth()}`; // Use year and month as a key
+            const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
             if (!monthlyRainfall[monthKey]) {
               monthlyRainfall[monthKey] = {
                 totalPrecipitation: 0,
@@ -119,9 +112,8 @@ export default function Dashboard() {
           });
         }
 
-        // Check if user data is available
         const hasUserData = userData && userData[0];
-        
+
         if (hasUserData) {
           const newChartData = Object.keys(monthlyRainfall).map((key) => {
             const data = monthlyRainfall[key];
@@ -129,11 +121,12 @@ export default function Dashboard() {
             const currentRoofArea = userData[0].area;
             const storageCapacity = userData[0].structure_capacity_liters;
 
-            // Calculate potential runoff for the month
-            const monthlyRunoff = precipitation * currentRoofArea * 0.85; // 85% efficiency factor
+            const monthlyRunoff = precipitation * currentRoofArea * 0.85;
 
-            // Realistic water saved is limited by storage capacity
-            const realisticWaterSaved = Math.min(monthlyRunoff, storageCapacity);
+            const realisticWaterSaved = Math.min(
+              monthlyRunoff,
+              storageCapacity
+            );
 
             total += realisticWaterSaved;
             return {
@@ -147,19 +140,16 @@ export default function Dashboard() {
           setChartData(newChartData);
           setTotalRainfall(total.toLocaleString());
         } else {
-          // No user data available, set empty chart and N/A for total
           setChartData([]);
           setTotalRainfall("N/A");
         }
 
-        // Step 4: Fetch forecast for alerts
         const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${newLat}&longitude=${newLon}&daily=precipitation_sum&timezone=auto`;
         const forecastResponse = await fetch(forecastUrl);
         const forecastData = await forecastResponse.json();
         const todayPrecipitation =
           forecastData.daily?.precipitation_sum[0] || 0;
-        
-        // Only show alerts if user data is available
+
         const newAlertsData = [];
         if (hasUserData) {
           const monsoonThreshold = 50000;
@@ -184,7 +174,6 @@ export default function Dashboard() {
           });
         }
         setAlertsData(newAlertsData);
-        
       } catch (error) {
         console.error("Error:", error.message);
         setChartData([]);
@@ -198,9 +187,8 @@ export default function Dashboard() {
     if (searchQuery) {
       fetchLocationAndWeather();
     }
-  }, [searchQuery, userData]); // Add userData to dependencies
+  }, [searchQuery, userData]);
 
-  // Show loader only when initially loading user data
   if (isLoadingData && !userData) {
     return (
       <div className="flex items-center justify-center h-screen bg-blue-950">
@@ -209,7 +197,6 @@ export default function Dashboard() {
     );
   }
 
-  // Get user data for stats
   const userRecommendation = userData && userData[0] ? userData[0] : null;
 
   const statCardsData = [

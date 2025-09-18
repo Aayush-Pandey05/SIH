@@ -1,4 +1,3 @@
-// components/FullScreenMenu.js
 import React from "react";
 import { HashLink } from "react-router-hash-link";
 const FullScreenMenu = ({ isMenuOpen, setIsMenuOpen }) => (
@@ -20,14 +19,14 @@ const FullScreenMenu = ({ isMenuOpen, setIsMenuOpen }) => (
         >
           Home
         </a>
-      <HashLink
-      smooth
-      to="/#features-section"
-      onClick={() => setIsMenuOpen(false)}
-      className="text-5xl font-extrabold text-gray-200 hover:text-cyan-400 transition-all hover:translate-x-2"
-    >
-      Features
-    </HashLink>
+        <HashLink
+          smooth
+          to="/#features-section"
+          onClick={() => setIsMenuOpen(false)}
+          className="text-5xl font-extrabold text-gray-200 hover:text-cyan-400 transition-all hover:translate-x-2"
+        >
+          Features
+        </HashLink>
         <a
           href="/about"
           onClick={() => setIsMenuOpen(false)}
