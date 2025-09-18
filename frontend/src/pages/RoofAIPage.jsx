@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import RoofMapper from "../components/RoofMapper";
-import { Droplet, TrendingUp } from "lucide-react";
+import { Droplet, TrendingUp,RulerDimensionLine } from "lucide-react";
 import rechargePitImage from "../assets/recharge_pit.png";
 import NavbarAL from "../components/NavbarAL";
 import { useDataStore } from "../store/useDataStore";
@@ -34,6 +34,9 @@ const RecommendationCard = ({ data }) => {
     </svg>
   );
 
+  
+  
+
   const RupeeIcon = ({ className }) => (
     <svg
       className={className}
@@ -55,6 +58,7 @@ const RecommendationCard = ({ data }) => {
       <path d="M5 3v15" />
     </svg>
   );
+  
 
   const DropletIcon = ({ className }) => (
     <svg
@@ -131,17 +135,36 @@ const GroundwaterLevelCard = ({ level }) => {
 
   return (
     <div className="groundwater-section ">
-      <h2 className="text-xl font-bold text-slate-200 flex items-center mb-5">
-        <Droplet className="w-6 h-6 mr-3  text-blue-400" />
-        Groundwater Level
-      </h2>
-      <div className="bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl border border-slate-700 shadow-lg flex flex-col gap-6">
-        <p className="text-sm text-slate-400">Current Level in Your Area</p>
-        <p className="text-2xl sm:text-3xl font-bold text-blue-400">
-          {level} m
-        </p>
+        <h2 className="text-xl font-bold text-slate-200 flex items-center mb-5">
+          <Droplet className="w-6 h-6 mr-3  text-blue-400" />
+          Groundwater Level
+        </h2>
+        <div className="bg-slate-800/50 backdrop-blur-sm p-6 py-8 rounded-xl border border-slate-700 shadow-lg flex flex-col gap-6">
+          <p className="text-sm text-slate-400">Current Level in Your Area</p>
+          <p className="text-2xl sm:text-3xl font-bold text-blue-400">
+            {level} m
+          </p>
+        </div>
       </div>
-    </div>
+  );
+};
+
+const DimensionsCard = ({ dimensions }) => {
+  if (dimensions === undefined || dimensions === null) return null;
+
+  return (
+    <div className="dimension-section ">
+        <h2 className="text-xl font-bold text-slate-200 flex items-center mb-5">
+          <RulerDimensionLine className="w-6 h-6 mr-3  text-blue-400" />
+          Dimensions
+        </h2>
+        <div className="bg-slate-800/50 backdrop-blur-sm p-6 py-8 rounded-xl border border-slate-700 shadow-lg flex flex-col gap-6">
+          <p className="text-sm text-slate-400">Dimension in Your Area</p>
+          <p className="text-2xl sm:text-3xl font-bold text-blue-400">
+            {dimensions} 
+          </p>
+        </div>
+      </div>
   );
 };
 
@@ -175,7 +198,7 @@ const RoiPreviewCard = ({ data }) => {
         <TrendingUp className="w-6 h-6 mr-3 text-cyan-400" />
         Your Personalized ROI Preview
       </h2>
-      <div className="bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl border border-slate-700 shadow-lg grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div className="bg-slate-800/50 backdrop-blur-sm p-6 py-12 rounded-xl border border-slate-700 shadow-lg grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="flex flex-col">
           <p className="text-sm text-slate-500">Est. Annual Savings</p>
           <p className="text-2xl sm:text-3xl font-bold text-green-600">
@@ -209,24 +232,7 @@ const navRoutes = ["/", "/dashboard", "/map-roof", "/govschemes", "/support"];
 export default function JalSetuPage() {
   const { fetchUserData, isLoadingData, userData } = useDataStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [time, setTime] = useState("");
 
-  useEffect(() => {
-    const updateTime = () => {
-      const options = {
-        timeZone: "Asia/Kolkata",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      };
-      setTime(new Intl.DateTimeFormat("en-US", options).format(new Date()));
-    };
-
-    updateTime();
-    const timerId = setInterval(updateTime, 60000);
-
-    return () => clearInterval(timerId);
-  }, []);
 
   const SearchIcon = ({ className }) => (
     <svg
@@ -262,17 +268,8 @@ export default function JalSetuPage() {
 
   return (
     <div>
-      <HeaderAL
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        time={time}
-      />
-      <FullScreenMenuAL
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        navLinks={navLinks}
-        navRoutes={navRoutes}
-      />
+      <HeaderAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}  />
+      <FullScreenMenuAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} navLinks={navLinks} navRoutes={navRoutes} />
       <div className="bg-slate-900 min-h-screen p-4 sm:p-6 md:p-8 font-sans">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-6 pt-20">
@@ -290,24 +287,18 @@ export default function JalSetuPage() {
             <div>
               <RecommendationCard data={userData} />
             </div>
-            <div className="flex flex-col gap-6 h-full">
-              <div className="flex-1">
-                <RoiPreviewCard data={userData} />
-              </div>
-              <div className="flex-1">
-                <GroundwaterLevelCard
-                  level={
-                    userData && Array.isArray(userData) && userData.length > 0
-                      ? userData[0].gwl
-                      : null
-                  }
-                />
-              </div>
+            <div className="flex-1">
+            <DimensionsCard dimensions={10*10*10}/>
+            </div>
+            <div className="flex-1">
+              {/* ✅ Access gwl from the first element of the array */}
+              <GroundwaterLevelCard 
+                level={userData && Array.isArray(userData) && userData.length > 0 ? userData[0].gwl : null} 
+              />
             </div>
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

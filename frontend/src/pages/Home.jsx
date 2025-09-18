@@ -2,18 +2,16 @@
 import React, { useState, useEffect, useRef } from "react";
 
 // Import all components
-import Header from "../components/Header";
-import FullScreenMenu from "../components/FullScreen";
-import HeroSection from "../components/Hero";
-import ValuePropsSection from "../components/ValueProps";
-import WelcomeSection from "../components/Welcome";
-import BenefitsSection from "../components/Benefits";
-import Footer from "../components/Footer";
-
+import Header from '../components/Header';
+import FullScreenMenu from '../components/FullScreen';
+import HeroSection from '../components/Hero';
+import ValuePropsSection from '../components/ValueProps';
+import WelcomeSection from '../components/Welcome';
+import BenefitsSection from '../components/Benefits';
+import Footer from '../components/Footer'
 const Home = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  // const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [visibleElements, setVisibleElements] = useState(new Set());
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const observerRef = useRef();
@@ -55,12 +53,7 @@ const Home = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % 4);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+  ;
 
   const benefits = [
     "Reduce Water Bills",
@@ -77,7 +70,8 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-blue-50 text-white overflow-hidden relative font-sans">
-      <div
+      {/* Background Glow */}
+      <div 
         className="fixed w-96 h-96 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl pointer-events-none z-0 transition-all duration-500 ease-out"
         style={{ left: mousePosition.x - 192, top: mousePosition.y - 192 }}
       />
@@ -91,15 +85,10 @@ const Home = () => {
 
       <main>
         <HeroSection visibleElements={visibleElements} />
-        {/* {<Feature/> } */}
         <ValuePropsSection visibleElements={visibleElements} />
-
         <WelcomeSection visibleElements={visibleElements} />
-        <BenefitsSection
-          visibleElements={visibleElements}
-          benefits={benefits}
-        />
-        <Footer />
+        <BenefitsSection visibleElements={visibleElements} benefits={benefits} />
+        <Footer/>
       </main>
     </div>
   );

@@ -264,7 +264,6 @@ export default function Dashboard() {
           />
         </main>
       </div>
-      <Footer />
     </div>
   );
 }

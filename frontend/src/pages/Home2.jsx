@@ -3,10 +3,9 @@ import HeaderAL from "../components/HeaderAL";
 import FullScreenMenuAL from "../components/FullScreenMenuAL";
 import HeroSectionAL from "../components/HeroAL";
 import FeaturesSectionAL from "../components/FeatureAL";
-import Feature from "../components/Feature";
-import HowItWorksSection from "../components/HowItWorks";
-import TestimonialsSection from "../components/Testimonial";
-import Footer from "../components/Footer";
+import HowItWorksSection from '../components/HowItWorks';
+import TestimonialsSection from '../components/Testimonial';
+import Footer from '../components/Footer'
 import {
   GisMapIcon,
   AiMlIcon,
@@ -107,31 +106,19 @@ const Home2 = () => {
     `${assets.img3}`,
   ];
   const testimonials = [
-    {
-      text: "Water is not just a natural resource; it is our lifeline. Each citizen must take responsibility for conserving every drop and adopting measures like rainwater harvesting",
-      author: "Droupadi Murmu ,Current President of India",
-    },
-    {
-      text: "Rainwater harvesting should become a compulsory mission for every home and institution in our country.",
-      author: "Dr. A.P.J. Abdul Kalam ,Former President of India",
-    },
-    {
-      text: "Water conservation should become a social responsibility and a mass movement. Every drop saved today secures our tomorrow.",
-      author: "Narendra Modi ,Prime Minister of India",
-    },
-    {
-      text: "If we conserve rain, we conserve life. Water harvesting is not an option, it is survival.",
-      author: "Rajendra Singh ,Waterman of India, Ramon Magsaysay Awardee",
-    },
+    { text: "Water is not just a natural resource; it is our lifeline. Each citizen must take responsibility for conserving every drop and adopting measures like rainwater harvesting", author: "Droupadi Murmu ,Current President of India" },
+    { text: "Rainwater harvesting should become a compulsory mission for every home and institution in our country.", author: "Dr. A.P.J. Abdul Kalam ,Former President of India" },
+    { text: "Water conservation should become a social responsibility and a mass movement. Every drop saved today secures our tomorrow.", author: "Narendra Modi ,Prime Minister of India" },
+    { text: "If we conserve rain, we conserve life. Water harvesting is not an option, it is survival.", author: "Rajendra Singh ,Waterman of India, Ramon Magsaysay Awardee" }
   ];
 
   return (
     <div className="h-full  bg-white text-white relative overflow-hidden">
       {/* Background glow */}
-      <div
-        className="fixed w-96 h-96 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl pointer-events-none z-0 transition-all"
-        style={{ left: mousePosition.x - 192, top: mousePosition.y - 192 }}
-      />
+    <div
+  className="fixed w-96 h-96 bg-gradient-to-r from-cyan-400/40 to-blue-400/30 rounded-full blur-3xl pointer-events-none z-0 transition-all"
+  style={{ left: mousePosition.x - 192, top: mousePosition.y - 192 }}
+/>
 
       <HeaderAL
         isMenuOpen={isMenuOpen}
@@ -147,22 +134,14 @@ const Home2 = () => {
 
       <main className=" relative z-10">
         <HeroSectionAL visibleElements={visibleElements} />
-        <Feature />
-        <FeaturesSectionAL
-          visibleElements={visibleElements}
-          features={features}
-        />
-        <HowItWorksSection
-          visibleElements={visibleElements}
-          stepVisuals={stepVisuals}
-        />
-        <TestimonialsSection
-          visibleElements={visibleElements}
-          testimonials={testimonials}
+        <FeaturesSectionAL visibleElements={visibleElements} features={features} />
+        <HowItWorksSection visibleElements={visibleElements} stepVisuals={stepVisuals} /> 
+        <TestimonialsSection 
+          visibleElements={visibleElements} 
+          testimonials={testimonials} 
           currentTestimonial={currentTestimonial}
           setCurrentTestimonial={setCurrentTestimonial}
         />
-        <Footer />
       </main>
     </div>
   );

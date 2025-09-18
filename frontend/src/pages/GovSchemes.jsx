@@ -17,22 +17,12 @@ const GovSchemesPage = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [time, setTime] = useState("");
+  
+
+
 
   useEffect(() => {
-      const updateTime = () => {
-        const options = { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", hour12: true };
-        setTime(new Intl.DateTimeFormat('en-US', options).format(new Date()));
-      };
-  
-      updateTime();
-      const timerId = setInterval(updateTime, 60000);
-  
-      return () => clearInterval(timerId);
-    }, []);
-
-  useEffect(() => {
-    // This effect triggers a simple fade-in animation when the component loads
+   
     const timer = setTimeout(() => setIsLoaded(true), 100);
     return () => clearTimeout(timer);
   }, []);
@@ -49,7 +39,7 @@ const GovSchemesPage = () => {
 
   return (
     <div>
-       <HeaderAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} time={time} />
+       <HeaderAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}  />
       <FullScreenMenuAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} navLinks={navLinks} navRoutes={navRoutes} />
     <div className={`bg-slate-900 text-slate-100 min-h-screen font-sans p-4 sm:p-8 transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
       <div className="container mx-auto mt-20">
@@ -96,7 +86,6 @@ const GovSchemesPage = () => {
         />
       </div>
     </div>
-    <Footer/>
     </div>
   );
 };
