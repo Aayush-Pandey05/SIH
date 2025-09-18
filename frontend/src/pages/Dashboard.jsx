@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import DashboardContent from "./DashboardContent";
 import NavbarAL from "../components/NavbarAL";
 import HeaderAL from "../components/HeaderAL";
@@ -18,13 +18,15 @@ const navRoutes = ["/", "/dashboard", "/map-roof", "/govschemes", "/support"];
 
 export default function Dashboard() {
   const { fetchUserData, userData, isLoadingData } = useDataStore();
+  const roofArea = 150; // Default roof area value
   const [chartData, setChartData] = useState([]);
   const [alertsData, setAlertsData] = useState([]);
-  const [totalRainfall, setTotalRainfall] = useState("N/A");
+  const [totalRainfall, setTotalRainfall] = useState("0");
   const [locationName, setLocationName] = useState("Bangalore");
   const [searchQuery, setSearchQuery] = useState("Bangalore");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [time, setTime] = useState("");
+  const [isWeatherLoading, setIsWeatherLoading] = useState(false);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -34,20 +36,155 @@ export default function Dashboard() {
     }
   };
 
+  // Weather data fetch function - wrapped in useCallback to prevent unnecessary re-renders
+  const fetchLocationAndWeather = useCallback(
+    async (location, currentUserData) => {
+      if (!location) return;
+
+      setIsWeatherLoading(true);
+      try {
+        // Step 1: Geocoding
+        const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=1`;
+        const geoResponse = await fetch(geoUrl);
+        const geoData = await geoResponse.json();
+        if (
+          !geoResponse.ok ||
+          !geoData.results ||
+          geoData.results.length === 0
+        ) {
+          throw new Error("Location not found.");
+        }
+        const newLat = geoData.results[0].latitude;
+        const newLon = geoData.results[0].longitude;
+
+        // Step 2: Fetch historical data
+        const endDate = new Date();
+        const startDate = new Date();
+        startDate.setFullYear(endDate.getFullYear() - 1);
+        const historicalUrl = `https://archive-api.open-meteo.com/v1/archive?latitude=${newLat}&longitude=${newLon}&start_date=${
+          startDate.toISOString().split("T")[0]
+        }&end_date=${
+          endDate.toISOString().split("T")[0]
+        }&daily=precipitation_sum`;
+        const historicalResponse = await fetch(historicalUrl);
+        const historicalData = await historicalResponse.json();
+
+        // Step 3: Process data for charts and stats
+        const monthlyRainfall = {};
+        let total = 0;
+        if (
+          historicalData.daily &&
+          historicalData.daily.time &&
+          historicalData.daily.precipitation_sum
+        ) {
+          historicalData.daily.time.forEach((dateString, index) => {
+            const date = new Date(dateString);
+            const monthKey = `${date.getFullYear()}-${date.getMonth()}`; // Use year and month as a key
+            if (!monthlyRainfall[monthKey]) {
+              monthlyRainfall[monthKey] = {
+                totalPrecipitation: 0,
+                date: date,
+              };
+            }
+            monthlyRainfall[monthKey].totalPrecipitation +=
+              historicalData.daily.precipitation_sum[index];
+          });
+        }
+
+        const newChartData = Object.keys(monthlyRainfall).map((key) => {
+          const data = monthlyRainfall[key];
+          const precipitation = data.totalPrecipitation;
+          // Use user's roof area if available, otherwise default to 150
+          const currentRoofArea =
+            currentUserData && currentUserData[0]
+              ? currentUserData[0].area
+              : 150;
+          const storageCapacity =
+            currentUserData && currentUserData[0]
+              ? currentUserData[0].structure_capacity_liters
+              : 10500;
+
+          // Calculate potential runoff for the month
+          const monthlyRunoff = precipitation * currentRoofArea * 0.85; // 85% efficiency factor
+
+          // Realistic water saved is limited by storage capacity
+          const realisticWaterSaved = Math.min(monthlyRunoff, storageCapacity);
+
+          total += realisticWaterSaved;
+          return {
+            name: data.date.toLocaleDateString("en-US", { month: "short" }),
+            value: Math.round(realisticWaterSaved),
+            date: data.date,
+          };
+        });
+
+        newChartData.sort((a, b) => a.date - b.date);
+
+        setChartData(newChartData);
+        setTotalRainfall(total.toLocaleString());
+
+        // Step 4: Fetch forecast for alerts
+        const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${newLat}&longitude=${newLon}&daily=precipitation_sum&timezone=auto`;
+        const forecastResponse = await fetch(forecastUrl);
+        const forecastData = await forecastResponse.json();
+        const todayPrecipitation =
+          forecastData.daily?.precipitation_sum[0] || 0;
+        const newAlertsData = [];
+
+        const monsoonThreshold = 50000;
+        if (total > monsoonThreshold && todayPrecipitation > 0) {
+          newAlertsData.push({
+            color: "blue",
+            title: "Prepare for the upcoming monsoon season",
+            subtitle: "Pre-Rain Alert",
+          });
+        } else {
+          newAlertsData.push({
+            color: "green",
+            title: "Rainwater harvesting system is active",
+            subtitle: "Post-Rain Alert",
+          });
+        }
+        setAlertsData(newAlertsData);
+      } catch (error) {
+        console.error("Error:", error.message);
+        setChartData([]);
+        setTotalRainfall("N/A");
+        setAlertsData([
+          { color: "red", title: "Error", subtitle: error.message },
+        ]);
+      } finally {
+        setIsWeatherLoading(false);
+      }
+    },
+    []
+  ); // Empty dependency array since we pass parameters directly
+
+  // Fetch user data on mount
   useEffect(() => {
     fetchUserData();
   }, [fetchUserData]);
 
+  // Process userData when it's available and set initial location
   useEffect(() => {
     if (userData && Array.isArray(userData) && userData.length > 0) {
       const recommendation = userData[0];
       if (recommendation && recommendation.district) {
-        setLocationName(recommendation.district);
-        setSearchQuery(recommendation.district);
+        const newLocation = recommendation.district;
+        setLocationName(newLocation);
+        setSearchQuery(newLocation);
       }
     }
   }, [userData]);
 
+  // Weather data fetch effect - simplified dependencies
+  useEffect(() => {
+    if (searchQuery) {
+      fetchLocationAndWeather(searchQuery, userData);
+    }
+  }, [searchQuery, fetchLocationAndWeather, userData]);
+
+  // Time update effect
   useEffect(() => {
     const updateTime = () => {
       const options = {
@@ -64,132 +201,8 @@ export default function Dashboard() {
     return () => clearInterval(timerId);
   }, []);
 
-  useEffect(() => {
-    const fetchLocationAndWeather = async () => {
-      try {
-        const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${searchQuery}&count=1`;
-        const geoResponse = await fetch(geoUrl);
-        const geoData = await geoResponse.json();
-        if (
-          !geoResponse.ok ||
-          !geoData.results ||
-          geoData.results.length === 0
-        ) {
-          throw new Error("Location not found.");
-        }
-        const newLat = geoData.results[0].latitude;
-        const newLon = geoData.results[0].longitude;
-
-        const endDate = new Date();
-        const startDate = new Date();
-        startDate.setFullYear(endDate.getFullYear() - 1);
-        const historicalUrl = `https://archive-api.open-meteo.com/v1/archive?latitude=${newLat}&longitude=${newLon}&start_date=${
-          startDate.toISOString().split("T")[0]
-        }&end_date=${
-          endDate.toISOString().split("T")[0]
-        }&daily=precipitation_sum`;
-        const historicalResponse = await fetch(historicalUrl);
-        const historicalData = await historicalResponse.json();
-
-        const monthlyRainfall = {};
-        let total = 0;
-        if (
-          historicalData.daily &&
-          historicalData.daily.time &&
-          historicalData.daily.precipitation_sum
-        ) {
-          historicalData.daily.time.forEach((dateString, index) => {
-            const date = new Date(dateString);
-            const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
-            if (!monthlyRainfall[monthKey]) {
-              monthlyRainfall[monthKey] = {
-                totalPrecipitation: 0,
-                date: date,
-              };
-            }
-            monthlyRainfall[monthKey].totalPrecipitation +=
-              historicalData.daily.precipitation_sum[index];
-          });
-        }
-
-        const hasUserData = userData && userData[0];
-
-        if (hasUserData) {
-          const newChartData = Object.keys(monthlyRainfall).map((key) => {
-            const data = monthlyRainfall[key];
-            const precipitation = data.totalPrecipitation;
-            const currentRoofArea = userData[0].area;
-            const storageCapacity = userData[0].structure_capacity_liters;
-
-            const monthlyRunoff = precipitation * currentRoofArea * 0.85;
-
-            const realisticWaterSaved = Math.min(
-              monthlyRunoff,
-              storageCapacity
-            );
-
-            total += realisticWaterSaved;
-            return {
-              name: data.date.toLocaleDateString("en-US", { month: "short" }),
-              value: Math.round(realisticWaterSaved),
-              date: data.date,
-            };
-          });
-
-          newChartData.sort((a, b) => a.date - b.date);
-          setChartData(newChartData);
-          setTotalRainfall(total.toLocaleString());
-        } else {
-          setChartData([]);
-          setTotalRainfall("N/A");
-        }
-
-        const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${newLat}&longitude=${newLon}&daily=precipitation_sum&timezone=auto`;
-        const forecastResponse = await fetch(forecastUrl);
-        const forecastData = await forecastResponse.json();
-        const todayPrecipitation =
-          forecastData.daily?.precipitation_sum[0] || 0;
-
-        const newAlertsData = [];
-        if (hasUserData) {
-          const monsoonThreshold = 50000;
-          if (total > monsoonThreshold && todayPrecipitation > 0) {
-            newAlertsData.push({
-              color: "blue",
-              title: "Prepare for the upcoming monsoon season",
-              subtitle: "Pre-Rain Alert",
-            });
-          } else {
-            newAlertsData.push({
-              color: "green",
-              title: "Rainwater harvesting system is active",
-              subtitle: "Post-Rain Alert",
-            });
-          }
-        } else {
-          newAlertsData.push({
-            color: "gray",
-            title: "No user data available",
-            subtitle: "Please configure your roof details",
-          });
-        }
-        setAlertsData(newAlertsData);
-      } catch (error) {
-        console.error("Error:", error.message);
-        setChartData([]);
-        setTotalRainfall("N/A");
-        setAlertsData([
-          { color: "red", title: "Error", subtitle: error.message },
-        ]);
-      }
-    };
-
-    if (searchQuery) {
-      fetchLocationAndWeather();
-    }
-  }, [searchQuery, userData]);
-
-  if (isLoadingData && !userData) {
+  // Show loader when initially loading user data or weather data
+  if ((isLoadingData && !userData) || isWeatherLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-blue-950">
         <Loader className="size-10 animate-spin text-white" />
@@ -197,18 +210,21 @@ export default function Dashboard() {
     );
   }
 
+  // Get user data for stats
   const userRecommendation = userData && userData[0] ? userData[0] : null;
 
   const statCardsData = [
     {
       title: "Roof Area (m²)",
-      value: userRecommendation ? Math.round(userRecommendation.area) : "N/A",
+      value: userRecommendation
+        ? Math.round(userRecommendation.area)
+        : roofArea,
     },
     {
       title: "Water Saved (Liters)",
       value: userRecommendation
         ? userRecommendation.structure_capacity_liters.toLocaleString()
-        : "N/A",
+        : totalRainfall,
     },
     {
       title: "Groundwater Level (m)",
@@ -218,7 +234,7 @@ export default function Dashboard() {
       title: "Savings (₹)",
       value: userRecommendation
         ? userRecommendation.annual_savings_inr.toLocaleString()
-        : "N/A",
+        : "1,200",
     },
   ];
 
@@ -251,8 +267,9 @@ export default function Dashboard() {
             <button
               type="submit"
               className="bg-blue-500 text-white p-2 rounded-md shadow-sm"
+              disabled={isWeatherLoading}
             >
-              Search
+              {isWeatherLoading ? "Loading..." : "Search"}
             </button>
           </form>
 
@@ -264,6 +281,7 @@ export default function Dashboard() {
           />
         </main>
       </div>
+      <Footer />
     </div>
   );
 }
