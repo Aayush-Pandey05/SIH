@@ -1,165 +1,145 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import RightPannel from "../components/RightPannel";
+
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    rememberMe: false,
-  });
-  const { login, isLoggingIn } = useAuthStore();
-  const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+    const [formData, setFormData] = useState({ email: "", password: "" });
+    const [focusedInput, setFocusedInput] = useState(null);
+     const { login, isLoggingIn } = useAuthStore();
+     const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { rememberMe: _, ...loginData } = formData;
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await login(formData);
+            navigate("/"); 
+        } catch (error) {
+            toast.error("Login failed. Please check your credentials.");
+            console.error("Login failed:", error);
+        }
+    };
+    
+    const handleChange = (e) => {
+        setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+    };
 
-    try {
-      const result = await login(loginData);
-      if (result && result.success) {
-        // Navigate to home page after successful login
-        navigate("/", { replace: true });
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-    }
-  };
+    return (
+        <div className="min-h-screen flex bg-slate-950">
+            {/* Left Panel - Form */}
+            <div className="w-full lg:w-1/2 flex items-center justify-center px-8 py-12 relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-900/50 via-slate-800/30 to-slate-700/50"></div>
+                
+                <div className="relative z-10 w-full max-w-md space-y-8">
+                    <div className="text-center">
+                        <div className="inline-flex items-center space-x-3 mb-8">
+                            <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                                <span className="text-white font-bold text-xl">J</span>
+                            </div>
+                            <h1 className="text-2xl font-bold text-white">JalSetu</h1>
+                        </div>
+                        
+                        <div className="space-y-2">
+                            <h2 className="text-3xl font-bold text-white">Welcome back</h2>
+                            <p className="text-slate-400 text-base">
+                                Sign in to continue to your dashboard
+                            </p>
+                        </div>
+                    </div>
 
-  const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+                    <div className="space-y-6">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-300">
+                                Email address
+                            </label>
+                            <div className="relative group">
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-cyan-400 transition-colors" />
+                                <input
+                                    id="email"
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    onFocus={() => setFocusedInput('email')}
+                                    onBlur={() => setFocusedInput(null)}
+                                    className={`w-full bg-slate-800/60 border-2 ${focusedInput === 'email' ? 'border-cyan-500' : 'border-slate-700'} rounded-xl px-11 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-all duration-300 backdrop-blur-sm`}
+                                    required
+                                />
+                            </div>
+                        </div>
 
-  return (
-    <div className="min-h-screen flex">
-      <div className="w-full md:w-1/2 flex items-center justify-center px-6 py-10 bg-gray-50">
-        <div className="w-full max-w-md bg-white rounded-xl p-8">
-          <h2 className="text-2xl font-bold text-blue-600 text-center">
-            Welcome back
-          </h2>
-          <p className="text-center text-gray-600 mt-1 text-sm">
-            Sign in to your JalSetu 2.0 account
-          </p>
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-300">
+                                Password
+                            </label>
+                            <div className="relative group">
+                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-cyan-400 transition-colors" />
+                                <input
+                                    id="password"
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="Enter your password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    onFocus={() => setFocusedInput('password')}
+                                    onBlur={() => setFocusedInput(null)}
+                                    className={`w-full bg-slate-800/60 border-2 ${focusedInput === 'password' ? 'border-cyan-500' : 'border-slate-700'} rounded-xl px-11 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-all duration-300 backdrop-blur-sm pr-12`}
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-cyan-400 transition-colors p-1"
+                                >
+                                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                </button>
+                            </div>
+                        </div>
 
-          <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email address
-              </label>
-              <div className="relative mt-1">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={(e) => handleChange("email", e.target.value)}
-                  required
-                  className="w-full rounded-lg px-10 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 border border-gray-300"
-                />
-              </div>
+                        <div className="text-right">
+                            <a href="#forgot" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">
+                                Forgot your password?
+                            </a>
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={handleSubmit}
+                            disabled={isLoggingIn}
+                            className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:from-slate-600 disabled:to-slate-600 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.01] disabled:scale-100 disabled:cursor-not-allowed shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 disabled:shadow-none flex items-center justify-center space-x-2"
+                        >
+                            {isLoggingIn ? (
+                                <>
+                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    <span>Signing in...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span>Sign in</span>
+                                    <ArrowRight className="w-5 h-5" />
+                                </>
+                            )}
+                        </button>
+                    </div>
+
+                    <div className="text-center">
+                        <span className="text-slate-400">
+                            Don't have an account?{" "}
+                            <a href="/signup" className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors">
+                                Create account
+                            </a>
+                        </span>
+                    </div>
+                </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <div className="relative mt-1">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={(e) => handleChange("password", e.target.value)}
-                  required
-                  className="w-full rounded-lg px-10 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 border border-gray-300"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={formData.rememberMe}
-                  onChange={(e) => handleChange("rememberMe", e.target.checked)}
-                  className="h-4 w-4"
-                />
-                <span className="text-gray-700">Remember me</span>
-              </label>
-              <Link
-                to="/forgot-password"
-                className="text-blue-600 hover:underline"
-              >
-                Forgot password?
-              </Link>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              disabled={isLoggingIn}
-            >
-              {isLoggingIn ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  Signing in...
-                </>
-              ) : (
-                "Sign in"
-              )}
-            </button>
-
-            <p className="text-center text-sm text-gray-600">
-              Don&apos;t have an account?{" "}
-              <Link
-                to="/signup"
-                className="text-blue-600 font-medium hover:underline"
-              >
-                Sign up
-              </Link>
-            </p>
-          </form>
+            {/* Right Panel - Three.js Scene */}
+            <RightPannel />
         </div>
-      </div>
-
-      <div className="hidden md:flex w-1/2 bg-blue-100 items-center justify-center p-10">
-        <div className="text-center">
-          <img
-            src="/rainwater.png"
-            alt="Rainwater harvesting"
-            className="mx-auto max-w-sm"
-          />
-          <h3 className="mt-6 text-lg font-semibold text-blue-700">
-            Every Drop Counts. Every Citizen Matters.
-          </h3>
-          <p className="mt-2 text-sm text-gray-700 max-w-sm mx-auto">
-            Empowering India to harvest rainwater efficiently with JalSetu 2.0
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Login;

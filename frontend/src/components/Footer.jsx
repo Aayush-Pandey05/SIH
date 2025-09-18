@@ -1,98 +1,145 @@
-import React from 'react';
-import { FaInstagram, FaTwitter, FaFacebookF, FaLinkedinIn, FaYoutube } from 'react-icons/fa';
+import React, { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { gsap } from "gsap";
+import assets from "../assets/assets";
 
 const Footer = () => {
+  const footerRef = useRef(null);
+  const titleRef = useRef(null);
+  const linksRef = useRef([]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        titleRef.current,
+        { opacity: 0, y: 50 },
+        { opacity: 0.1, y: 0, duration: 1.5, ease: "power3.out" }
+      );
+
+      gsap.fromTo(
+        linksRef.current,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power3.out",
+          delay: 0.5,
+        }
+      );
+
+      gsap.fromTo(
+        footerRef.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" }
+      );
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <footer className="bg-blue-800 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"> {/* Reduced padding */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4"> {/* Reduced gap */}
-          <div>
-            <h2 className="text-lg font-bold mb-1">JalSetu 2.0</h2> {/* Smaller heading */}
-            <p className="text-xs">Every Drop Counts. Every Citizen Matters.</p>
-            <p className="text-xs mt-0.5">Empowering India to harvest rainwater efficiently.</p>
-          </div>
+    <footer
+      ref={footerRef}
+      className="relative bg-gradient-to-b from-slate-800 to-black text-white overflow-hidden py-16 md:py-6"
+    >
+      <div className="absolute inset-0 hidden lg:flex items-center justify-center pointer-events-none z-0">
+        <span
+          ref={titleRef}
+          className="font-extrabold text-white/10 text-7xl sm:text-9xl md:text-[10rem] lg:text-[14rem] leading-none select-none"
+        >
+          JalSetu
+        </span>
+      </div>
 
-          <div>
-            <h3 className="text-sm font-semibold mb-1">Quick Links</h3>
-            <ul className="space-y-0.5">
-              <li><a href="#" className="hover:underline">Home</a></li>
-              <li><a href="#" className="hover:underline">About</a></li>
-              <li><a href="#" className="hover:underline">Features</a></li>
-              <li><a href="#" className="hover:underline">Schemes</a></li>
-              <li><a href="#" className="hover:underline">Contact</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold mb-1">Resources</h3>
-            <ul className="space-y-0.5">
-              <li><a href="#" className="hover:underline">Govt. Resources & Policies</a></li>
-              <li><a href="#" className="hover:underline">Knowledge Articles</a></li>
-              <li><a href="#" className="hover:underline">FAQs</a></li>
-              <li><a href="#" className="hover:underline">Blog/Updates</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold mb-1">Support</h3>
-            <ul className="space-y-0.5">
-              <li><a href="#" className="hover:underline">Help Center</a></li>
-              <li><a href="#" className="hover:underline">Report an Issue</a></li>
-              <li><a href="#" className="hover:underline">Feedback</a></li>
-              <li><a href="#" className="hover:underline">Contact Support</a></li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="border-t border-blue-600 my-2"></div> {/* Reduced from my-4 */}
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-          <div>
-            <h3 className="text-sm font-semibold mb-1">Contact Info</h3>
-            <p className="text-xs">123 Jal Marg, New Delhi, India 110001</p>
-            <p className="text-xs mt-0.5">Email: contact@jalsetu.gov.in</p>
-            <p className="text-xs mt-0.5">Helpline: +91 1800 123 4567</p>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold mb-1">Follow Us</h3>
-            <div className="flex space-x-2"> {/* Smaller spacing */}
-              <a href="#" className="hover:text-gray-300"><FaInstagram size={18} /></a>
-              <a href="#" className="hover:text-gray-300"><FaTwitter size={18} /></a>
-              <a href="#" className="hover:text-gray-300"><FaFacebookF size={18} /></a>
-              <a href="#" className="hover:text-gray-300"><FaLinkedinIn size={18} /></a>
-              <a href="#" className="hover:text-gray-300"><FaYoutube size={18} /></a>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold mb-1">Newsletter Signup</h3>
-            <p className="text-xs mb-1">Stay updated with our latest news and features.</p>
-            <form className="flex">
-              <input
-                type="email"
-                placeholder="Your email"
-                className="flex-1 px-2 py-0.5 bg-white border border-gray-300 rounded-l text-gray-800 text-xs focus:outline-none focus:border-blue-500"
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-16 sm:gap-28">
+          <div ref={(el) => (linksRef.current[0] = el)}>
+            <div className="flex gap-3">
+              <img
+                src={assets.logo}
+                alt="JalSetu Logo"
+                className="h-10 w-10 rounded-full"
               />
-              <button
-                type="submit"
-                className="px-3 py-0.5 bg-blue-600 hover:bg-blue-500 rounded-r text-xs"
-              >
-                Subscribe
-              </button>
-            </form>
+              <h2 className="text-xl font-bold mb-2">JalSetu</h2>
+            </div>
+            <p className="text-sm text-white/70 mt-1">Every Drop Counts.</p>
+            <p className="text-sm text-white/70 mt-1">Every Citizen Matters.</p>
+          </div>
+
+          <div ref={(el) => (linksRef.current[1] = el)}>
+            <h3 className="text-base font-semibold mb-3 text-teal-400">
+              Quick Links
+            </h3>
+            <ul className="space-y-2 text-sm text-white/80">
+              <li>
+                <Link
+                  to="/"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth"})}
+                  className="hover:text-cyan-900 transition-all duration-300 "
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/about"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth"})}
+                  className=" hover:text-cyan-900 transition-all duration-200"
+                >
+                  About
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div ref={(el) => (linksRef.current[2] = el)}>
+            <h3 className="text-base font-semibold mb-3 text-teal-400">
+              Govt. Policies
+            </h3>
+            <ul className="space-y-2 text-sm text-white/80">
+              <li>
+                <a
+                  href="https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=1914351" target='_blank' 
+                  className="hover:text-cyan-900 transition-all duration-300 "
+                >
+                  Resources & Policies
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.researchgate.net/publication/357226990_A_Review_of_Indian_Traditional_Method_of_Rain_Water_Harvesting" target='_blank' 
+                  className="hover:text-cyan-900 transition-all duration-300 "
+                >
+                  Knowledge Articles
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div ref={(el) => (linksRef.current[3] = el)}>
+            <h3 className="text-base font-semibold mb-3 text-teal-400">
+              Support
+            </h3>
+            <ul className="space-y-2 text-sm text-white/80">
+        
+              <li>
+                <Link
+                  to="/contactus"
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth"})}
+                  className="hover:text-cyan-900 transition-all duration-300 "
+                >
+                  Contact Us
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="border-t border-blue-600 my-2"></div>
-
-        <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-200">
-          <div className="space-x-2 mb-1 md:mb-0">
-            <a href="#" className="hover:underline">Privacy Policy</a>
-            <a href="#" className="hover:underline">Terms & Conditions</a>
-            <a href="#" className="hover:underline">Disclaimer</a>
-          </div>
-          <div>© 2024 JalSetu 2.0. All Rights Reserved.</div>
+        <div className="border-t border-slate-700 mt-28"></div>
+        <div className=" text-center text-sm text-white/70 mt-4">
+          © {new Date().getFullYear()} JalSetu. All Rights Reserved.
         </div>
       </div>
     </footer>

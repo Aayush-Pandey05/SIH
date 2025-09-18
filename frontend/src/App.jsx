@@ -9,9 +9,13 @@ import About from "./pages/About";
 import RoofAIPage from "./pages/RoofAIPage";
 import Support from "./pages/Support";
 import SignUp from "./pages/SignUp";
+import ContactUs from './components/ContactUs'
 import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/useAuthStore";
 import { Loader } from "lucide-react";
+
+// Assuming this is your Navbar component
+import NavbarAL from "./components/NavbarAL"; 
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -38,7 +42,6 @@ const App = () => {
           path="/dashboard"
           element={authUser ? <Dashboard /> : <LoginPage />}
         />
-        {/* <Route path="/home" element={<Home2 />} /> */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUp />} />
         <Route
@@ -54,6 +57,7 @@ const App = () => {
           element={authUser ? <GovSchemes /> : <LoginPage />}
         />
         <Route path="/about" element={<About />} />
+        <Route path="/contactus" element={<ContactUs />} />
       </Routes>
       <Toaster />
     </div>

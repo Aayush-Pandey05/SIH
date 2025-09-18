@@ -43,19 +43,18 @@ const NavbarAL = () => {
       : "text-gray-500 hover:text-gray-900";
 
   return (
-    <div className="fixed h-20 top-0 left-0 w-full z-50 bg-white flex items-center justify-between px-6 md:px-10 font-medium border-b border-gray-200">
-      <Link to="/home" className="flex items-center gap-2 object-fill">
+    <div className="fixed h-20 top-0 left-0 w-full z-1200 bg-white flex items-center justify-between px-6 md:px-10 font-medium border-b border-gray-200">
+      <Link to="/" className="flex items-center gap-2 object-fill">
         <img
           src={assets.logo}
           alt="JalSetu Logo"
-          className="h-10 w-10 object-contain rounded-full"
+          className="h-8 w-8 object-contain rounded-full border border-gray-300"
         />
         <span className="text-2xl font-bold text-gray-800">JalSetu</span>
       </Link>
 
-      {/* Desktop Nav */}
       <ul className="hidden md:flex gap-8 text-base relative">
-        <NavLink to="/home" className={getNavLinkClass}>
+        <NavLink to="/" className={getNavLinkClass}>
           Home
         </NavLink>
         <NavLink to="/dashboard" className={getNavLinkClass}>
@@ -72,7 +71,6 @@ const NavbarAL = () => {
         </NavLink>
       </ul>
 
-      {/* Profile & Mobile Menu Button */}
       <div className="flex items-center gap-6">
         <div className="relative hidden md:block">
           <button
@@ -129,7 +127,6 @@ const NavbarAL = () => {
         />
       </div>
 
-      {/* Sidebar Menu for small screens */}
       <div
         className={`fixed top-0 right-0 h-full overflow-hidden bg-white transition-all duration-300 shadow-xl ${
           isMobileMenuOpen ? "w-4/5 sm:w-80" : "w-0"
@@ -142,6 +139,13 @@ const NavbarAL = () => {
           >
             <p className="font-semibold">Close</p>
           </div>
+          <NavLink
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="py-3 pl-6 border-t"
+            to="/"
+          >
+            Home
+          </NavLink>
           <NavLink
             onClick={() => setIsMobileMenuOpen(false)}
             className="py-3 pl-6 border-t"
