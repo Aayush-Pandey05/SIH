@@ -8,7 +8,7 @@ const HeroSection = ({ visibleElements }) => (
     // style={{ backgroundImage: "url('https://images.unsplash.com/photo-1621213009911-9635b7a37265?q=80&w=2070&auto=format&fit=crop')" }}
     data-animate="hero"
   >
-    <div className="absolute inset-0 bg-white"><div className='h-full w-full'>
+    <div className="absolute inset-0 bg-white"><div className='h-full w-full'><div className="absolute  inset-0 bg-black/50 z-10"></div>
       <video autoPlay loop muted className="h-full object-cover w-full" src="/Video.mp4"></video>
     </div></div>
     <div className="relative z-10">
