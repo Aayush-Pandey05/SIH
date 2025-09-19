@@ -3,14 +3,15 @@ import React, { useState, useEffect, useRef } from "react";
 
 // Import all components
 import Header from '../components/Header';
-import FullScreenMenu from '../components/FullScreen';
+// FullScreenMenu import is no longer needed
 import HeroSection from '../components/Hero';
 import ValuePropsSection from '../components/ValueProps';
 import WelcomeSection from '../components/Welcome';
 import BenefitsSection from '../components/Benefits';
 import Footer from '../components/Footer'
+
 const Home = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // isMenuOpen state is no longer needed here
   const [scrolled, setScrolled] = useState(false);
   const [visibleElements, setVisibleElements] = useState(new Set());
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -53,8 +54,6 @@ const Home = () => {
     };
   }, []);
 
-  ;
-
   const benefits = [
     "Reduce Water Bills",
     "Recharge Groundwater",
@@ -72,16 +71,14 @@ const Home = () => {
     <div className="min-h-screen bg-blue-50 text-white overflow-hidden relative font-sans">
       {/* Background Glow */}
       <div 
-        className="fixed w-96 h-96 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl pointer-events-none z-0 transition-all duration-500 ease-out"
+        className="fixed z-0 w-96 h-96 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl pointer-events-none  transition-all duration-500 ease-out"
         style={{ left: mousePosition.x - 192, top: mousePosition.y - 192 }}
       />
 
-      <Header
-        scrolled={scrolled}
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-      />
-      <FullScreenMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+      {/* The Header is now simpler and self-contained */}
+      <Header scrolled={scrolled} />
+      
+      {/* The FullScreenMenu component is no longer needed */}
 
       <main>
         <HeroSection visibleElements={visibleElements} />

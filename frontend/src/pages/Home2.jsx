@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import HeaderAL from "../components/HeaderAL";
-import FullScreenMenuAL from "../components/FullScreenMenuAL";
 import HeroSectionAL from "../components/HeroAL";
 import FeaturesSectionAL from "../components/FeatureAL";
 import HowItWorksSection from '../components/HowItWorks';
 import TestimonialsSection from '../components/Testimonial';
-import Footer from '../components/Footer'
 import {
   GisMapIcon,
   AiMlIcon,
@@ -16,21 +14,12 @@ import {
 import assets from "../assets/assets";
 
 const Home2 = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
   const [visibleElements, setVisibleElements] = useState(new Set());
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 }); 
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [time, setTime] = useState("");
+  
   const observerRef = useRef();
-
-  const navLinks = [
-    "Home",
-    "Dashboard",
-    "Map Roof",
-    "Government Schemes",
-    "Support",
-  ];
-  const navRoutes = ["/", "/dashboard", "/map-roof", "/govschemes", "/support"];
   const features = [
     {
       icon: <GisMapIcon />,
@@ -59,10 +48,25 @@ const Home2 = () => {
     },
   ];
 
+  const testimonials = [
+    { text: "Water is not just a natural resource; it is our lifeline. Each citizen must take responsibility for conserving every drop and adopting measures like rainwater harvesting", author: "Droupadi Murmu, Current President of India" },
+    { text: "Rainwater harvesting should become a compulsory mission for every home and institution in our country.", author: "Dr. A.P.J. Abdul Kalam, Former President of India" },
+    { text: "Water conservation should become a social responsibility and a mass movement. Every drop saved today secures our tomorrow.", author: "Narendra Modi, Prime Minister of India" },
+    { text: "If we conserve rain, we conserve life. Water harvesting is not an option, it is survival.", author: "Rajendra Singh, Waterman of India, Ramon Magsaysay Awardee" }
+  ];
+
+  const stepVisuals = [
+    "https://geoawesome.com/wp-content/uploads/2022/03/London_Google_Maps.webp",
+    "https://images.unsplash.com/photo-1610650394144-a778795cf585?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    `${assets.img3}`,
+  ];
+
   useEffect(() => {
+    
     const handleMouseMove = (e) =>
       setMousePosition({ x: e.clientX, y: e.clientY });
 
+    // Intersection observer for scroll animations
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -78,67 +82,34 @@ const Home2 = () => {
 
     const animatedElements = document.querySelectorAll("[data-animate]");
     animatedElements.forEach((el) => observerRef.current.observe(el));
-
-    const updateTime = () => {
-      const options = {
-        timeZone: "Asia/Kolkata",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      };
-      setTime(new Intl.DateTimeFormat([], options).format(new Date()));
-    };
-
-    updateTime();
-    const timerId = setInterval(updateTime, 60000);
-
+    
+ 
     window.addEventListener("mousemove", handleMouseMove);
 
+   
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      clearInterval(timerId);
       if (observerRef.current) observerRef.current.disconnect();
     };
   }, []);
-  const stepVisuals = [
-    "https://geoawesome.com/wp-content/uploads/2022/03/London_Google_Maps.webp",
-    "https://images.unsplash.com/photo-1610650394144-a778795cf585?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    `${assets.img3}`,
-  ];
-  const testimonials = [
-    { text: "Water is not just a natural resource; it is our lifeline. Each citizen must take responsibility for conserving every drop and adopting measures like rainwater harvesting", author: "Droupadi Murmu ,Current President of India" },
-    { text: "Rainwater harvesting should become a compulsory mission for every home and institution in our country.", author: "Dr. A.P.J. Abdul Kalam ,Former President of India" },
-    { text: "Water conservation should become a social responsibility and a mass movement. Every drop saved today secures our tomorrow.", author: "Narendra Modi ,Prime Minister of India" },
-    { text: "If we conserve rain, we conserve life. Water harvesting is not an option, it is survival.", author: "Rajendra Singh ,Waterman of India, Ramon Magsaysay Awardee" }
-  ];
 
   return (
-    <div className="h-full  bg-white text-white relative overflow-hidden">
-      {/* Background glow */}
-    <div
-  className="fixed w-96 h-96 bg-gradient-to-r from-cyan-400/40 to-blue-400/30 rounded-full blur-3xl pointer-events-none z-0 transition-all"
-  style={{ left: mousePosition.x - 192, top: mousePosition.y - 192 }}
-/>
-
-      <HeaderAL
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        time={time}
+    <div className="h-full bg-white text-white relative overflow-hidden">
+      
+      <div
+        className="fixed w-96 h-96 bg-gradient-to-r from-cyan-400/40 to-blue-400/30 rounded-full blur-3xl pointer-events-none z-0 transition-all"
+        style={{ left: mousePosition.x - 192, top: mousePosition.y - 192 }}
       />
-      <FullScreenMenuAL
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        navLinks={navLinks}
-        navRoutes={navRoutes}
-      />
+      
+      <HeaderAL />
 
-      <main className=" relative z-10">
+      <main className="relative z-10">
         <HeroSectionAL visibleElements={visibleElements} />
         <FeaturesSectionAL visibleElements={visibleElements} features={features} />
-        <HowItWorksSection visibleElements={visibleElements} stepVisuals={stepVisuals} /> 
-        <TestimonialsSection 
-          visibleElements={visibleElements} 
-          testimonials={testimonials} 
+        <HowItWorksSection visibleElements={visibleElements} stepVisuals={stepVisuals} />
+        <TestimonialsSection
+          visibleElements={visibleElements}
+          testimonials={testimonials}
           currentTestimonial={currentTestimonial}
           setCurrentTestimonial={setCurrentTestimonial}
         />
