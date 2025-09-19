@@ -1,15 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Send, Mail, Phone, MapPin, Loader2 } from "lucide-react";
 import Header from "../components/Header";
-import FullScreenMenu from "../components/FullScreen";
 import toast from "react-hot-toast";
 import { useFormStore } from "../store/useFormStore";
 
 const ContactPage = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const observerRef = useRef();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -39,34 +34,10 @@ const ContactPage = () => {
     }
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
 
   return (
     <div>
-      {/* ✅ Header & Menu */}
-      <Header
-        scrolled={scrolled}
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-      />
-      <FullScreenMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-
+      <Header/>
       {/* Contact Page Content */}
       <div className="bg-slate-900 text-white min-h-screen">
         {/* Hero Section */}
@@ -82,7 +53,7 @@ const ContactPage = () => {
           </div>
           <div className="relative z-10">
             <h1 className="text-4xl md:text-6xl font-bold">Contact Us</h1>
-            <p className="text-slate-300 max-w-2xl mx-auto mt-4 text-lg">
+            <p className="text-slate-300 font-[font16] max-w-2xl mx-auto mt-4 text-lg">
               We’d love to hear from you! Reach out with questions, feedback, or
               collaboration ideas.
             </p>
