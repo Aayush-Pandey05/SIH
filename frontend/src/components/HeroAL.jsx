@@ -70,7 +70,7 @@ const HeroSectionAL = ({ visibleElements }) => {
 
           {/* Title */}
           <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-black drop-shadow-lg leading-tight">
-            Welcome to <span className="text-blue-950">JalSetu</span>
+            Welcome to <span className="text-cyan-400">JalSetu</span>
           </h1>
 
           {/* Description */}

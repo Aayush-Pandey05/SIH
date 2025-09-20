@@ -132,7 +132,7 @@ const HeaderAL = () => {
         <div className="px-4 sm:px-6 flex items-center justify-between h-16">
           <div
             ref={logoRef}
-            className="flex items-center cursor-pointer group space-x-1 sm:space-x-2 md:space-x-3 lg:space-x-4"
+            className="flex items-center cursor-pointer group space-x-1 sm:space-x-2 md:space-x-2 lg:space-x-3"
           >
             <img
               src={assets.logo}

@@ -40,7 +40,7 @@ const SupportPage = () => {
             <div className="absolute top-0 left-0 w-full h-full bg-black/70"></div>
           </div>
           <div className="relative z-10">
-            <h1 className="text-4xl md:text-6xl font-bold text-cyan-600">
+            <h1 className="text-4xl md:text-6xl font-bold text-cyan-500">
               Support Center
             </h1>
             <p className="text-base sm:text-lg text-slate-300 font-medium max-w-2xl mx-auto mt-4">

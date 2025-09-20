@@ -80,23 +80,21 @@ const Header = () => {
   // Helper function to get link className for desktop nav
   const getDesktopLinkClassName = (linkPath) => {
     const isActive = isLinkActive(linkPath);
-    return `text-sm sm:text-base md:text-lg lg:text-xl font-medium font-[font16] transition-colors duration-700 hover:text-gray-400 ${
-      isActive
+    return `text-sm sm:text-base md:text-lg lg:text-xl font-medium font-[font16] transition-colors duration-700 hover:text-gray-400 ${isActive
         ? isScrolled
           ? "text-blue-500 font-bold"
           : "text-gray-300"
         : isScrolled
-        ? "text-black"
-        : "text-white"
-    }`;
+          ? "text-black"
+          : "text-white"
+      }`;
   };
 
   // Helper function to get link className for mobile nav
   const getMobileLinkClassName = (linkPath) => {
     const isActive = isLinkActive(linkPath);
-    return `text-white hover:text-gray-300 transition-colors duration-300 ${
-      isActive ? "text-blue-400 font-bold" : ""
-    }`;
+    return `text-white hover:text-gray-300 transition-colors duration-300 ${isActive ? "text-blue-400 font-bold" : ""
+      }`;
   };
 
   // Handle smooth scroll for hash links
@@ -114,15 +112,14 @@ const Header = () => {
     <>
       <header
         ref={headerRef}
-        className={`fixed z-50 top-5 left-4 right-4 p-2 rounded-3xl transition-all duration-700 ${
-          isScrolled ? "bg-white shadow-lg" : "bg-black/80"
-        }`}
+        className={`fixed z-50 top-5 left-4 right-4 p-2 rounded-3xl transition-all duration-700 ${isScrolled ? "bg-white shadow-lg" : "bg-black/80"
+          }`}
       >
         <div className="px-4 sm:px-6 flex items-center justify-between h-16">
           {/* Logo */}
           <div
             ref={logoRef}
-            className="flex items-center space-x-2 cursor-pointer group"
+            className="flex items-center cursor-pointer group space-x-1 sm:space-x-2 md:space-x-2 lg:space-x-3"
           >
             <img
               src={assets.logo}
@@ -130,9 +127,9 @@ const Header = () => {
               className="h-8 w-8 rounded-full"
             />
             <span
-              className={`text-2xl font-bold group-hover:text-blue-400 transition-colors duration-700 font-[font16] ${
-                isScrolled ? "text-black" : "text-white"
-              }`}
+              className={`text-sm sm:text-l md:text-xl lg:text-2xl font-bold group-hover:text-blue-400 transition-colors duration-700 font-[font16] ${isScrolled ? "text-black" : "text-white"
+                }`}
+
             >
               JalSetu
             </span>
@@ -174,15 +171,13 @@ const Header = () => {
             {/* Join JalSetu */}
             <NavLink
               to="/signup"
-              className={`group flex items-center space-x-3 pl-4 pr-1 py-1 font-[font6] rounded-full transition-colors duration-700 ${
-                isScrolled ? "bg-black text-white" : "bg-white text-black"
-              }`}
+              className={`group flex items-center space-x-3 pl-4 pr-1 py-1 font-[font6] rounded-full transition-colors duration-700 ${isScrolled ? "bg-black text-white" : "bg-white text-black"
+                }`}
             >
               <span className="font-semibold hidden sm:inline">Join JalSetu</span>
               <div
-                className={`p-2 rounded-full transition-colors duration-700 ${
-                  isScrolled ? "bg-white text-black" : "bg-black text-white"
-                }`}
+                className={`p-2 rounded-full transition-colors duration-700 ${isScrolled ? "bg-white text-black" : "bg-black text-white"
+                  }`}
               >
                 <ArrowRightIcon />
               </div>
@@ -190,17 +185,15 @@ const Header = () => {
 
             {/* Mobile Toggle */}
             <div
-              className={`rounded-full block sm:block md:hidden transition-colors duration-700 ${
-                isScrolled ? "bg-white" : "bg-black"
-              }`}
+              className={`rounded-full block sm:block md:hidden transition-colors duration-700 ${isScrolled ? "bg-white" : "bg-black"
+                }`}
             >
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className={`p-2 rounded-full transition-colors duration-700 ${
-                  isScrolled
+                className={`p-2 rounded-full transition-colors duration-700 ${isScrolled
                     ? "text-black hover:bg-gray-200"
                     : "text-white hover:bg-gray-800"
-                }`}
+                  }`}
               >
                 {isMenuOpen ? <XIcon /> : <MenuIcon />}
               </button>
@@ -211,9 +204,8 @@ const Header = () => {
 
       {/* Mobile Menu Overlay */}
       <div
-        className={`fixed inset-0 z-40 bg-black/90 text-white transform transition-transform duration-700 ease-in-out ${
-          isMenuOpen ? "translate-x-0" : "translate-x-full"
-        } md:hidden`}
+        className={`fixed inset-0 z-40 bg-black/90 text-white transform transition-transform duration-700 ease-in-out ${isMenuOpen ? "translate-x-0" : "translate-x-full"
+          } md:hidden`}
       >
         <div className="flex flex-col items-center justify-center h-full space-y-8 text-2xl font-bold">
           {navLinks.map((link) => {

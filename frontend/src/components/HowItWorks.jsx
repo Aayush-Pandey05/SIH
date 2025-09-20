@@ -99,7 +99,7 @@ const HowItWorksSection = ({ visibleElements, stepVisuals }) => {
                 </div>
               </div>
               <div
-                className={`group bg-gradient-to-br from-gray-800 to-gray-900 border border-cyan-500/20 rounded-3xl h-80 flex items-center justify-center relative overflow-hidden hover:shadow-2xl hover:shadow-cyan-400/10 hover:scale-105 transition-all duration-500 cursor-pointer ${
+                className={`group bg-gradient-to-br from-gray-800 to-gray-900 border border-cyan-500/20 rounded-3xl h-95 flex items-center justify-center relative overflow-hidden hover:shadow-2xl hover:shadow-cyan-400/10 hover:scale-105 transition-all duration-500 cursor-pointer ${
                   index % 2 === 1 ? "md:col-start-1" : ""
                 }`}
               >
