@@ -1,11 +1,14 @@
+import { useFormStore } from "../store/useFormStore";
 import React, { useState, useEffect, useRef } from "react";
+import { Loader2 } from "lucide-react";
 
-const Modal = ({ isOpen, onClose, onSubmit }) => {
+const Modal = ({ isOpen, onClose }) => {
   const [area, setArea] = useState("");
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
   const [district, setDistrict] = useState("");
   const firstInputRef = useRef(null);
+  const { isSubmittingUserData, submitUserDataForm } = useFormStore();
 
   useEffect(() => {
     if (isOpen) {
@@ -27,17 +30,17 @@ const Modal = ({ isOpen, onClose, onSubmit }) => {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!area || !lat || !lng || !district) {
       alert("Please fill all fields");
       return;
     }
-    onSubmit({
-      dimensions: { area: parseFloat(area) },
-      latitude: parseFloat(lat),
-      longitude: parseFloat(lng),
-      district,
-    });
+    try {
+      await submitUserDataForm(lat, lng, area, district);
+      window.location.reload();
+    } catch (error) {
+      console.error("API error:", error);
+    }
     onClose();
   };
 
@@ -115,9 +118,21 @@ const Modal = ({ isOpen, onClose, onSubmit }) => {
           </button>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition"
+            className={`px-4 py-2 text-white text-sm lg:text-base rounded-lg shadow-md transition-all flex items-center justify-center gap-2 ${
+              isSubmittingUserData
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-[#00a63e] hover:bg-[#008c34] hover:shadow-lg hover:scale-105"
+            }`}
+            disabled={isSubmittingUserData}
           >
-            Submit
+            {isSubmittingUserData ? (
+              <>
+                <Loader2 className="size-5 animate-spin" />
+                <span>Sending...</span>
+              </>
+            ) : (
+              "Send"
+            )}
           </button>
         </div>
       </div>
