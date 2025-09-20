@@ -9,13 +9,13 @@ import About from "./pages/About";
 import RoofAIPage from "./pages/RoofAIPage";
 import Support from "./pages/Support";
 import SignUp from "./pages/SignUp";
-import ContactUs from './components/ContactUs'
+import ContactUs from './pages/ContactUs'
 import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/useAuthStore";
-import { Loader } from "lucide-react";
+import { Loader, Scroll } from "lucide-react";
+import ScrollToTop from "./components/ScrollToToP";
 
-// Assuming this is your Navbar component
-import NavbarAL from "./components/NavbarAL"; 
+
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -36,6 +36,7 @@ const App = () => {
 
   return (
     <div>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={authUser ? <Home2 /> : <Home />} />
         <Route

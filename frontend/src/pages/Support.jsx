@@ -1,28 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import FAQSection from "../components/FAQSection";
 import ContactSection from "../components/ContactSection";
 import HeaderAL from "../components/HeaderAL";
-import FullScreenMenuAL from "../components/FullScreenMenuAL";
-import Footer from "../components/Footer";
+
 import assets from "../assets/assets";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const navLinks = [
-  "Home",
-  "Dashboard",
-  "Map Roof",
-  "Government Schemes",
-  "Support",
-];
-const navRoutes = ["/", "/dashboard", "/map-roof", "/govschemes", "/support"];
-
 const SupportPage = () => {
   const mainRef = useRef(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   useGSAP(() => {
     const tl = gsap.timeline({ 
@@ -42,11 +30,9 @@ const SupportPage = () => {
 
   return (
     <div>
-      <HeaderAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-      <FullScreenMenuAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} navLinks={navLinks} navRoutes={navRoutes} />
-      
-      <div ref={mainRef} className="bg-slate-900 text-white min-h-screen" id="hero">
-        <div className="relative h-[50vh] sm:h-[65vh] flex items-center justify-center text-center px-4 support-hero">
+      <HeaderAL />
+      <div ref={mainRef} className="bg-gradient-to-b from-slate-900 via-blue-950 to-black text-white min-h-screen font-[font6]" >
+        <div id="hero" className="relative h-[50vh] sm:h-[65vh] flex items-center justify-center text-center px-4 support-hero">
           <div
             className="absolute top-0 left-0 w-full h-full bg-cover bg-center"
             style={{ backgroundImage: `url(${assets.Support})` }}
@@ -54,7 +40,7 @@ const SupportPage = () => {
             <div className="absolute top-0 left-0 w-full h-full bg-black/70"></div>
           </div>
           <div className="relative z-10">
-            <h1 className="text-4xl md:text-6xl font-bold text-cyan-600">
+            <h1 className="text-4xl md:text-6xl font-bold text-cyan-500">
               Support Center
             </h1>
             <p className="text-base sm:text-lg text-slate-300 font-medium max-w-2xl mx-auto mt-4">

@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
-import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom"; // ✅ added useLocation
-
-import { MenuIcon, XIcon } from "./IconAL";
-import assets from "../assets/assets";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { MenuIcon, XIcon } from "./IconAL"; 
+import assets from "../assets/assets"; 
 import { useAuthStore } from "../store/useAuthStore";
-
 const InitialAvatar = ({ name, className }) => {
   const getInitials = (name) => {
     if (!name || typeof name !== "string") return "?";
@@ -30,12 +28,14 @@ const navLinks = [
   { name: "Support", path: "/support" },
 ];
 
-const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
+const HeaderAL = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const { logout, authUser } = useAuthStore();
-  const location = useLocation(); // ✅ track route changes
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const headerRef = useRef(null);
   const logoRef = useRef(null);
@@ -43,45 +43,37 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
   const buttonRef = useRef(null);
   const profileMenuRef = useRef(null);
   const profileButtonRef = useRef(null);
-  const mobileMenuRef = useRef(null);
 
-  // ✅ Scroll / Hero detection
   useEffect(() => {
     const hero = document.getElementById("hero");
-
     if (!hero) {
-      // No hero → treat as transparent at top
       setIsScrolled(false);
       return;
     }
-
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsScrolled(!entry.isIntersecting);
-      },
+      ([entry]) => setIsScrolled(!entry.isIntersecting),
       { threshold: 0 }
     );
-
     observer.observe(hero);
     return () => observer.disconnect();
   }, [location.pathname]);
 
-  // ✅ GSAP animation on mount
+  // GSAP intro animation (Unchanged)
   useEffect(() => {
-    const headerEl = headerRef.current;
-    const logoEl = logoRef.current;
-    const navItems = navRef.current?.children || [];
-    const buttonEl = buttonRef.current;
-
     const tl = gsap.timeline();
-    tl.from(headerEl, { y: -50, opacity: 0, duration: 0.8, ease: "power3.out" })
-      .from([logoEl, buttonEl], {
+    tl.from(headerRef.current, {
+      y: -50,
+      opacity: 0,
+      duration: 0.8,
+      ease: "power3.out",
+    })
+      .from([logoRef.current, buttonRef.current], {
         opacity: 0,
         y: -20,
         duration: 0.5,
         ease: "power3.out",
       }, "-=0.3")
-      .from(navItems, {
+      .from(navRef.current?.children || [], {
         opacity: 0,
         y: -20,
         duration: 0.4,
@@ -90,20 +82,8 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
       }, "-=0.3");
   }, []);
 
-  // ✅ GSAP mobile menu slide
   useEffect(() => {
-    if (isMenuOpen) {
-      gsap.fromTo(
-        mobileMenuRef.current,
-        { x: "100%" },
-        { x: "0%", duration: 0.6, ease: "power3.out" }
-      );
-    }
-  }, [isMenuOpen]);
-
-  // ✅ Close profile menu on outside click
-  useEffect(() => {
-    function handleClickOutside(event) {
+    const handleClickOutside = (event) => {
       if (
         profileMenuRef.current &&
         !profileMenuRef.current.contains(event.target) &&
@@ -112,16 +92,33 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
       ) {
         setIsProfileMenuOpen(false);
       }
-    }
+    };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  const Navigate = useNavigate();
 
   const handleLogout = async () => {
     setIsProfileMenuOpen(false);
     await logout();
-    Navigate("/", { replace: true });
+    navigate("/", { replace: true });
+  };
+
+  const getDesktopLinkClassName = ({ isActive }) => {
+    return `text-sm sm:text-base md:text-lg lg:text-xl font-medium font-[font16] transition-colors duration-700 hover:text-gray-400 ${
+      isActive
+        ? isScrolled
+          ? "text-blue-500 font-bold"
+          : "text-gray-300"
+        : isScrolled
+        ? "text-black"
+        : "text-white"
+    }`;
+  };
+
+  const getMobileLinkClassName = ({ isActive }) => {
+    return `text-white hover:text-gray-300 transition-colors duration-300 ${
+      isActive ? "text-blue-400 font-bold" : ""
+    }`;
   };
 
   return (
@@ -133,11 +130,17 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
         }`}
       >
         <div className="px-4 sm:px-6 flex items-center justify-between h-16">
-          {/* Logo */}
-          <div ref={logoRef} className="flex items-center space-x-2 cursor-pointer group">
-            <img src={assets.logo} alt="JalSetu Logo" className="h-8 w-8 rounded-full" />
+          <div
+            ref={logoRef}
+            className="flex items-center cursor-pointer group space-x-1 sm:space-x-2 md:space-x-2 lg:space-x-3"
+          >
+            <img
+              src={assets.logo}
+              alt="JalSetu Logo"
+              className="h-8 w-8 rounded-full"
+            />
             <span
-              className={`text-2xl font-bold group-hover:text-blue-400 transition-colors duration-700 font-[font17] ${
+              className={`text-sm sm:text-l md:text-xl lg:text-2xl font-bold group-hover:text-blue-400 transition-colors duration-700 font-[font16] ${
                 isScrolled ? "text-black" : "text-white"
               }`}
             >
@@ -145,55 +148,44 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
             </span>
           </div>
 
-          {/* Desktop Nav */}
-          <nav ref={navRef} className="hidden lg:flex items-center gap-3 space-x-6">
+          
+          <nav ref={navRef} className="hidden lg:flex items-center gap-8 sm:gap-2 md:gap-3 lg:gap-6 xl:gap-7">
             {navLinks.map((link) => (
               <NavLink
                 key={link.name}
                 to={link.path}
-                className={({ isActive }) =>
-                  `text-xl sm:text-lg md:text-base lg:text-[2.3vh] font-medium transition-colors duration-700 hover:text-gray-400 ${
-                    isActive
-                      ? isScrolled
-                        ? "text-blue-500 font-bold"
-                        : "text-gray-300"
-                      : isScrolled
-                      ? "text-black"
-                      : "text-white"
-                  }`
-                }
+                className={getDesktopLinkClassName}
               >
                 {link.name}
               </NavLink>
             ))}
           </nav>
 
-          {/* Right Section */}
-          <div ref={buttonRef} className="flex items-center space-x-4">
-            {/* Profile Dropdown */}
+          {/* Right Section (Buttons) */}
+          <div ref={buttonRef} className="flex items-center space-x-4 sm:space-x-3 md:space-x-4 lg:space-x-4 xl:space-x-4">
+            
             <div className="relative">
               <button
                 ref={profileButtonRef}
                 onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                className={`group flex items-center space-x-3 px-3 py-1 rounded-full transition-colors duration-700 ${
-                  isScrolled ? "bg-white text-black" : "bg-black text-white"
+                className={`group flex items-center space-x-3 pl-1 pr-3 py-1.5 rounded-full transition-colors duration-700 ${
+                  isScrolled ?  "bg-black hover:bg-gray-900": "bg-white hover:bg-gray-200" 
                 }`}
               >
                 <InitialAvatar name={authUser?.fullName} className="w-8 h-8" />
-                <span className="font-semibold hidden sm:inline">
-                  {authUser?.fullName || "User"}
+                <span className={`font-semibold hidden text-sm sm:text-base md:text-lg lg:text-xl sm:inline ${ isScrolled ? "text-white" : "text-black"}`}> 
+                  {authUser?.fullName || "Profile"}
                 </span>
               </button>
 
               {isProfileMenuOpen && (
                 <div
                   ref={profileMenuRef}
-                  className="absolute right-0 mt-3 w-56 bg-slate-950 backdrop-blur-lg 
-                        rounded-xl shadow-2xl border border-gray-700 overflow-hidden z-50"
+                  className="absolute right-0 mt-3 w-56 bg-slate-950 backdrop-blur-lg rounded-xl shadow-2xl border border-gray-700 overflow-hidden z-50"
                 >
                   <div className="flex flex-col items-center p-4 border-b border-gray-700">
                     <InitialAvatar name={authUser?.fullName} className="w-12 h-12 p-2 border-2 border-slate-600" />
-                    <p className="font-semibold text-white text-center">
+                    <p className="font-semibold text-white text-center mt-2">
                       {authUser?.fullName || "User"}
                     </p>
                     <p className="text-sm text-slate-300 text-center">
@@ -203,7 +195,7 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
                   <div className="py-2">
                     <button
                       onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-red-400 hover:bg-slate-700/50"
+                      className="block w-full text-left px-4 py-2 text-red-400 hover:bg-slate-700/50 transition-colors"
                     >
                       Logout
                     </button>
@@ -212,16 +204,18 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
               )}
             </div>
 
-            {/* Mobile Menu Toggle */}
+            {/* Mobile Toggle  */}
             <div
-              className={`rounded-full lg:hidden transition-colors duration-700 ${
+              className={`rounded-full block lg:hidden transition-colors duration-700 ${
                 isScrolled ? "bg-white" : "bg-black"
               }`}
             >
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className={`p-2 rounded-full transition-colors duration-700 ${
-                  isScrolled ? "text-black hover:bg-gray-200" : "text-white hover:bg-gray-800"
+                  isScrolled
+                    ? "text-black hover:bg-gray-200"
+                    : "text-white hover:bg-gray-800"
                 }`}
               >
                 {isMenuOpen ? <XIcon /> : <MenuIcon />}
@@ -230,27 +224,33 @@ const HeaderAL = ({ isMenuOpen, setIsMenuOpen }) => {
           </div>
         </div>
       </header>
-
-      {/* Mobile Menu Overlay */}
-      {isMenuOpen && (
-        <div
-          ref={mobileMenuRef}
-          className="fixed inset-0 bg-black/90 z-40 flex flex-col items-center justify-center space-y-8 md:hidden"
-        >
+      <div
+        className={`fixed inset-0 z-40 bg-black/90 text-white transform transition-transform duration-500 ease-in-out ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        } lg:hidden`}
+      >
+        <div className="flex flex-col items-center justify-center h-full space-y-8 text-2xl font-bold">
           {navLinks.map((link) => (
             <NavLink
               key={link.name}
               to={link.path}
+              className={getMobileLinkClassName}
               onClick={() => setIsMenuOpen(false)}
-              className={`text-2xl font-semibold transition-colors duration-700 ${
-                isScrolled ? "text-black" : "text-white"
-              }`}
             >
               {link.name}
             </NavLink>
           ))}
+          <button
+            onClick={() => {
+              setIsMenuOpen(false);
+              handleLogout();
+            }}
+            className="mt-6 px-6 py-3 rounded-full text-red-400 border border-red-400 hover:bg-red-400 hover:text-white transition-colors"
+          >
+            Logout
+          </button>
         </div>
-      )}
+      </div>
     </>
   );
 };

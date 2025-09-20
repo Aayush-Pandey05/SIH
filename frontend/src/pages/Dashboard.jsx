@@ -1,31 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import DashboardContent from "./DashboardContent";
-import NavbarAL from "../components/NavbarAL";
 import HeaderAL from "../components/HeaderAL";
-import FullScreenMenuAL from "../components/FullScreenMenuAL";
-import Footer from "../components/Footer";
 import { Loader } from "lucide-react";
 import { useDataStore } from "../store/useDataStore";
 
-const navLinks = [
-  "Home",
-  "Dashboard",
-  "Map Roof",
-  "Government Schemes",
-  "Support",
-];
-const navRoutes = ["/", "/dashboard", "/map-roof", "/govschemes", "/support"];
-
 export default function Dashboard() {
   const { fetchUserData, userData, isLoadingData } = useDataStore();
-  const roofArea = 150; // Default roof area value
+  const roofArea = 150; 
   const [chartData, setChartData] = useState([]);
   const [alertsData, setAlertsData] = useState([]);
   const [totalRainfall, setTotalRainfall] = useState("0");
   const [locationName, setLocationName] = useState("Bangalore");
   const [searchQuery, setSearchQuery] = useState("Bangalore");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [time, setTime] = useState("");
   const [isWeatherLoading, setIsWeatherLoading] = useState(false);
 
   const handleSearchSubmit = (e) => {
@@ -41,21 +27,77 @@ export default function Dashboard() {
     async (location, currentUserData) => {
       if (!location) return;
 
+      console.log("🔍 Searching for location:", location);
+      console.log("📊 Current user data:", currentUserData);
+
       setIsWeatherLoading(true);
       try {
-        // Step 1: Geocoding
-        const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=1`;
-        const geoResponse = await fetch(geoUrl);
-        const geoData = await geoResponse.json();
+        let newLat, newLon;
+
+        // Check if we have coordinates from userData AND we're using the district from userData
         if (
-          !geoResponse.ok ||
-          !geoData.results ||
-          geoData.results.length === 0
+          currentUserData &&
+          currentUserData[0] &&
+          currentUserData[0].latitude &&
+          currentUserData[0].longitude &&
+          currentUserData[0].district &&
+          location === currentUserData[0].district
         ) {
-          throw new Error("Location not found.");
+          console.log(
+            "📍 Using coordinates from userData for district:",
+            currentUserData[0].district
+          );
+          newLat = currentUserData[0].latitude;
+          newLon = currentUserData[0].longitude;
+          console.log(`🎯 Coordinates: ${newLat}, ${newLon}`);
+        } else {
+          // Use geocoding for manual searches or when no coordinates in userData
+          console.log("🔍 Using geocoding for location search:", location);
+
+          // Step 1: Geocoding - try multiple formats
+          let geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+            location
+          )}&count=1`;
+          console.log("🌍 Geocoding URL:", geoUrl);
+
+          const geoResponse = await fetch(geoUrl);
+          const geoData = await geoResponse.json();
+
+          console.log("📍 Geocoding response:", geoData);
+
+          if (
+            !geoResponse.ok ||
+            !geoData.results ||
+            geoData.results.length === 0
+          ) {
+            // Try with ", India" appended if first search fails
+            const locationWithCountry = `${location}, India`;
+            console.log("🔄 Retrying with:", locationWithCountry);
+
+            geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+              locationWithCountry
+            )}&count=1`;
+            const retryResponse = await fetch(geoUrl);
+            const retryData = await retryResponse.json();
+
+            console.log("🔄 Retry response:", retryData);
+
+            if (
+              !retryResponse.ok ||
+              !retryData.results ||
+              retryData.results.length === 0
+            ) {
+              throw new Error(
+                `Location "${location}" not found. Please try a more specific location.`
+              );
+            }
+
+            // Use retry data if successful
+            geoData.results = retryData.results;
+          }
+          newLat = geoData.results[0].latitude;
+          newLon = geoData.results[0].longitude;
         }
-        const newLat = geoData.results[0].latitude;
-        const newLon = geoData.results[0].longitude;
 
         // Step 2: Fetch historical data
         const endDate = new Date();
@@ -147,11 +189,16 @@ export default function Dashboard() {
         }
         setAlertsData(newAlertsData);
       } catch (error) {
-        console.error("Error:", error.message);
+        console.error("❌ Weather fetch error:", error.message);
+        console.error("📍 Failed location:", location);
         setChartData([]);
         setTotalRainfall("N/A");
         setAlertsData([
-          { color: "red", title: "Error", subtitle: error.message },
+          {
+            color: "red",
+            title: "Location Error",
+            subtitle: `Cannot find weather data for "${location}". Try a different location or check spelling.`,
+          },
         ]);
       } finally {
         setIsWeatherLoading(false);
@@ -165,14 +212,20 @@ export default function Dashboard() {
     fetchUserData();
   }, [fetchUserData]);
 
+  console.log("User Data:", userData);
+
   // Process userData when it's available and set initial location
   useEffect(() => {
     if (userData && Array.isArray(userData) && userData.length > 0) {
       const recommendation = userData[0];
+      console.log("🏠 User recommendation:", recommendation);
       if (recommendation && recommendation.district) {
         const newLocation = recommendation.district;
+        console.log("📍 Setting location to:", newLocation);
         setLocationName(newLocation);
         setSearchQuery(newLocation);
+      } else {
+        console.log("⚠️ No district found in recommendation");
       }
     }
   }, [userData]);
@@ -184,22 +237,6 @@ export default function Dashboard() {
     }
   }, [searchQuery, fetchLocationAndWeather, userData]);
 
-  // Time update effect
-  useEffect(() => {
-    const updateTime = () => {
-      const options = {
-        timeZone: "Asia/Kolkata",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      };
-      setTime(new Intl.DateTimeFormat("en-US", options).format(new Date()));
-    };
-
-    updateTime();
-    const timerId = setInterval(updateTime, 60000);
-    return () => clearInterval(timerId);
-  }, []);
 
   // Show loader when initially loading user data or weather data
   if ((isLoadingData && !userData) || isWeatherLoading) {
@@ -240,18 +277,8 @@ export default function Dashboard() {
 
   return (
     <div>
-      <HeaderAL
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        time={time}
-      />
-      <FullScreenMenuAL
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        navLinks={navLinks}
-        navRoutes={navRoutes}
-      />
-      <div className="h-full font-sans text-slate-50 bg-blue-950 bg-gradient-to-tr from-blue-900 via-blue-950 to-blue-950">
+      <HeaderAL/>
+      <div className="min-h-screen overflow-x-hidden font-sans text-slate-50 bg-gradient-to-b from-slate-800 via-blue-950 to-black">
         <main className="p-12 sm:p-6 lg:p-8 pt-28">
           <form
             onSubmit={handleSearchSubmit}
@@ -284,4 +311,3 @@ export default function Dashboard() {
     </div>
   );
 }
-

@@ -297,7 +297,6 @@ const RoofMapper = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmit}
       />
     </div>
   );
