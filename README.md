@@ -58,7 +58,7 @@
 
 2. **Setup Backend 1 (Node.js)**
    ```bash
-   cd backend1
+   cd ./backend1
    npm install
    ```
 
