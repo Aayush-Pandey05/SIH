@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { ArrowRightIcon } from "./IconAL";
 import { gsap } from "gsap";
 import { assets } from "../assets/assets";
 
 const HeroSectionAL = ({ visibleElements }) => {
+  const { t } = useTranslation();
   const logoRef = useRef(null);
 
   useEffect(() => {
@@ -64,27 +66,26 @@ const HeroSectionAL = ({ visibleElements }) => {
             <img
               className="w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover"
               src={assets.logo}
-              alt="JalSetu Logo"
+              alt={t('heroAL.logoAlt')}
             />
           </div>
 
           {/* Title */}
           <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-black drop-shadow-lg leading-tight">
-            Welcome to <span className="text-cyan-400">JalSetu</span>
+            <Trans i18nKey="heroAL.title">
+              Welcome to <span className="text-blue-950">JalSetu</span>
+            </Trans>
           </h1>
 
           {/* Description */}
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white font-medium leading-relaxed mb-6 sm:mb-8 px-2 md:px-4">
-            JalSetu is your comprehensive solution for planning, optimizing, and
-            adopting Rainwater Harvesting (RWH). We combine GIS mapping, AI/ML,
-            smart alerts, government integration, and WebAR visualization to
-            make RWH accessible and efficient for every Indian citizen.
+            {t('heroAL.description')}
           </p>
 
           {/* CTA Button */}
           <a href="/map-roof" className="w-full sm:w-auto">
             <button className="w-full sm:w-auto group flex items-center justify-center space-x-2 px-5 sm:px-8 py-3 sm:py-4 bg-cyan-500 hover:bg-blue-950 text-white text-sm sm:text-lg font-semibold rounded-lg shadow-lg hover:scale-105 transition-all">
-              <span>Map Your Roof to Get Started</span>
+              <span>{t('heroAL.ctaButton')}</span>
               <ArrowRightIcon className="w-4 h-4 sm:w-6 sm:h-6" />
             </button>
           </a>
