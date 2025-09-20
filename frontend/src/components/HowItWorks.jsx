@@ -1,38 +1,39 @@
+
 import React from "react";
-import { useTranslation } from "react-i18next";
 
 const HowItWorksSection = ({ visibleElements, stepVisuals }) => {
-  const { t } = useTranslation();
-
   const steps = [
     {
       step: "01",
-      title: t('howItWorks.step1.title'),
-      description: t('howItWorks.step1.description'),
+      title: "Map & Measure",
+      description:
+        "Use our interactive GIS interface to draw your rooftop area on a high-resolution satellite map. Our system instantly calculates your roof's size and potential rainwater harvesting capacity.",
       includes: [
-        t('howItWorks.step1.includes.item1'),
-        t('howItWorks.step1.includes.item2'),
-        t('howItWorks.step1.includes.item3'),
+        "Satellite Imagery Integration",
+        "Rooftop Polygon Drawing Tool",
+        "Instant Runoff Calculation",
       ],
     },
     {
       step: "02",
-      title: t('howItWorks.step2.title'),
-      description: t('howItWorks.step2.description'),
+      title: "Analyze & Plan",
+      description:
+        "Receive AI-powered recommendations tailored to your location's rainfall patterns, soil type, and groundwater levels. Get a detailed ROI analysis to understand your savings.",
       includes: [
-        t('howItWorks.step2.includes.item1'),
-        t('howItWorks.step2.includes.item2'),
-        t('howItWorks.step2.includes.item3'),
+        "AI Recommendation Engine",
+        "Automated ROI Reports",
+        "Recharge Structure Sizing",
       ],
     },
     {
       step: "03",
-      title: t('howItWorks.step3.title'),
-      description: t('howItWorks.step3.description'),
+      title: "Connect & Act",
+      description:
+        "Turn your personalized plan into reality. JalSetu bridges the gap between planning and implementation by connecting you with verified local professionals and guiding you through the process of accessing government support.",
       includes: [
-        t('howItWorks.step3.includes.item1'),
-        t('howItWorks.step3.includes.item2'),
-        t('howItWorks.step3.includes.item3'),
+        "Verified Vendor Marketplace",
+        "Simplified Subsidy Applications",
+        "Step-by-Step Implementation Guide",
       ],
     },
   ];
@@ -48,7 +49,7 @@ const HowItWorksSection = ({ visibleElements, stepVisuals }) => {
           }`}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            {t('howItWorks.mainTitle')}
+            Simple Steps to Water Independence
           </h2>
         </div>
         <div className="space-y-16">
@@ -82,7 +83,7 @@ const HowItWorksSection = ({ visibleElements, stepVisuals }) => {
                 </p>
                 <div className="space-y-2">
                   <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                    {t('howItWorks.includesTitle')}
+                    Includes
                   </div>
                   {item.includes.map((include, i) => (
                     <div
@@ -104,7 +105,7 @@ const HowItWorksSection = ({ visibleElements, stepVisuals }) => {
               >
                 <img
                   src={stepVisuals[index]}
-                  alt={t('howItWorks.imageAlt', { title: item.title })}
+                  alt={`${item.title} Visual`}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>

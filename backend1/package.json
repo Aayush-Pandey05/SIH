@@ -2,8 +2,6 @@
   "name": "backend1",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
-  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
@@ -11,11 +9,11 @@
   },
   "keywords": [],
   "author": "",
-  
+  "type": "module",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "axios": "^1.12.2",
+    "axios": "^1.12.1",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
