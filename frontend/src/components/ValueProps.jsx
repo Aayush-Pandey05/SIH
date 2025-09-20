@@ -1,21 +1,18 @@
 import React from "react";
-import { useTranslation } from 'react-i18next';
 
 const ValuePropsSection = ({ visibleElements }) => {
-  const { t } = useTranslation();
-
   const valueProps = [
     {
-      title: t('valueProps.item1.title'),
-      desc: t('valueProps.item1.desc'),
+      title: "GIS-Powered Precision",
+      desc: "Draw your rooftop on a satellite map and get precise calculations for harvestable rainwater.",
     },
     {
-      title: t('valueProps.item2.title'),
-      desc: t('valueProps.item2.desc'),
+      title: "AI-Driven Recommendations",
+      desc: "Our intelligent system suggests the most effective recharge structures based on your location.",
     },
     {
-      title: t('valueProps.item3.title'),
-      desc: t('valueProps.item3.desc'),
+      title: "Immersive WebAR Visualization",
+      desc: "Use your phone to place 3D models of tanks and pits in your own space before you build.",
     },
   ];
 

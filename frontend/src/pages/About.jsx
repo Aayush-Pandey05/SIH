@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Target, Cpu, BarChart4, Loader2 } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import { useFormStore } from "../store/useFormStore";
 
 const AboutPage = () => {
-  const { t } = useTranslation();
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -16,19 +15,19 @@ const AboutPage = () => {
 
   const validateForm = () => {
     if (!formData.fullName.trim()) {
-      alert(t('aboutPage.alerts.fullNameRequired'));
+      alert("Full name is required");
       return false;
     }
     if (!formData.email.trim()) {
-      alert(t('aboutPage.alerts.emailRequired'));
+      alert("Email is required");
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      alert(t('aboutPage.alerts.invalidEmail'));
+      alert("Invalid email format");
       return false;
     }
     if (!formData.feedback.trim()) {
-      alert(t('aboutPage.alerts.feedbackRequired'));
+      alert("Feedback is required");
       return false;
     }
     return true;
@@ -39,18 +38,21 @@ const AboutPage = () => {
     if (validateForm()) {
       try {
         await submitFeedbackForm(formData);
-        alert(t('aboutPage.alerts.feedbackSuccess'));
+        alert("Thank you for your feedback!");
         setFormData({ fullName: "", email: "", feedback: "" });
       } catch (error) {
         console.error("Feedback failed:", error);
-        alert(t('aboutPage.alerts.feedbackError'));
+        alert("Failed to send feedback. Please try again.");
       }
     }
   };
 
+
   return (
     <div>
+      
       <Header />
+      
 
       {/* Hero Section */}
       <section
@@ -68,13 +70,15 @@ const AboutPage = () => {
         </div>
         <div className="relative z-10 p-4">
           <h1 className="text-4xl md:text-6xl font-bold">
-            {t('aboutPage.hero.title1')}
+            A Water-Secure Future.
           </h1>
           <h1 className="text-4xl md:text-6xl font-bold text-cyan-400 mt-2">
-            {t('aboutPage.hero.title2')}
+            Built With You.
           </h1>
           <p className="text-slate-300 max-w-3xl mx-auto mt-6 text-lg">
-            {t('aboutPage.hero.subtitle')}
+            Personalized, proactive water journeys, guided by experts and
+            powered by AI, designed to help you conserve better, plan smarter,
+            and stay water-secure longer.
           </p>
         </div>
       </section>
@@ -84,13 +88,16 @@ const AboutPage = () => {
         <div className="container mx-auto py-20 px-4">
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-sm font-bold uppercase text-cyan-500 tracking-widest">
-              {t('aboutPage.story.tagline')}
+              For a Water-Secure India
             </h2>
             <p className="text-3xl md:text-4xl font-bold mt-4 text-gray-200">
-              {t('aboutPage.story.title')}
+              Empowering Citizens with Water Intelligence
             </p>
             <p className="text-gray-400 mt-4 leading-relaxed">
-              {t('aboutPage.story.description')}
+              JalSetu connects advanced satellite mapping, artificial intelligence,
+              and augmented reality into a simple platform. Our mission is to make
+              rainwater harvesting accessible, data-driven, and actionable for
+              everyone from individual homes to entire communities.
             </p>
           </div>
 
@@ -98,23 +105,26 @@ const AboutPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20">
             <div className="bg-gray-800 shadow-lg p-8 rounded-2xl text-center">
               <Target className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-white">{t('aboutPage.pillars.item1.title')}</h3>
+              <h3 className="text-2xl font-bold text-white">GIS-Powered Precision</h3>
               <p className="text-gray-400 mt-2">
-                {t('aboutPage.pillars.item1.desc')}
+                Draw your rooftop on a satellite map and get precise calculations
+                for harvestable rainwater.
               </p>
             </div>
             <div className="bg-gray-800 shadow-lg p-8 rounded-2xl text-center">
               <Cpu className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-white">{t('aboutPage.pillars.item2.title')}</h3>
+              <h3 className="text-2xl font-bold text-white">AI-Driven Recommendations</h3>
               <p className="text-gray-400 mt-2">
-                {t('aboutPage.pillars.item2.desc')}
+                Our intelligent system suggests the most effective recharge
+                structures based on your location.
               </p>
             </div>
             <div className="bg-gray-800 shadow-lg p-8 rounded-2xl text-center">
               <BarChart4 className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-white">{t('aboutPage.pillars.item3.title')}</h3>
+              <h3 className="text-2xl font-bold text-white">Smart Analytics & Alerts</h3>
               <p className="text-gray-400 mt-2">
-                {t('aboutPage.pillars.item3.desc')}
+                Receive predictive rainfall alerts and track your water savings
+                with a personalized analytics dashboard.
               </p>
             </div>
           </div>
@@ -122,16 +132,17 @@ const AboutPage = () => {
           {/* Feedback Form */}
           <div className="mt-24 max-w-3xl mx-auto">
             <div className="text-center">
-              <h2 className="text-3xl text-cyan-400 md:text-4xl font-bold">{t('aboutPage.feedbackForm.title')}</h2>
+              <h2 className="text-3xl text-cyan-400 md:text-4xl font-bold">Share Your Feedback</h2>
               <p className="text-gray-400 mt-4 leading-relaxed">
-                {t('aboutPage.feedbackForm.subtitle')}
+                Have a question, a suggestion, or a story to share? We'd love to
+                hear from you.
               </p>
             </div>
             <div className="bg-gray-900 border border-gray-700 shadow-md p-8 rounded-2xl mt-10">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-                    {t('aboutPage.feedbackForm.fullNameLabel')}
+                    Full Name
                   </label>
                   <input
                     type="text"
@@ -139,12 +150,12 @@ const AboutPage = () => {
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     id="name"
                     className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    placeholder={t('aboutPage.feedbackForm.fullNamePlaceholder')}
+                    placeholder="Your Name"
                   />
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-                    {t('aboutPage.feedbackForm.emailLabel')}
+                    Email Address
                   </label>
                   <input
                     type="email"
@@ -152,12 +163,12 @@ const AboutPage = () => {
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     id="email"
                     className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    placeholder={t('aboutPage.feedbackForm.emailPlaceholder')}
+                    placeholder="you@example.com"
                   />
                 </div>
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
-                    {t('aboutPage.feedbackForm.feedbackLabel')}
+                    Your Feedback
                   </label>
                   <textarea
                     id="message"
@@ -165,7 +176,7 @@ const AboutPage = () => {
                     onChange={(e) => setFormData({ ...formData, feedback: e.target.value })}
                     rows="5"
                     className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    placeholder={t('aboutPage.feedbackForm.feedbackPlaceholder')}
+                    placeholder="Tell us what you think..."
                   ></textarea>
                 </div>
                 <div>
@@ -177,10 +188,10 @@ const AboutPage = () => {
                     {isSubmittingFeedback ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>{t('aboutPage.feedbackForm.sendingButton')}</span>
+                        <span>Sending...</span>
                       </>
                     ) : (
-                      t('aboutPage.feedbackForm.submitButton')
+                      "Submit Feedback"
                     )}
                   </button>
                 </div>
