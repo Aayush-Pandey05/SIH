@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, {  useEffect } from "react";
 import RoofMapper from "../components/RoofMapper";
 import { Droplet, TrendingUp, RulerDimensionLine } from "lucide-react";
 import rechargePitImage from "../assets/recharge_pit.png";
-import NavbarAL from "../components/NavbarAL";
 import { useDataStore } from "../store/useDataStore";
 import HeaderAL from "../components/HeaderAL";
-import FullScreenMenuAL from "../components/FullScreenMenuAL";
-import Footer from "../components/Footer";
-
+;
 // Helper function to parse dimensions string and calculate volume
 const parseDimensionsAndCalculateVolume = (dimensionsString) => {
   if (!dimensionsString || typeof dimensionsString !== "string") {
@@ -42,7 +39,7 @@ const parseDimensionsAndCalculateVolume = (dimensionsString) => {
     const volume = width * depth * length;
 
     return {
-      volume: Math.round(volume * 100) / 100, // Round to 2 decimal places
+      volume: Math.round(volume * 100) / 100, 
       width,
       depth,
       length,
@@ -282,18 +279,9 @@ const RoiPreviewCard = ({ data }) => {
   );
 };
 
-const navLinks = [
-  "Home",
-  "Dashboard",
-  "Map Roof",
-  "Government Schemes",
-  "Support",
-];
-const navRoutes = ["/", "/dashboard", "/map-roof", "/govschemes", "/support"];
-
 export default function JalSetuPage() {
   const { fetchUserData, isLoadingData, userData } = useDataStore();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
 
   const SearchIcon = ({ className }) => (
     <svg
@@ -335,17 +323,12 @@ export default function JalSetuPage() {
 
   return (
     <div>
-      <HeaderAL isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-      <FullScreenMenuAL
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        navLinks={navLinks}
-        navRoutes={navRoutes}
-      />
-      <div className="bg-slate-900 min-h-screen p-4 sm:p-6 md:p-8 font-sans">
+      <HeaderAL/>
+      <div  className="bg-gradient-to-b from-slate-900 via-blue-950 to-black min-h-screen p-4 sm:p-6 md:p-8 font-sans">
+        <div id="hero">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-6 pt-20">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-100">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-cyan-400">
               Roof Mapping + AI Recommendation
             </h1>
             <p className="mt-2 text-sm sm:text-base text-slate-300 max-w-3xl mx-auto">
@@ -354,7 +337,8 @@ export default function JalSetuPage() {
             </p>
           </div>
           <RoofMapper />
-
+          </div>
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
             <div>
               <RecommendationCard data={userData} />
@@ -379,6 +363,6 @@ export default function JalSetuPage() {
           </div>
         </div>
       </div>
-    </div>
+
   );
 }

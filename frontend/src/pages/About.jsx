@@ -1,13 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Target, Cpu, BarChart4, Loader2 } from "lucide-react";
 import Header from "../components/Header";
-import FullScreenMenu from "../components/FullScreen";
 import { useFormStore } from "../store/useFormStore";
 
 const AboutPage = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("hero");
-  const observerRef = useRef(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -51,39 +47,12 @@ const AboutPage = () => {
     }
   };
 
-  useEffect(() => {
-    const hero = document.getElementById("hero");
-    if (!hero) return;
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        if (entry.isIntersecting) {
-          setActiveSection("hero");
-        } else {
-          setActiveSection("scrolled");
-        }
-      },
-      { threshold: 0 }
-    );
-
-    observerRef.current.observe(hero);
-
-    return () => {
-      if (hero && observerRef.current) {
-        observerRef.current.unobserve(hero);
-      }
-    };
-  }, []);
 
   return (
     <div>
-      <Header
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        activeSection={activeSection}
-      />
-      <FullScreenMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+      
+      <Header />
+      
 
       {/* Hero Section */}
       <section

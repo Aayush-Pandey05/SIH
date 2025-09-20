@@ -1,31 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import DashboardContent from "./DashboardContent";
-import NavbarAL from "../components/NavbarAL";
 import HeaderAL from "../components/HeaderAL";
-import FullScreenMenuAL from "../components/FullScreenMenuAL";
-import Footer from "../components/Footer";
 import { Loader } from "lucide-react";
 import { useDataStore } from "../store/useDataStore";
 
-const navLinks = [
-  "Home",
-  "Dashboard",
-  "Map Roof",
-  "Government Schemes",
-  "Support",
-];
-const navRoutes = ["/", "/dashboard", "/map-roof", "/govschemes", "/support"];
-
 export default function Dashboard() {
   const { fetchUserData, userData, isLoadingData } = useDataStore();
-  const roofArea = 150; // Default roof area value
+  const roofArea = 150; 
   const [chartData, setChartData] = useState([]);
   const [alertsData, setAlertsData] = useState([]);
   const [totalRainfall, setTotalRainfall] = useState("0");
   const [locationName, setLocationName] = useState("Bangalore");
   const [searchQuery, setSearchQuery] = useState("Bangalore");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [time, setTime] = useState("");
   const [isWeatherLoading, setIsWeatherLoading] = useState(false);
 
   const handleSearchSubmit = (e) => {
@@ -251,22 +237,6 @@ export default function Dashboard() {
     }
   }, [searchQuery, fetchLocationAndWeather, userData]);
 
-  // Time update effect
-  useEffect(() => {
-    const updateTime = () => {
-      const options = {
-        timeZone: "Asia/Kolkata",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      };
-      setTime(new Intl.DateTimeFormat("en-US", options).format(new Date()));
-    };
-
-    updateTime();
-    const timerId = setInterval(updateTime, 60000);
-    return () => clearInterval(timerId);
-  }, []);
 
   // Show loader when initially loading user data or weather data
   if ((isLoadingData && !userData) || isWeatherLoading) {
@@ -307,18 +277,8 @@ export default function Dashboard() {
 
   return (
     <div>
-      <HeaderAL
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        time={time}
-      />
-      <FullScreenMenuAL
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        navLinks={navLinks}
-        navRoutes={navRoutes}
-      />
-      <div className="h-full font-sans text-slate-50 bg-blue-950 bg-gradient-to-tr from-blue-900 via-blue-950 to-blue-950">
+      <HeaderAL/>
+      <div className="min-h-screen overflow-x-hidden font-sans text-slate-50 bg-gradient-to-b from-slate-800 via-blue-950 to-black">
         <main className="p-12 sm:p-6 lg:p-8 pt-28">
           <form
             onSubmit={handleSearchSubmit}

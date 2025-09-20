@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { NavLink, useLocation } from "react-router-dom";
-import { NavHashLink } from "react-router-hash-link";
 import { MenuIcon, XIcon, ArrowRightIcon } from "./Icons";
 import { assets } from "../assets/assets";
 
@@ -22,7 +21,6 @@ const Header = () => {
   const navRef = useRef(null);
   const buttonRef = useRef(null);
 
-  // ✅ Detect hero fully leaving
   useEffect(() => {
     const hero = document.getElementById("hero");
     if (!hero) return;
@@ -38,7 +36,7 @@ const Header = () => {
     return () => observer.disconnect();
   }, []);
 
-  // GSAP intro animation
+  // ✅ GSAP intro animation
   useEffect(() => {
     const headerEl = headerRef.current;
     const logoEl = logoRef.current;
@@ -67,6 +65,51 @@ const Header = () => {
       }, "-=0.3");
   }, []);
 
+  // Helper function to check if a link is active
+  const isLinkActive = (linkPath) => {
+    if (linkPath === "/") {
+      return location.pathname === "/" && !location.hash;
+    }
+    if (linkPath.includes("/#")) {
+      const hash = linkPath.split("#")[1];
+      return location.pathname === "/" && location.hash === `#${hash}`;
+    }
+    return location.pathname === linkPath;
+  };
+
+  // Helper function to get link className for desktop nav
+  const getDesktopLinkClassName = (linkPath) => {
+    const isActive = isLinkActive(linkPath);
+    return `text-sm sm:text-base md:text-lg lg:text-xl font-medium font-[font16] transition-colors duration-700 hover:text-gray-400 ${
+      isActive
+        ? isScrolled
+          ? "text-blue-500 font-bold"
+          : "text-gray-300"
+        : isScrolled
+        ? "text-black"
+        : "text-white"
+    }`;
+  };
+
+  // Helper function to get link className for mobile nav
+  const getMobileLinkClassName = (linkPath) => {
+    const isActive = isLinkActive(linkPath);
+    return `text-white hover:text-gray-300 transition-colors duration-300 ${
+      isActive ? "text-blue-400 font-bold" : ""
+    }`;
+  };
+
+  // Handle smooth scroll for hash links
+  const handleHashClick = (e, hash) => {
+    e.preventDefault();
+    const element = document.getElementById(hash);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      // Update URL without page reload
+      window.history.pushState(null, null, `/#${hash}`);
+    }
+  };
+
   return (
     <>
       <header
@@ -76,7 +119,7 @@ const Header = () => {
         }`}
       >
         <div className="px-4 sm:px-6 flex items-center justify-between h-16">
-          
+          {/* Logo */}
           <div
             ref={logoRef}
             className="flex items-center space-x-2 cursor-pointer group"
@@ -87,7 +130,7 @@ const Header = () => {
               className="h-8 w-8 rounded-full"
             />
             <span
-              className={`text-2xl font-bold group-hover:text-blue-400 transition-colors duration-700 font-[font17] ${
+              className={`text-2xl font-bold group-hover:text-blue-400 transition-colors duration-700 font-[font16] ${
                 isScrolled ? "text-black" : "text-white"
               }`}
             >
@@ -96,53 +139,33 @@ const Header = () => {
           </div>
 
           {/* Desktop Nav */}
-          <nav
-            ref={navRef}
-            className="hidden lg:flex items-center gap-3 space-x-6"
-          >
+          <nav ref={navRef} className="hidden md:flex lg:flex items-center gap-3 space-x-6">
             {navLinks.map((link) => {
               const isHashLink = link.path.includes("/#");
-              return isHashLink ? (
-                <NavHashLink
-                  key={link.name}
-                  to={link.path}
-                  smooth
-                  end={link.path === "/"}
-                  className={() => {
-                    const hash = link.path.split("#")[1];
-                    const isActiveHash = location.hash === `#${hash}`;
-                    return `text-[2.5vh] font-medium transition-colors duration-700 hover:text-gray-400 ${
-                      isActiveHash
-                        ? isScrolled
-                          ? "text-blue-500 font-bold"
-                          : "text-gray-300"
-                        : isScrolled
-                        ? "text-black"
-                        : "text-white"
-                    }`;
-                  }}
-                >
-                  {link.name}
-                </NavHashLink>
-              ) : (
-                <NavLink
-                  key={link.name}
-                  to={link.path}
-                  className={({ isActive }) =>
-                    `text-[2.5vh] font-medium transition-colors duration-700 hover:text-gray-400 ${
-                      isActive
-                        ? isScrolled
-                          ? "text-blue-500 font-bold"
-                          : "text-gray-300"
-                        : isScrolled
-                        ? "text-black"
-                        : "text-white"
-                    }`
-                  }
-                >
-                  {link.name}
-                </NavLink>
-              );
+
+              if (isHashLink) {
+                const hash = link.path.split("#")[1];
+                return (
+                  <a
+                    key={link.name}
+                    href={link.path}
+                    onClick={(e) => handleHashClick(e, hash)}
+                    className={getDesktopLinkClassName(link.path)}
+                  >
+                    {link.name}
+                  </a>
+                );
+              } else {
+                return (
+                  <NavLink
+                    key={link.name}
+                    to={link.path}
+                    className={getDesktopLinkClassName(link.path)}
+                  >
+                    {link.name}
+                  </NavLink>
+                );
+              }
             })}
           </nav>
 
@@ -151,16 +174,14 @@ const Header = () => {
             {/* Join JalSetu */}
             <NavLink
               to="/signup"
-              className={`group flex items-center space-x-3 pl-5 pr-3 py-1 font-[font6] rounded-full transition-colors duration-700 ${
-                isScrolled ? "bg-white text-black" : "bg-black text-white"
+              className={`group flex items-center space-x-3 pl-4 pr-1 py-1 font-[font6] rounded-full transition-colors duration-700 ${
+                isScrolled ? "bg-black text-white" : "bg-white text-black"
               }`}
             >
-              <span className="font-semibold hidden sm:inline">
-                Join JalSetu
-              </span>
+              <span className="font-semibold hidden sm:inline">Join JalSetu</span>
               <div
                 className={`p-2 rounded-full transition-colors duration-700 ${
-                  isScrolled ? "bg-black text-white" : "bg-white text-black"
+                  isScrolled ? "bg-white text-black" : "bg-black text-white"
                 }`}
               >
                 <ArrowRightIcon />
@@ -169,7 +190,7 @@ const Header = () => {
 
             {/* Mobile Toggle */}
             <div
-              className={`rounded-full lg:hidden transition-colors duration-700 ${
+              className={`rounded-full block sm:block md:hidden transition-colors duration-700 ${
                 isScrolled ? "bg-white" : "bg-black"
               }`}
             >
@@ -195,17 +216,37 @@ const Header = () => {
         } md:hidden`}
       >
         <div className="flex flex-col items-center justify-center h-full space-y-8 text-2xl font-bold">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.name}
-              to={link.path}
-              onClick={() =>{window.scrollTo({ top: 0, behavior: "smooth"})
-              setIsMenuOpen(false)}}
-              className="hover:text-blue-400 transition-colors duration-500"
-            >
-              {link.name}
-            </NavLink>
-          ))}
+          {navLinks.map((link) => {
+            const isHashLink = link.path.includes("/#");
+
+            if (isHashLink) {
+              const hash = link.path.split("#")[1];
+              return (
+                <a
+                  key={link.name}
+                  href={link.path}
+                  onClick={(e) => {
+                    handleHashClick(e, hash);
+                    setIsMenuOpen(false);
+                  }}
+                  className={getMobileLinkClassName(link.path)}
+                >
+                  {link.name}
+                </a>
+              );
+            } else {
+              return (
+                <NavLink
+                  key={link.name}
+                  to={link.path}
+                  className={getMobileLinkClassName(link.path)}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.name}
+                </NavLink>
+              );
+            }
+          })}
           <NavLink
             to="/signup"
             onClick={() => setIsMenuOpen(false)}
