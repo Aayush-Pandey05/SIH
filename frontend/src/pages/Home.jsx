@@ -1,14 +1,15 @@
-// App.js - Main Component
-import React, { useState, useEffect, useRef } from "react";
 
-// Import all components
+import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from 'react-i18next';
+
 import Header from '../components/Header';
-// FullScreenMenu import is no longer needed
+
 import HeroSection from '../components/Hero';
 import ValuePropsSection from '../components/ValueProps';
 import WelcomeSection from '../components/Welcome';
 import BenefitsSection from '../components/Benefits';
 import Footer from '../components/Footer'
+
 
 const Home = () => {
   // isMenuOpen state is no longer needed here
@@ -54,18 +55,22 @@ const Home = () => {
     };
   }, []);
 
-  const benefits = [
-    "Reduce Water Bills",
-    "Recharge Groundwater",
-    "Sustainable Water Source",
-    "Decrease Urban Flooding",
-    "Support Local Ecosystems",
-    "Easy ROI Calculation",
-    "Promote Water Conservation",
-    "Drought Mitigation",
-    "Community Resilience",
-    "Eco-Friendly Solution",
+
+
+  const { t } = useTranslation();
+ const translatedBenefits = [
+    t('benefits.list.item1'),
+    t('benefits.list.item2'),
+    t('benefits.list.item3'),
+    t('benefits.list.item4'),
+    t('benefits.list.item5'),
+    t('benefits.list.item6'),
+    t('benefits.list.item7'),
+    t('benefits.list.item8'),
+    t('benefits.list.item9'),
+    t('benefits.list.item10'),
   ];
+  
 
   return (
     <div className="min-h-screen bg-blue-50 text-white overflow-hidden relative font-sans">
@@ -77,14 +82,11 @@ const Home = () => {
 
       {/* The Header is now simpler and self-contained */}
       <Header scrolled={scrolled} />
-      
-      {/* The FullScreenMenu component is no longer needed */}
-
       <main>
         <HeroSection visibleElements={visibleElements} />
         <ValuePropsSection visibleElements={visibleElements} />
         <WelcomeSection visibleElements={visibleElements} />
-        <BenefitsSection visibleElements={visibleElements} benefits={benefits} />
+          <BenefitsSection visibleElements={visibleElements} benefits={translatedBenefits} />
         <Footer/>
       </main>
     </div>
