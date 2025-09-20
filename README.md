@@ -64,13 +64,13 @@
 
 3. **Setup Backend 2 (Python/FastAPI)**
    ```bash
-   cd ../backend2
+   cd ./backend2
    pip install -r requirements.txt
    ```
 
 4. **Setup Frontend (React)**
    ```bash
-   cd ../frontend
+   cd ./frontend
    npm install
    ```
 
