@@ -4,7 +4,6 @@ export const contactFormHandler = async (req, res) =>{
     const { fullName, email, message} = req.body;
     try {
         if(!fullName || !email || !message){
-            return res.status(400).json({ messag: "Please fill all the required fields"});
         }
         const newContact = new Contact({
             fullName,
