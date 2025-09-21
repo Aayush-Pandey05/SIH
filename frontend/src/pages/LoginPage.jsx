@@ -1,17 +1,19 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import RightPannel from "../components/RightPannel";
-
+import assets from '../assets/assets'
 
 const Login = () => {
+    const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [focusedInput, setFocusedInput] = useState(null);
-     const { login, isLoggingIn } = useAuthStore();
-     const navigate = useNavigate();
+    const { login, isLoggingIn } = useAuthStore();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,7 +21,7 @@ const Login = () => {
             await login(formData);
             navigate("/"); 
         } catch (error) {
-            toast.error("Login failed. Please check your credentials.");
+            toast.error(t('loginPage.errorToast'));
             console.error("Login failed:", error);
         }
     };
@@ -37,16 +39,14 @@ const Login = () => {
                 <div className="relative z-10 w-full max-w-md space-y-8">
                     <div className="text-center">
                         <div className="inline-flex items-center space-x-3 mb-8">
-                            <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
-                                <span className="text-white font-bold text-xl">J</span>
-                            </div>
-                            <h1 className="text-2xl font-bold text-white">JalSetu</h1>
+                             <img src={assets.logo} alt="JalSetu Logo" className="h-10 w-10 rounded-full"/>
+                            <h1 className="text-2xl font-bold text-white">{t('loginPage.brandName')}</h1>
                         </div>
                         
                         <div className="space-y-2">
-                            <h2 className="text-3xl font-bold text-white">Welcome back</h2>
+                            <h2 className="text-3xl font-bold text-white">{t('loginPage.title')}</h2>
                             <p className="text-slate-400 text-base">
-                                Sign in to continue to your dashboard
+                                {t('loginPage.subtitle')}
                             </p>
                         </div>
                     </div>
@@ -54,14 +54,14 @@ const Login = () => {
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-slate-300">
-                                Email address
+                                {t('loginPage.emailLabel')}
                             </label>
                             <div className="relative group">
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-cyan-400 transition-colors" />
                                 <input
                                     id="email"
                                     type="email"
-                                    placeholder="Enter your email"
+                                    placeholder={t('loginPage.emailPlaceholder')}
                                     value={formData.email}
                                     onChange={handleChange}
                                     onFocus={() => setFocusedInput('email')}
@@ -74,14 +74,14 @@ const Login = () => {
 
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-slate-300">
-                                Password
+                                {t('loginPage.passwordLabel')}
                             </label>
                             <div className="relative group">
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-cyan-400 transition-colors" />
                                 <input
                                     id="password"
                                     type={showPassword ? "text" : "password"}
-                                    placeholder="Enter your password"
+                                    placeholder={t('loginPage.passwordPlaceholder')}
                                     value={formData.password}
                                     onChange={handleChange}
                                     onFocus={() => setFocusedInput('password')}
@@ -101,7 +101,7 @@ const Login = () => {
 
                         <div className="text-right">
                             <a href="#forgot" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">
-                                Forgot your password?
+                                {t('loginPage.forgotPasswordLink')}
                             </a>
                         </div>
 
@@ -114,11 +114,11 @@ const Login = () => {
                             {isLoggingIn ? (
                                 <>
                                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                    <span>Signing in...</span>
+                                    <span>{t('loginPage.signingInButton')}</span>
                                 </>
                             ) : (
                                 <>
-                                    <span>Sign in</span>
+                                    <span>{t('loginPage.signInButton')}</span>
                                     <ArrowRight className="w-5 h-5" />
                                 </>
                             )}
@@ -127,9 +127,9 @@ const Login = () => {
 
                     <div className="text-center">
                         <span className="text-slate-400">
-                            Don't have an account?{" "}
+                            {t('loginPage.noAccountPrompt')}{" "}
                             <a href="/signup" className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors">
-                                Create account
+                                {t('loginPage.createAccountLink')}
                             </a>
                         </span>
                     </div>

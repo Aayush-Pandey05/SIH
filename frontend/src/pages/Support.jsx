@@ -1,15 +1,17 @@
 import React, { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import FAQSection from "../components/FAQSection";
 import ContactSection from "../components/ContactSection";
 import HeaderAL from "../components/HeaderAL";
-
 import assets from "../assets/assets";
 
 gsap.registerPlugin(ScrollTrigger);
+
 const SupportPage = () => {
+  const { t } = useTranslation();
   const mainRef = useRef(null);
   
   useGSAP(() => {
@@ -40,11 +42,11 @@ const SupportPage = () => {
             <div className="absolute top-0 left-0 w-full h-full bg-black/70"></div>
           </div>
           <div className="relative z-10">
-            <h1 className="text-4xl md:text-6xl font-bold text-cyan-500">
-              Support Center
+            <h1 className="text-4xl md:text-6xl font-bold text-cyan-600">
+              {t('supportPage.title')}
             </h1>
             <p className="text-base sm:text-lg text-slate-300 font-medium max-w-2xl mx-auto mt-4">
-              Your questions, answered. Find the help you need to get started.
+              {t('supportPage.subtitle')}
             </p>
           </div>
         </div>
@@ -58,7 +60,6 @@ const SupportPage = () => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };

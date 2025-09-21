@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Send, Mail, Phone, MapPin, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import toast from "react-hot-toast";
 import { useFormStore } from "../store/useFormStore";
 
 const ContactPage = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -12,11 +14,11 @@ const ContactPage = () => {
   });
 
   const validateForm = () => {
-    if (!formData.fullName.trim()) return toast.error("Full name is required");
-    if (!formData.email.trim()) return toast.error("Email is required");
+    if (!formData.fullName.trim()) return toast.error(t('contact.validation.fullNameRequired'));
+    if (!formData.email.trim()) return toast.error(t('contact.validation.emailRequired'));
     if (!/\S+@\S+\.\S+/.test(formData.email))
-      return toast.error("Invalid email format");
-    if (!formData.message.trim()) return toast.error("Message is required");
+      return toast.error(t('contact.validation.invalidEmail'));
+    if (!formData.message.trim()) return toast.error(t('contact.validation.messageRequired'));
     return true;
   };
 
@@ -24,7 +26,7 @@ const ContactPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm) {
+    if (validateForm()) { // Corrected this line
       try {
         await submitContactForm(formData);
         setFormData({ fullName: "", email: "", message: "" });
@@ -33,7 +35,6 @@ const ContactPage = () => {
       }
     }
   };
-
 
   return (
     <div>
@@ -52,10 +53,9 @@ const ContactPage = () => {
             <div className="absolute top-0 left-0 w-full h-full bg-black/60"></div>
           </div>
           <div className="relative z-10">
-            <h1 className="text-4xl md:text-6xl font-bold">Contact Us</h1>
+            <h1 className="text-4xl md:text-6xl font-bold">{t('contact.hero.title')}</h1>
             <p className="text-slate-300 font-[font16] max-w-2xl mx-auto mt-4 text-lg">
-              We’d love to hear from you! Reach out with questions, feedback, or
-              collaboration ideas.
+              {t('contact.hero.subtitle')}
             </p>
           </div>
         </div>
@@ -64,24 +64,23 @@ const ContactPage = () => {
         <div className="container mx-auto py-20 px-4 grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Info */}
           <div className="space-y-8 lg:pr-10">
-            <h2 className="text-3xl font-bold">Get In Touch</h2>
+            <h2 className="text-3xl font-bold">{t('contact.info.title')}</h2>
             <p className="text-slate-400">
-              Our team is here to help and answer any questions you might have.
-              We look forward to hearing from you.
+              {t('contact.info.subtitle')}
             </p>
 
             <div className="space-y-6">
               <div className="flex items-center gap-4 p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition">
                 <Mail className="w-6 h-6 text-cyan-400" />
-                <p className="text-slate-300">support@jalsetu.com</p>
+                <p className="text-slate-300">{t('contact.info.email')}</p>
               </div>
               <div className="flex items-center gap-4 p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition">
                 <Phone className="w-6 h-6 text-cyan-400" />
-                <p className="text-slate-300">+91 98765 43210</p>
+                <p className="text-slate-300">{t('contact.info.phone')}</p>
               </div>
               <div className="flex items-center gap-4 p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition">
                 <MapPin className="w-6 h-6 text-cyan-400" />
-                <p className="text-slate-300">Bengaluru, Karnataka, India</p>
+                <p className="text-slate-300">{t('contact.info.address')}</p>
               </div>
             </div>
           </div>
@@ -94,7 +93,7 @@ const ContactPage = () => {
                   htmlFor="name"
                   className="block text-sm font-medium text-slate-300 mb-2"
                 >
-                  Full Name
+                  {t('contact.form.fullNameLabel')}
                 </label>
                 <input
                   type="text"
@@ -104,7 +103,7 @@ const ContactPage = () => {
                   }
                   id="name"
                   className="w-full px-4 py-3 text-white bg-slate-700/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                  placeholder="Your Name"
+                  placeholder={t('contact.form.fullNamePlaceholder')}
                   required
                 />
               </div>
@@ -113,7 +112,7 @@ const ContactPage = () => {
                   htmlFor="email"
                   className="block text-sm font-medium text-slate-300 mb-2"
                 >
-                  Email Address
+                  {t('contact.form.emailLabel')}
                 </label>
                 <input
                   type="email"
@@ -123,7 +122,7 @@ const ContactPage = () => {
                   }
                   id="email"
                   className="w-full px-4 py-3 text-white bg-slate-700/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                  placeholder="you@example.com"
+                  placeholder={t('contact.form.emailPlaceholder')}
                   required
                 />
               </div>
@@ -132,7 +131,7 @@ const ContactPage = () => {
                   htmlFor="message"
                   className="block text-sm font-medium text-slate-300 mb-2"
                 >
-                  Message
+                  {t('contact.form.messageLabel')}
                 </label>
                 <textarea
                   id="message"
@@ -142,7 +141,7 @@ const ContactPage = () => {
                   }
                   rows="5"
                   className="w-full px-4 py-3 text-white bg-slate-700/50 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                  placeholder="Your feedback or question..."
+                  placeholder={t('contact.form.messagePlaceholder')}
                   required
                 ></textarea>
               </div>
@@ -155,7 +154,7 @@ const ContactPage = () => {
                   {isSubmittingContact ? (
                     <>
                       <Loader2 className="animate-spin" />
-                      <span>Sending....</span>
+                      <span>{t('contact.form.sendingButton')}</span>
                     </>
                   ) : (
                     <Send className="w-4 h-4" />
