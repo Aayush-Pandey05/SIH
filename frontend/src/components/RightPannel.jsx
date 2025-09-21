@@ -1,7 +1,10 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ThreeJSWaterScene from "./ThreeJSWaterScene";
 
 const RightPannel = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="hidden lg:flex w-1/2 relative">
       <div className="absolute inset-0">
@@ -12,26 +15,25 @@ const RightPannel = () => {
         <div className="text-center px-12 space-y-6">
           <div className="space-y-4">
             <h3 className="text-4xl font-bold text-white leading-tight">
-              Empowering Water Intelligence
+              {t('loginPanel.title')}
             </h3>
             <p className="text-xl text-slate-200 leading-relaxed">
-              Advanced analytics and AI-driven insights for sustainable water
-              management across communities
+              {t('loginPanel.subtitle')}
             </p>
           </div>
 
           <div className="grid grid-cols-3 gap-6 pt-8">
             <div className="text-center">
-              <div className="text-2xl font-bold text-cyan-400">50K+</div>
-              <div className="text-sm text-slate-300">Liters Saved</div>
+              <div className="text-2xl font-bold text-cyan-400">{t('loginPanel.stat1.value')}</div>
+              <div className="text-sm text-slate-300">{t('loginPanel.stat1.label')}</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-cyan-400">100+</div>
-              <div className="text-sm text-slate-300">Communities</div>
+              <div className="text-2xl font-bold text-cyan-400">{t('loginPanel.stat2.value')}</div>
+              <div className="text-sm text-slate-300">{t('loginPanel.stat2.label')}</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-cyan-400">95%</div>
-              <div className="text-sm text-slate-300">Efficiency</div>
+              <div className="text-2xl font-bold text-cyan-400">{t('loginPanel.stat3.value')}</div>
+              <div className="text-sm text-slate-300">{t('loginPanel.stat3.label')}</div>
             </div>
           </div>
         </div>

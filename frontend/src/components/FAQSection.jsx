@@ -1,28 +1,27 @@
 import React, { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Search } from "lucide-react";
 import FAQItem from "./FAQItem";
 
-const faqData = [
-  {
-    question: "How do I get started with JalSetu?",
-    answer:
-      "To get started, sign up for an account, complete your profile, and explore the dashboard. You can access tutorials and guides in the 'Learn' section for detailed instructions.",
-  },
-  {
-    question: "What are the benefits of rainwater harvesting?",
-    answer:
-      "Rainwater harvesting helps in conserving water, reducing soil erosion, recharging groundwater levels, and decreasing reliance on municipal water sources. It's a sustainable practice that promotes water security.",
-  },
-  {
-    question: "How can I contact support?",
-    answer:
-      'You can contact our support team via email at support@jalsetu.com, call us at +91 123 456 7890, or browse our Knowledge Base. All options are listed in the "Contact Us" section.',
-  },
-];
-
 const FAQSection = () => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [openFAQ, setOpenFAQ] = useState(null);
+
+  const faqData = useMemo(() => [
+    {
+      question: t('faq.item1.question'),
+      answer: t('faq.item1.answer'),
+    },
+    {
+      question: t('faq.item2.question'),
+      answer: t('faq.item2.answer'),
+    },
+    {
+      question: t('faq.item3.question'),
+      answer: t('faq.item3.answer'),
+    },
+  ], [t]);
 
   const filteredFaqs = useMemo(() => {
     const lowercasedQuery = searchQuery.toLowerCase();
@@ -32,18 +31,18 @@ const FAQSection = () => {
         faq.question.toLowerCase().includes(lowercasedQuery) ||
         faq.answer.toLowerCase().includes(lowercasedQuery)
     );
-  }, [searchQuery]);
+  }, [searchQuery, faqData]);
 
   return (
     <div className="max-w-3xl mx-auto mb-20 faq-section">
       <h2 className="text-3xl font-bold text-center mb-10">
-        Frequently Asked Questions
+        {t('faq.title')}
       </h2>
 
       <div className="relative mb-8">
         <input
           type="search"
-          placeholder="Search for answers..."
+          placeholder={t('faq.searchPlaceholder')}
           className="w-full pl-12 pr-4 py-4 text-white bg-slate-800/50 border border-slate-700 rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-400"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -64,7 +63,7 @@ const FAQSection = () => {
           ))
         ) : (
           <p className="text-center text-slate-400">
-            No results found for "{searchQuery}"
+            {t('faq.noResults', { query: searchQuery })}
           </p>
         )}
       </div>

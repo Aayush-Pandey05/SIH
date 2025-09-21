@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -9,6 +10,7 @@ const TestimonialsSection = ({
   currentTestimonial,
   setCurrentTestimonial,
 }) => {
+  const { t } = useTranslation();
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
 
@@ -58,7 +60,7 @@ const TestimonialsSection = ({
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12 sm:mb-16 testimonial-heading">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-200 mb-4">
-            “Leadership for a Water-Secure Future"
+            “{t('testimonials.mainTitle')}”
           </h2>
         </div>
 
@@ -69,10 +71,10 @@ const TestimonialsSection = ({
               className="min-h-[14rem] sm:min-h-[12rem] flex flex-col justify-center"
             >
               <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-8">
-                "{testimonials[currentTestimonial].text}"
+                "{testimonials[currentTestimonial]?.text}"
               </p>
               <p className="text-gray-500 font-medium">
-                — {testimonials[currentTestimonial].author}
+                — {testimonials[currentTestimonial]?.author}
               </p>
             </div>
           </div>
