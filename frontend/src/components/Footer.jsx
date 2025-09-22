@@ -1,11 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
-import { useTranslation } from "react-i18next";
 import assets from "../assets/assets";
 
 const Footer = () => {
-  const { t } = useTranslation();
   const footerRef = useRef(null);
   const titleRef = useRef(null);
   const linksRef = useRef([]);
@@ -17,6 +15,7 @@ const Footer = () => {
         { opacity: 0, y: 50 },
         { opacity: 0.1, y: 0, duration: 1.5, ease: "power3.out" }
       );
+
       gsap.fromTo(
         linksRef.current,
         { opacity: 0, y: 20 },
@@ -29,6 +28,7 @@ const Footer = () => {
           delay: 0.5,
         }
       );
+
       gsap.fromTo(
         footerRef.current,
         { opacity: 0, y: 50 },
@@ -49,7 +49,7 @@ const Footer = () => {
           ref={titleRef}
           className="font-extrabold text-white/10 text-7xl sm:text-9xl md:text-[10rem] lg:text-[14rem] leading-none select-none"
         >
-          {t('footer.brandName')}
+          JalSetu
         </span>
       </div>
 
@@ -59,18 +59,18 @@ const Footer = () => {
             <div className="flex gap-3">
               <img
                 src={assets.logo}
-                alt={t('footer.logoAlt')}
+                alt="JalSetu Logo"
                 className="h-10 w-10 rounded-full"
               />
-              <h2 className="text-xl font-bold mb-2">{t('footer.brandName')}</h2>
+              <h2 className="text-xl font-bold mb-2">JalSetu</h2>
             </div>
-            <p className="text-sm text-white/70 mt-1">{t('footer.tagline1')}</p>
-            <p className="text-sm text-white/70 mt-1">{t('footer.tagline2')}</p>
+            <p className="text-sm text-white/70 mt-1">Every Drop Counts.</p>
+            <p className="text-sm text-white/70 mt-1">Every Citizen Matters.</p>
           </div>
 
           <div ref={(el) => (linksRef.current[1] = el)}>
             <h3 className="text-base font-semibold mb-3 text-teal-400">
-              {t('footer.quickLinks.title')}
+              Quick Links
             </h3>
             <ul className="space-y-2 text-sm text-white/80">
               <li>
@@ -79,7 +79,7 @@ const Footer = () => {
                   onClick={() => window.scrollTo({ top: 0, behavior: "smooth"})}
                   className="hover:text-cyan-900 transition-all duration-300 "
                 >
-                  {t('footer.quickLinks.home')}
+                  Home
                 </Link>
               </li>
               <li>
@@ -88,7 +88,7 @@ const Footer = () => {
                   onClick={() => window.scrollTo({ top: 0, behavior: "smooth"})}
                   className=" hover:text-cyan-900 transition-all duration-200"
                 >
-                  {t('footer.quickLinks.about')}
+                  About
                 </Link>
               </li>
             </ul>
@@ -96,7 +96,7 @@ const Footer = () => {
 
           <div ref={(el) => (linksRef.current[2] = el)}>
             <h3 className="text-base font-semibold mb-3 text-teal-400">
-              {t('footer.policies.title')}
+              Govt. Policies
             </h3>
             <ul className="space-y-2 text-sm text-white/80">
               <li>
@@ -104,7 +104,7 @@ const Footer = () => {
                   href="https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=1914351" target='_blank' 
                   className="hover:text-cyan-900 transition-all duration-300 "
                 >
-                  {t('footer.policies.resources')}
+                  Resources & Policies
                 </a>
               </li>
               <li>
@@ -112,7 +112,7 @@ const Footer = () => {
                   href="https://www.researchgate.net/publication/357226990_A_Review_of_Indian_Traditional_Method_of_Rain_Water_Harvesting" target='_blank' 
                   className="hover:text-cyan-900 transition-all duration-300 "
                 >
-                  {t('footer.policies.articles')}
+                  Knowledge Articles
                 </a>
               </li>
             </ul>
@@ -120,16 +120,17 @@ const Footer = () => {
 
           <div ref={(el) => (linksRef.current[3] = el)}>
             <h3 className="text-base font-semibold mb-3 text-teal-400">
-              {t('footer.support.title')}
+              Support
             </h3>
             <ul className="space-y-2 text-sm text-white/80">
+        
               <li>
                 <Link
                   to="/contactus"
                   onClick={() => window.scrollTo({ top: 0, behavior: "smooth"})}
                   className="hover:text-cyan-900 transition-all duration-300 "
                 >
-                  {t('footer.support.contact')}
+                  Contact Us
                 </Link>
               </li>
             </ul>
@@ -138,7 +139,7 @@ const Footer = () => {
 
         <div className="border-t border-slate-700 mt-28"></div>
         <div className=" text-center text-sm text-white/70 mt-4">
-          {t('footer.copyright', { year: new Date().getFullYear() })}
+          © {new Date().getFullYear()} JalSetu. All Rights Reserved.
         </div>
       </div>
     </footer>
