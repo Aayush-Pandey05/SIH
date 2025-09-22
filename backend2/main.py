@@ -903,3 +903,9 @@ if __name__ == "__main__":
     import uvicorn
     print("Starting Clean Rainwater Harvesting AI Agent server...")
     uvicorn.run(app, host="0.0.0.0", port=5000, log_level="info")
+
+# Add this import at the top if not already there
+from mangum import Mangum
+
+# Add this at the very end of your main.py file
+handler = Mangum(app)
