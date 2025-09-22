@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import RightPanelSignup from "../components/RightPanelSignup";
+import assets from '../assets/assets'
 
 const Signup = () => {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -15,31 +18,31 @@ const Signup = () => {
   });
   const { signUp, isSigningUp } = useAuthStore();
   const [focusedInput, setFocusedInput] = useState(null);
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   const validateForm = () => {
     if (!formData.fullName.trim()) {
-      alert("Full name is required");
+      alert(t('signupPage.alerts.fullNameRequired'));
       return false;
     }
     if (!formData.email.trim()) {
-      alert("Email is required");
+      alert(t('signupPage.alerts.emailRequired'));
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      alert("Invalid email format");
+      alert(t('signupPage.alerts.invalidEmail'));
       return false;
     }
     if (!formData.password) {
-      alert("Password is required");
+      alert(t('signupPage.alerts.passwordRequired'));
       return false;
     }
     if (formData.password.length < 6) {
-      alert("Password must be at least 6 characters");
+      alert(t('signupPage.alerts.passwordTooShort'));
       return false;
     }
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
+      alert(t('signupPage.alerts.passwordsNoMatch'));
       return false;
     }
     return true;
@@ -51,7 +54,7 @@ const Signup = () => {
       const { confirmPassword: _, ...signUpData } = formData;
       try {
         await signUp(signUpData);
-        Navigate("/");
+        navigate("/");
       } catch (error) {
         console.error("Signup failed:", error);
       }
@@ -71,18 +74,16 @@ const Signup = () => {
           {/* Logo Section */}
           <div className="text-center">
             <div className="inline-flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
-                <span className="text-white font-bold text-xl">J</span>
-              </div>
-              <h1 className="text-2xl font-bold text-white">JalSetu</h1>
+              <img src={assets.logo} alt="JalSetu Logo" className="h-10 w-10 rounded-full"/>
+              <h1 className="text-2xl font-bold text-white">{t('signupPage.brandName')}</h1>
             </div>
 
             <div className="space-y-2">
               <h2 className="text-3xl font-bold text-white">
-                Create your account
+                {t('signupPage.title')}
               </h2>
               <p className="text-slate-400 text-base">
-                Join the mission for sustainable water management
+                {t('signupPage.subtitle')}
               </p>
             </div>
           </div>
@@ -92,14 +93,14 @@ const Signup = () => {
             {/* Full Name Input */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-300">
-                Full Name
+                {t('signupPage.fullNameLabel')}
               </label>
               <div className="relative group">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-cyan-400 transition-colors" />
                 <input
                   id="fullName"
                   type="text"
-                  placeholder="Enter your full name"
+                  placeholder={t('signupPage.fullNamePlaceholder')}
                   value={formData.fullName}
                   onChange={(e) => handleChange("fullName", e.target.value)}
                   onFocus={() => setFocusedInput("fullName")}
@@ -117,14 +118,14 @@ const Signup = () => {
             {/* Email Input */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-300">
-                Email address
+                {t('signupPage.emailLabel')}
               </label>
               <div className="relative group">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-cyan-400 transition-colors" />
                 <input
                   id="email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t('signupPage.emailPlaceholder')}
                   value={formData.email}
                   onChange={(e) => handleChange("email", e.target.value)}
                   onFocus={() => setFocusedInput("email")}
@@ -142,14 +143,14 @@ const Signup = () => {
             {/* Password Input */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-300">
-                Password
+                {t('signupPage.passwordLabel')}
               </label>
               <div className="relative group">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-cyan-400 transition-colors" />
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Create a password"
+                  placeholder={t('signupPage.passwordPlaceholder')}
                   value={formData.password}
                   onChange={(e) => handleChange("password", e.target.value)}
                   onFocus={() => setFocusedInput("password")}
@@ -178,14 +179,14 @@ const Signup = () => {
             {/* Confirm Password Input */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-300">
-                Confirm Password
+                {t('signupPage.confirmPasswordLabel')}
               </label>
               <div className="relative group">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-cyan-400 transition-colors" />
                 <input
                   id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirm your password"
+                  placeholder={t('signupPage.confirmPasswordPlaceholder')}
                   value={formData.confirmPassword}
                   onChange={(e) =>
                     handleChange("confirmPassword", e.target.value)
@@ -223,11 +224,11 @@ const Signup = () => {
               {isSigningUp ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Creating account...</span>
+                  <span>{t('signupPage.creatingAccountButton')}</span>
                 </>
               ) : (
                 <>
-                  <span>Create account</span>
+                  <span>{t('signupPage.createAccountButton')}</span>
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
@@ -237,12 +238,12 @@ const Signup = () => {
           {/* Sign In Link */}
           <div className="text-center">
             <span className="text-slate-400">
-              Already have an account?{" "}
+              {t('signupPage.alreadyHaveAccountPrompt')}{" "}
               <a
                 href="/login"
                 className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
               >
-                Sign in
+                {t('signupPage.signInLink')}
               </a>
             </span>
           </div>
