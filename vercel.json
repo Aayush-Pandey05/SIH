@@ -9,7 +9,7 @@
       }
     },
     {
-      "src": "backend1/package.json",
+      "src": "backend1/**/*.js",
       "use": "@vercel/node"
     },
     {
@@ -20,15 +20,15 @@
   "routes": [
     {
       "src": "/api/node/(.*)",
-      "dest": "backend1/$1"
+      "dest": "backend1/src/index.js"
     },
     {
       "src": "/api/python/(.*)",
-      "dest": "backend2/$1"
+      "dest": "backend2/main.py"
     },
     {
       "src": "/(.*)",
-      "dest": "frontend/$1"
+      "dest": "frontend/dist/$1"
     }
   ]
 }

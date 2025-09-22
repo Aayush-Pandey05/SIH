@@ -1,0 +1,8 @@
+node_modules
+.env
+.env.local
+.git
+backend1/node_modules
+backend2/__pycache__
+backend2/venv
+*.log
