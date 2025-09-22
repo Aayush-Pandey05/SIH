@@ -1,18 +1,15 @@
 import React from 'react';
 import { assets } from '../assets/assets';
-import { useTranslation, Trans } from 'react-i18next';
 
 const WelcomeSection = ({ visibleElements }) => {
-  const { t } = useTranslation();
-
   const features = [
-    t('welcome.features.item1'),
-    t('welcome.features.item2'),
-    t('welcome.features.item3'),
+    "Personalized Solutions",
+    "Data-Driven Decisions",
+    "Measurable Community Impact",
   ];
 
   return (
-    <section id='feature' className="py-30 px-6 bg-gray-900" data-animate="welcome">
+    <section id='feature'className="py-30 px-6 bg-gray-900" data-animate="welcome">
       <div className="max-w-6xl mx-auto">
         <div
           className={`grid md:grid-cols-2 gap-12 items-center transition-all duration-1000 ease-out ${
@@ -21,30 +18,30 @@ const WelcomeSection = ({ visibleElements }) => {
               : "opacity-0 -translate-x-10"
           }`}
         >
- 
+  
           <div className="space-y-6">
             <div className="space-y-4">
               <h2 className="text-sm font-semibold text-gray-100 uppercase tracking-wider">
-                {t('welcome.tagline')}
+                for a water-secure india
               </h2>
               <p className="text-lg text-gray-400">
-                {t('welcome.problemStatement')}
+                Traditional water management is struggling to keep up. We
+                believe in empowering every citizen with the tools to make a
+                difference.
               </p>
             </div>
             <div className="space-y-4">
               <h2 className="text-4xl md:text-5xl font-bold">
-                {t('welcome.mainTitle')}
+                Empowering Citizens with Water Intelligence
               </h2>
               <p className="text-lg text-gray-400 leading-relaxed">
-                <Trans i18nKey="welcome.description">
-                  JalSetu connects advanced satellite mapping, artificial
-                  intelligence, and augmented reality into a simple platform.
-                  <br />
-                  <br />
-                  Our mission is to make rainwater harvesting accessible,
-                  understandable, and effective for everyone, from individual
-                  homes to entire communities.
-                </Trans>
+                JalSetu connects advanced satellite mapping, artificial
+                intelligence, and augmented reality into a simple platform.
+                <br />
+                <br />
+                Our mission is to make rainwater harvesting accessible,
+                understandable, and effective for everyone, from individual
+                homes to entire communities.
               </p>
             </div>
             <div className="grid grid-cols-1 gap-4">
@@ -64,7 +61,7 @@ const WelcomeSection = ({ visibleElements }) => {
           <div className="relative bg-gradient-to-br from-gray-700 to-gray-800 border border-cyan-500/20 rounded-3xl  flex items-center justify-center group hover:shadow-2xl hover:shadow-cyan-400/10 hover:scale-105 transition-all duration-500 cursor-pointer overflow-hidden">
             <img 
               src={assets.img2}
-              alt={t('welcome.imageAlt')}
+              alt="AI Analysis Dashboard"
               className="w-full  object-cover cursor-pointer rounded-3xl"
             />
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl cursor-pointer"></div>

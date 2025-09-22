@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useTranslation } from "react-i18next";
 import gsap from "gsap";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { MenuIcon, XIcon } from "./IconAL"; 
 import assets from "../assets/assets"; 
 import { useAuthStore } from "../store/useAuthStore";
-import Translation from '../components/Translation'
-
 const InitialAvatar = ({ name, className }) => {
-  const { t } = useTranslation();
   const getInitials = (name) => {
-    if (!name || typeof name !== "string") return t('header.avatar.fallback');
+    if (!name || typeof name !== "string") return "?";
     const parts = name.split(" ");
     return `${parts[0]?.[0] || ""}${parts[1]?.[0] || ""}`.toUpperCase();
   };
@@ -24,8 +20,15 @@ const InitialAvatar = ({ name, className }) => {
   );
 };
 
+const navLinks = [
+  { name: "Home", path: "/" },
+  { name: "Dashboard", path: "/dashboard" },
+  { name: "Government Schemes", path: "/govschemes" },
+  { name: "Map Roof AI", path: "/map-roof" },
+  { name: "Support", path: "/support" },
+];
+
 const HeaderAL = () => {
-  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -41,18 +44,10 @@ const HeaderAL = () => {
   const profileMenuRef = useRef(null);
   const profileButtonRef = useRef(null);
 
-  const navLinks = [
-    { name: t('header.nav.home'), path: "/" },
-    { name: t('header.nav.dashboard'), path: "/dashboard" },
-    { name: t('header.nav.schemes'), path: "/govschemes" },
-    { name: t('header.nav.map'), path: "/map-roof" },
-    { name: t('header.nav.support'), path: "/support" },
-  ];
-
   useEffect(() => {
     const hero = document.getElementById("hero");
     if (!hero) {
-      setIsScrolled(true); // Assuming pages without a hero section have a scrolled header
+      setIsScrolled(false);
       return;
     }
     const observer = new IntersectionObserver(
@@ -141,7 +136,7 @@ const HeaderAL = () => {
           >
             <img
               src={assets.logo}
-              alt={t('header.logo.alt')}
+              alt="JalSetu Logo"
               className="h-8 w-8 rounded-full"
             />
             <span
@@ -149,7 +144,7 @@ const HeaderAL = () => {
                 isScrolled ? "text-black" : "text-white"
               }`}
             >
-              {t('header.brandName')}
+              JalSetu
             </span>
           </div>
 
@@ -168,7 +163,7 @@ const HeaderAL = () => {
 
           {/* Right Section (Buttons) */}
           <div ref={buttonRef} className="flex items-center space-x-4 sm:space-x-3 md:space-x-4 lg:space-x-4 xl:space-x-4">
-            <Translation/>
+            
             <div className="relative">
               <button
                 ref={profileButtonRef}
@@ -179,7 +174,7 @@ const HeaderAL = () => {
               >
                 <InitialAvatar name={authUser?.fullName} className="w-8 h-8" />
                 <span className={`font-semibold hidden text-sm sm:text-base md:text-lg lg:text-xl sm:inline ${ isScrolled ? "text-white" : "text-black"}`}> 
-                  {authUser?.fullName || t('header.profile.buttonFallback')}
+                  {authUser?.fullName || "Profile"}
                 </span>
               </button>
 
@@ -191,10 +186,10 @@ const HeaderAL = () => {
                   <div className="flex flex-col items-center p-4 border-b border-gray-700">
                     <InitialAvatar name={authUser?.fullName} className="w-12 h-12 p-2 border-2 border-slate-600" />
                     <p className="font-semibold text-white text-center mt-2">
-                      {(authUser?.fullName) || t('header.profile.menuUserFallback')}
+                      {authUser?.fullName || "User"}
                     </p>
                     <p className="text-sm text-slate-300 text-center">
-                      {authUser?.email || t('header.profile.menuEmailFallback')}
+                      {authUser?.email || "user@example.com"}
                     </p>
                   </div>
                   <div className="py-2">
@@ -202,7 +197,7 @@ const HeaderAL = () => {
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-red-400 hover:bg-slate-700/50 transition-colors"
                     >
-                      {t('header.profile.logout')}
+                      Logout
                     </button>
                   </div>
                 </div>
@@ -252,7 +247,7 @@ const HeaderAL = () => {
             }}
             className="mt-6 px-6 py-3 rounded-full text-red-400 border border-red-400 hover:bg-red-400 hover:text-white transition-colors"
           >
-            {t('header.profile.logout')}
+            Logout
           </button>
         </div>
       </div>
