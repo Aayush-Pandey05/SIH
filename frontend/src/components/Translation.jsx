@@ -91,12 +91,7 @@ const LanguageSwitcher = ({ closeOtherDropdown }) => {
             >
               ਪੰਜਾਬੀ (Punjabi)
             </li>
-            <li
-              className="px-3 py-2 hover:bg-blue-950 cursor-pointer text-white"
-              onClick={() => handleLanguageChange("as")}
-            >
-              অসমীয়া (Assamese)
-            </li>
+            
           </ul>
         </div>
       )}
