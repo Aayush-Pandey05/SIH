@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -50,7 +51,7 @@ const AlertItem = ({ color, title, subtitle }) => {
     </svg>
   );
   const icon = color === "blue" ? <WaterDropIcon /> : <CheckCircleIcon />;
-  const colorClasses = { blue: "bg-blue-100", green: "bg-green-100" };
+  const colorClasses = { blue: "bg-blue-100", green: "bg-green-100", red: "bg-red-100" };
 
   return (
     <div className="flex items-center space-x-4">
@@ -67,78 +68,84 @@ const AlertItem = ({ color, title, subtitle }) => {
   );
 };
 
-const Alerts = ({ alertsData }) => (
-  <div className="bg-white p-6 rounded-xl shadow-sm space-y-6">
-    <h3 className="text-lg font-semibold text-gray-800">Alerts</h3>
-    {alertsData.length > 0 ? (
-      alertsData.map((alert, index) => <AlertItem key={index} {...alert} />)
-    ) : (
-      <p className="text-gray-500">No active weather alerts.</p>
-    )}
-  </div>
-);
+const Alerts = ({ alertsData }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="bg-white p-6 rounded-xl shadow-sm space-y-6">
+      <h3 className="text-lg font-semibold text-gray-800">{t('dashboard.content.alerts.title')}</h3>
+      {alertsData.length > 0 ? (
+        alertsData.map((alert, index) => <AlertItem key={index} {...alert} />)
+      ) : (
+        <p className="text-gray-500">{t('dashboard.content.alerts.noAlerts')}</p>
+      )}
+    </div>
+  );
+};
 
-const WaterSavedChart = ({ chartData, totalRainfall }) => (
-  <div className="bg-white p-6 rounded-xl shadow-sm">
-    <h3 className="text-lg font-semibold text-gray-800 mb-2">
-      Water Saved Over Time
-    </h3>
-    <div className="flex items-baseline space-x-3 mb-4">
-      <p className="text-4xl font-bold text-gray-900">
-        {totalRainfall}
-        <span className="text-2xl font-medium text-gray-600"> Liters</span>
-      </p>
-      <p className="text-sm text-green-500 font-medium">Last 12 Months</p>
+const WaterSavedChart = ({ chartData, totalRainfall }) => {
+  const { t, i18n } = useTranslation();
+  return (
+    <div className="bg-white p-6 rounded-xl shadow-sm">
+      <h3 className="text-lg font-semibold text-gray-800 mb-2">
+        {t('dashboard.content.chart.title')}
+      </h3>
+      <div className="flex items-baseline space-x-3 mb-4">
+        <p className="text-4xl font-bold text-gray-900">
+          {totalRainfall}
+          <span className="text-2xl font-medium text-gray-600"> {t('dashboard.content.chart.unitLiters')}</span>
+        </p>
+        <p className="text-sm text-green-500 font-medium">{t('dashboard.content.chart.subtitle')}</p>
+      </div>
+      <div className="h-72 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart
+            data={chartData}
+            margin={{ top: 5, right: 20, left: -20, bottom: 5 }}
+          >
+            <defs>
+              <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
+                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <XAxis
+              dataKey="name"
+              tick={{ fontSize: 12, fill: "#6b7280" }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis
+              tick={false}
+              axisLine={false}
+              tickLine={false}
+              domain={["dataMin", "dataMax"]}
+            />
+            <Tooltip
+              contentStyle={{
+                borderRadius: "8px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                border: "1px solid #e5e7eb",
+              }}
+              labelStyle={{ fontWeight: "bold" }}
+              formatter={(value) => [
+                `${value.toLocaleString(i18n.language)} ${t('dashboard.content.chart.unitLiters')}`,
+                t('dashboard.content.chart.tooltipLabel'),
+              ]}
+            />
+            <Area
+              type="monotone"
+              dataKey="value"
+              stroke="#3b82f6"
+              strokeWidth={3}
+              fillOpacity={1}
+              fill="url(#colorValue)"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
     </div>
-    <div className="h-72 w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart
-          data={chartData}
-          margin={{ top: 5, right: 20, left: -20, bottom: 5 }}
-        >
-          <defs>
-            <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
-              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <XAxis
-            dataKey="name"
-            tick={{ fontSize: 12, fill: "#6b7280" }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <YAxis
-            tick={false}
-            axisLine={false}
-            tickLine={false}
-            domain={["dataMin", "dataMax"]}
-          />
-          <Tooltip
-            contentStyle={{
-              borderRadius: "8px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-              border: "1px solid #e5e7eb",
-            }}
-            labelStyle={{ fontWeight: "bold" }}
-            formatter={(value) => [
-              `${value.toLocaleString()} Liters`,
-              "Water Saved",
-            ]}
-          />
-          <Area
-            type="monotone"
-            dataKey="value"
-            stroke="#3b82f6"
-            strokeWidth={3}
-            fillOpacity={1}
-            fill="url(#colorValue)"
-          />
-        </AreaChart>
-      </ResponsiveContainer>
-    </div>
-  </div>
-);
+  );
+};
 
 export default function DashboardContent({
   statCardsData,

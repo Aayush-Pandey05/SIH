@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import HeaderAL from "../components/HeaderAL";
 import HeroSectionAL from "../components/HeroAL";
 import FeaturesSectionAL from "../components/FeatureAL";
@@ -14,45 +15,46 @@ import {
 import assets from "../assets/assets";
 
 const Home2 = () => {
-  
+  const { t } = useTranslation();
   const [visibleElements, setVisibleElements] = useState(new Set());
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 }); 
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   
   const observerRef = useRef();
+
   const features = [
     {
       icon: <GisMapIcon />,
-      title: "GIS Mapping",
-      description: "Visualize and analyze your roof's RWH potential.",
+      title: t('homePage.features.item1.title'),
+      description: t('homePage.features.item1.description'),
     },
     {
       icon: <AiMlIcon />,
-      title: "AI/ML Powered",
-      description: "Get smart recommendations for optimal RWH system design.",
+      title: t('homePage.features.item2.title'),
+      description: t('homePage.features.item2.description'),
     },
     {
       icon: <SmartAlertsIcon />,
-      title: "Smart Alerts",
-      description: "Receive timely notifications for maintenance and rainfall.",
+      title: t('homePage.features.item3.title'),
+      description: t('homePage.features.item3.description'),
     },
     {
       icon: <GovtIntegrationIcon />,
-      title: "Govt. Integration",
-      description: "Access subsidies and comply with regulations.",
+      title: t('homePage.features.item4.title'),
+      description: t('homePage.features.item4.description'),
     },
     {
       icon: <CommunityImpactIcon />,
-      title: "Community Impact",
-      description: "Track your neighborhood's collective water savings.",
+      title: t('homePage.features.item5.title'),
+      description: t('homePage.features.item5.description'),
     },
   ];
 
   const testimonials = [
-    { text: "Water is not just a natural resource; it is our lifeline. Each citizen must take responsibility for conserving every drop and adopting measures like rainwater harvesting", author: "Droupadi Murmu, Current President of India" },
-    { text: "Rainwater harvesting should become a compulsory mission for every home and institution in our country.", author: "Dr. A.P.J. Abdul Kalam, Former President of India" },
-    { text: "Water conservation should become a social responsibility and a mass movement. Every drop saved today secures our tomorrow.", author: "Narendra Modi, Prime Minister of India" },
-    { text: "If we conserve rain, we conserve life. Water harvesting is not an option, it is survival.", author: "Rajendra Singh, Waterman of India, Ramon Magsaysay Awardee" }
+    { text: t('homePage.testimonials.item1.text'), author: t('homePage.testimonials.item1.author') },
+    { text: t('homePage.testimonials.item2.text'), author: t('homePage.testimonials.item2.author') },
+    { text: t('homePage.testimonials.item3.text'), author: t('homePage.testimonials.item3.author') },
+    { text: t('homePage.testimonials.item4.text'), author: t('homePage.testimonials.item4.author') }
   ];
 
   const stepVisuals = [
@@ -83,10 +85,10 @@ const Home2 = () => {
     const animatedElements = document.querySelectorAll("[data-animate]");
     animatedElements.forEach((el) => observerRef.current.observe(el));
     
- 
+  
     window.addEventListener("mousemove", handleMouseMove);
 
-   
+    
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       if (observerRef.current) observerRef.current.disconnect();
