@@ -3,11 +3,13 @@ import gsap from "gsap";
 import { NavLink, useLocation } from "react-router-dom";
 import { MenuIcon, XIcon, ArrowRightIcon } from "./Icons";
 import { assets } from "../assets/assets";
-import { useTranslation } from 'react-i18next';
-import Translation from "./Translation";
 
-
-
+const navLinks = [
+  { name: "Home", path: "/" },
+  { name: "Feature", path: "/#feature" },
+  { name: "About", path: "/about" },
+  { name: "Contact Us", path: "/contactus" },
+];
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,17 +20,6 @@ const Header = () => {
   const logoRef = useRef(null);
   const navRef = useRef(null);
   const buttonRef = useRef(null);
-  const { t } = useTranslation();
-
-
-
-  const navLinks = [
-    { name: t('nav.home'), path: "/" },
-    { name: t('nav.feature'), path: "/#feature" },
-    { name: t('nav.about'), path: "/about" },
-    { name: t('nav.contact'), path: "/contactus" },
-  ];
-
 
   useEffect(() => {
     const hero = document.getElementById("hero");
@@ -140,10 +131,10 @@ const Header = () => {
                 }`}
 
             >
-              {t('nav.title')}
+              JalSetu
             </span>
           </div>
-      
+
           {/* Desktop Nav */}
           <nav ref={navRef} className="hidden md:flex lg:flex items-center gap-3 space-x-6">
             {navLinks.map((link) => {
@@ -173,20 +164,17 @@ const Header = () => {
                 );
               }
             })}
-            
           </nav>
-          
-            
+
           {/* Buttons */}
           <div ref={buttonRef} className="flex items-center space-x-4">
-            <Translation/>
             {/* Join JalSetu */}
             <NavLink
               to="/signup"
               className={`group flex items-center space-x-3 pl-4 pr-1 py-1 font-[font6] rounded-full transition-colors duration-700 ${isScrolled ? "bg-black text-white" : "bg-white text-black"
                 }`}
             >
-              <span className="font-semibold hidden sm:inline">{t('nav.join')}</span>
+              <span className="font-semibold hidden sm:inline">Join JalSetu</span>
               <div
                 className={`p-2 rounded-full transition-colors duration-700 ${isScrolled ? "bg-white text-black" : "bg-black text-white"
                   }`}
@@ -256,7 +244,7 @@ const Header = () => {
             onClick={() => setIsMenuOpen(false)}
             className="mt-6 px-6 py-3 rounded-full bg-white text-black hover:bg-gray-200 transition-colors"
           >
-            {t('nav.join')}
+            Join JalSetu
           </NavLink>
         </div>
       </div>

@@ -1,5 +1,4 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 import { Mail, Phone, BookOpen } from "lucide-react";
 
 const ContactCard = ({ icon, title, description, linkText, linkHref }) => (
@@ -9,48 +8,45 @@ const ContactCard = ({ icon, title, description, linkText, linkHref }) => (
         </div>
         <h3 className="text-xl font-bold text-white mt-2">{title}</h3>
         <p className="text-slate-400 text-sm flex-grow">{description}</p>
-        <a href={linkHref} target='_blank' rel="noopener noreferrer" className="font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-4">
+        <a href={linkHref} target='_blank' className="font-semibold text-cyan-400 hover:text-cyan-300 transition-colors mt-4">
             {linkText}
         </a>
     </div>
 );
 
-const ContactSection = () => {
-  const { t } = useTranslation();
-
-  return (
-    <div className="max-w-5xl mx-auto mt-20 contact-section ">
-      <div className="text-center mb-10">
-        <h2 className="text-3xl font-bold text-white">{t('contactSection.title')}</h2>
-        <p className="text-slate-400 mt-2">
-          {t('contactSection.subtitle')}
-        </p>
-      </div>
-      <div className="grid md:grid-cols-3 gap-8">
-        <ContactCard
-          icon={<Mail size={32} className="text-cyan-400" />}
-          title={t('contactSection.email.title')}
-          description={t('contactSection.email.description')}
-          linkText={t('contactSection.email.linkText')}
-          linkHref="mailto:support@jalsetu.com"
-        />
-        <ContactCard
-          icon={<Phone size={32} className="text-cyan-400" />}
-          title={t('contactSection.phone.title')}
-          description={t('contactSection.phone.description')}
-          linkText={t('contactSection.phone.linkText')}
-          linkHref="tel:+911234567890"
-        />
-        <ContactCard
-          icon={<BookOpen size={32} className="text-cyan-400" />}
-          title={t('contactSection.knowledgeBase.title')}
-          description={t('contactSection.knowledgeBase.description')}
-          linkText={t('contactSection.knowledgeBase.linkText')}
-          linkHref="https://nwm.gov.in/catchtherain"
-        />
-      </div>
+const ContactSection = () => (
+  <div className="max-w-5xl mx-auto mt-20 contact-section ">
+    <div className="text-center mb-10">
+      <h2 className="text-3xl font-bold text-white">Still Need Help?</h2>
+      <p className="text-slate-400 mt-2">
+        If you can't find the answer you're looking for, please don't hesitate
+        to reach out.
+      </p>
     </div>
-  );
-};
+    <div className="grid md:grid-cols-3 gap-8">
+      <ContactCard
+        icon={<Mail size={32} className="text-cyan-400" />}
+        title="Email Us"
+        description="Send us an email and we'll get back to you shortly."
+        linkText="support@jalsetu.com"
+        linkHref="mailto:support@jalsetu.com"
+      />
+      <ContactCard
+        icon={<Phone size={32} className="text-cyan-400" />}
+        title="Call Us"
+        description="Talk to our support team for immediate assistance."
+        linkText="+91 123 456 7890"
+        linkHref="tel:+911234567890"
+      />
+      <ContactCard
+        icon={<BookOpen size={32} className="text-cyan-400" />}
+        title="Knowledge Base"
+        description="Explore our articles and guides for self-service."
+        linkText="Browse Articles"
+        linkHref="https://nwm.gov.in/catchtherain"
+      />
+    </div>
+  </div>
+);
 
 export default ContactSection;

@@ -4,7 +4,7 @@ import { Droplet, TrendingUp, RulerDimensionLine } from "lucide-react";
 import rechargePitImage from "../assets/recharge_pit.png";
 import { useDataStore } from "../store/useDataStore";
 import HeaderAL from "../components/HeaderAL";
-import { useTranslation } from "react-i18next";
+;
 // Helper function to parse dimensions string and calculate volume
 const parseDimensionsAndCalculateVolume = (dimensionsString) => {
   if (!dimensionsString || typeof dimensionsString !== "string") {
@@ -58,7 +58,6 @@ const parseDimensionsAndCalculateVolume = (dimensionsString) => {
 };
 
 const RecommendationCard = ({ data }) => {
-  const { t, i18n } = useTranslation();
   if (!data || !Array.isArray(data) || data.length === 0) return null;
 
   const recommendation = data[0];
@@ -127,7 +126,7 @@ const RecommendationCard = ({ data }) => {
     <div className="m-1">
       <h2 className="text-xl font-bold text-slate-200 flex items-center mb-4">
         <AiIcon className="w-6 h-6 mr-2 text-blue-500" />
-        {t('mapRoofPage.recommendation.title')}
+        AI Recommendation
       </h2>
       <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm h-full">
         <img
@@ -137,29 +136,37 @@ const RecommendationCard = ({ data }) => {
           }`}
           className="w-full object-cover rounded-md mb-4"
         />
-               <h3 className="text-lg font-semibold text-slate-900">
-          {t('mapRoofPage.recommendation.structureTitle')}{" "}
+        <h3 className="text-lg font-semibold text-slate-900">
+          Recommended Structure:{" "}
           <span className="text-blue-600">
-            {recommendation.structure_type || t('mapRoofPage.general.notAvailable')}
+            {recommendation.structure_type || "N/A"}
           </span>
         </h3>
         <p className="text-sm text-slate-600 mt-2 mb-4">
-          {recommendation.ai_recommendation || t('mapRoofPage.recommendation.noRecommendation')}
+          {recommendation.ai_recommendation || "No recommendation available"}
         </p>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm text-slate-700 border-t border-slate-200 pt-4 gap-2">
           <div className="flex items-center">
             <RupeeIcon className="w-4 h-4 mr-2 text-slate-500" />
             <span>
-              {t('mapRoofPage.recommendation.costLabel')} ₹
-              {recommendation.estimated_cost_inr?.toLocaleString(i18n.language) || t('mapRoofPage.general.notAvailable')}
+              Cost: ₹
+              {recommendation.estimated_cost_inr &&
+              typeof recommendation.estimated_cost_inr === "number"
+                ? recommendation.estimated_cost_inr.toLocaleString("en-IN")
+                : "N/A"}
             </span>
           </div>
           <div className="flex items-center">
             <DropletIcon className="w-4 h-4 mr-2 text-slate-500" />
             <span>
-              {t('mapRoofPage.recommendation.capacityLabel')}{" "}
-              {recommendation.structure_capacity_liters?.toLocaleString(i18n.language) || t('mapRoofPage.general.notAvailable')}{" "}
-              {t('mapRoofPage.recommendation.capacityUnit')}
+              Capacity:{" "}
+              {recommendation.structure_capacity_liters &&
+              typeof recommendation.structure_capacity_liters === "number"
+                ? recommendation.structure_capacity_liters.toLocaleString(
+                    "en-IN"
+                  )
+                : "N/A"}{" "}
+              L
             </span>
           </div>
         </div>
@@ -169,19 +176,18 @@ const RecommendationCard = ({ data }) => {
 };
 
 const GroundwaterLevelCard = ({ level }) => {
-  const { t } = useTranslation();
   if (level === undefined || level === null) return null;
 
   return (
     <div className="groundwater-section ">
       <h2 className="text-xl font-bold text-slate-200 flex items-center mb-5">
-        <Droplet className="w-6 h-6 mr-3 text-blue-400" />
-        {t('mapRoofPage.groundwater.title')}
+        <Droplet className="w-6 h-6 mr-3  text-blue-400" />
+        Groundwater Level
       </h2>
       <div className="bg-slate-800/50 backdrop-blur-sm p-6 py-8 rounded-xl border border-slate-700 shadow-lg flex flex-col gap-6">
-        <p className="text-sm text-slate-400">{t('mapRoofPage.groundwater.subtitle')}</p>
+        <p className="text-sm text-slate-400">Current Level in Your Area</p>
         <p className="text-2xl sm:text-3xl font-bold text-blue-400">
-          {level} {t('mapRoofPage.groundwater.unit')}
+          {level} m
         </p>
       </div>
     </div>
@@ -189,28 +195,30 @@ const GroundwaterLevelCard = ({ level }) => {
 };
 
 const DimensionsCard = ({ dimensionsData }) => {
-  const { t } = useTranslation();
-  if (!dimensionsData || (!dimensionsData.volume && !dimensionsData.formattedString))
+  if (
+    !dimensionsData ||
+    (!dimensionsData.volume && !dimensionsData.formattedString)
+  )
     return null;
 
   return (
     <div className="dimension-section ">
       <h2 className="text-xl font-bold text-slate-200 flex items-center mb-5">
-        <RulerDimensionLine className="w-6 h-6 mr-3 text-blue-400" />
-        {t('mapRoofPage.dimensions.title')}
+        <RulerDimensionLine className="w-6 h-6 mr-3  text-blue-400" />
+        Structure Dimensions
       </h2>
       <div className="bg-slate-800/50 backdrop-blur-sm p-6 py-8 rounded-xl border border-slate-700 shadow-lg flex flex-col gap-4">
         <div>
-          <p className="text-sm text-slate-400">{t('mapRoofPage.dimensions.dimensionsLabel')}</p>
+          <p className="text-sm text-slate-400">Dimensions</p>
           <p className="text-lg sm:text-xl font-bold text-blue-400">
             {dimensionsData.formattedString}
           </p>
         </div>
         {dimensionsData.volume && (
           <div>
-            <p className="text-sm text-slate-400">{t('mapRoofPage.dimensions.volumeLabel')}</p>
+            <p className="text-sm text-slate-400">Volume</p>
             <p className="text-2xl sm:text-3xl font-bold text-cyan-400">
-              {dimensionsData.volume} {t('mapRoofPage.dimensions.volumeUnit')}
+              {dimensionsData.volume} m³
             </p>
           </div>
         )}
@@ -220,8 +228,8 @@ const DimensionsCard = ({ dimensionsData }) => {
 };
 
 const RoiPreviewCard = ({ data }) => {
-  const { t, i18n } = useTranslation();
   if (!data || !Array.isArray(data) || data.length === 0) return null;
+
   const roiData = data[0];
 
   const RoiIcon = ({ className }) => (
@@ -247,20 +255,23 @@ const RoiPreviewCard = ({ data }) => {
     <div className="mt-1">
       <h2 className="text-xl font-bold text-slate-200 flex items-center mb-4">
         <TrendingUp className="w-6 h-6 mr-3 text-cyan-400" />
-        {t('mapRoofPage.roi.title')}
+        Your Personalized ROI Preview
       </h2>
       <div className="bg-slate-800/50 backdrop-blur-sm p-6 py-12 rounded-xl border border-slate-700 shadow-lg grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="flex flex-col">
-          <p className="text-sm text-slate-500">{t('mapRoofPage.roi.savingsLabel')}</p>
+          <p className="text-sm text-slate-500">Est. Annual Savings</p>
           <p className="text-2xl sm:text-3xl font-bold text-green-600">
             ₹
-            {roiData.annual_savings_inr?.toLocaleString(i18n.language) || t('mapRoofPage.general.notAvailable')}
+            {roiData.annual_savings_inr &&
+            typeof roiData.annual_savings_inr === "number"
+              ? roiData.annual_savings_inr.toLocaleString("en-IN")
+              : "N/A"}
           </p>
         </div>
         <div className="flex flex-col">
-          <p className="text-sm text-slate-500">{t('mapRoofPage.roi.paybackLabel')}</p>
+          <p className="text-sm text-slate-500">Payback Period</p>
           <p className="text-2xl sm:text-3xl font-bold text-amber-600">
-            {roiData.payback_period_years || t('mapRoofPage.general.notAvailable')} {t('mapRoofPage.roi.paybackUnit')}
+            {roiData.payback_period_years || "N/A"} Years
           </p>
         </div>
       </div>
@@ -270,7 +281,26 @@ const RoiPreviewCard = ({ data }) => {
 
 export default function JalSetuPage() {
   const { fetchUserData, isLoadingData, userData } = useDataStore();
-  const { t } = useTranslation();
+
+
+  const SearchIcon = ({ className }) => (
+    <svg
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+  );
+
   useEffect(() => {
     fetchUserData();
   }, [fetchUserData]);
@@ -283,10 +313,10 @@ export default function JalSetuPage() {
       ? parseDimensionsAndCalculateVolume(userData[0].structure_dimensions)
       : null;
 
- if (isLoadingData) {
+  if (isLoadingData) {
     return (
       <div className="bg-slate-950 min-h-screen flex items-center justify-center">
-        <p className="text-lg text-slate-300">{t('mapRoofPage.loadingText')}</p>
+        <p className="text-lg text-slate-300">Loading Recommendations...</p>
       </div>
     );
   }
@@ -294,39 +324,45 @@ export default function JalSetuPage() {
   return (
     <div>
       <HeaderAL/>
-      <div className="bg-gradient-to-b from-slate-900 via-blue-950 to-black min-h-screen p-4 sm:p-6 md:p-8 font-sans">
+      <div  className="bg-gradient-to-b from-slate-900 via-blue-950 to-black min-h-screen p-4 sm:p-6 md:p-8 font-sans">
         <div id="hero">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-6 pt-20">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-cyan-400">
-                {t('mapRoofPage.pageTitle')}
-              </h1>
-              <p className="mt-2 text-sm sm:text-base text-slate-300 max-w-3xl mx-auto">
-                {t('mapRoofPage.pageSubtitle')}
-              </p>
-            </div>
-            <RoofMapper />
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-6 pt-20">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-cyan-400">
+              Roof Mapping + AI Recommendation
+            </h1>
+            <p className="mt-2 text-sm sm:text-base text-slate-300 max-w-3xl mx-auto">
+              Draw a polygon on the map to mark your roof area. Our AI will
+              recommend the best rainwater harvesting structure for you.
+            </p>
           </div>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
-          <div>
-            <RecommendationCard data={userData} />
+          <RoofMapper />
           </div>
-          <div className="flex flex-col gap-6 h-full">
-            <div className="flex-1">
-              <RoiPreviewCard data={userData} />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+            <div>
+              <RecommendationCard data={userData} />
             </div>
-            <div className="flex-1">
-              <DimensionsCard dimensionsData={dimensionsData} />
-            </div>
-            <div className="flex-1">
-              <GroundwaterLevelCard
-                level={userData?.[0]?.gwl}
-              />
+            <div className="flex flex-col gap-6 h-full">
+              <div className="flex-1">
+                <RoiPreviewCard data={userData} />
+              </div>
+              <div className="flex-1">
+                <DimensionsCard dimensionsData={dimensionsData} />
+              </div>
+              <div className="flex-1">
+                <GroundwaterLevelCard
+                  level={
+                    userData && Array.isArray(userData) && userData.length > 0
+                      ? userData[0].gwl
+                      : null
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
   );
 }
