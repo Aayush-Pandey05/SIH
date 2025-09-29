@@ -1,8 +1,40 @@
-node_modules
-.env
+# Dependencies
+node_modules/
+backend1/node_modules/
+__pycache__/
+backend2/__pycache__/
+*.pyc
+.pytest_cache/
+
+# Environment files (handled via Vercel dashboard)
 .env.local
-.git
-backend1/node_modules
-backend2/__pycache__
-backend2/venv
+.env.development
+
+# Development files
+.vscode/
+.git/
 *.log
+*.tgz
+
+# Frontend build cache
+frontend/.vite/
+frontend/dist/
+
+# Python virtual environments
+venv/
+env/
+.venv/
+backend2/venv/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE files
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/

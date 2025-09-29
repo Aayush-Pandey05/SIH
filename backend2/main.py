@@ -48,6 +48,15 @@ app.add_middleware(
 
 llm = ChatOpenAI(model="gpt-4o", temperature=0)
 
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    return {
+        "status": "healthy",
+        "timestamp": "2025-09-29T00:00:00Z",
+        "service": "backend2-fastapi-ai"
+    }
+
 # Pydantic Models
 class GWLRequest(BaseModel):
     district: str
@@ -904,8 +913,10 @@ if __name__ == "__main__":
     print("Starting Clean Rainwater Harvesting AI Agent server...")
     uvicorn.run(app, host="0.0.0.0", port=5000, log_level="info")
 
-# Add this import at the top if not already there
-from mangum import Mangum
-
-# Add this at the very end of your main.py file
-handler = Mangum(app)
+# Vercel serverless function handler
+try:
+    from mangum import Mangum
+    handler = Mangum(app)
+except ImportError:
+    print("Mangum not available - running in development mode")
+    handler = None

@@ -17,10 +17,25 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin:
+      process.env.NODE_ENV === "production"
+        ? [
+            "https://jal-setu.vercel.app",
+            "https://jal-setu-git-main-aayush-pandey05s-projects.vercel.app",
+          ]
+        : "http://localhost:5173",
     credentials: true,
   })
 );
+
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    service: "backend1-nodejs",
+  });
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/processing", processRoutes);
@@ -28,7 +43,16 @@ app.use("/api/data", dataRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/feedback", feedbackRoutes);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+// For local development
+if (process.env.NODE_ENV !== "production") {
+  app.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}`);
+    connectDb();
+  });
+} else {
+  // Connect to database for production
   connectDb();
-});
+}
+
+// Export for Vercel
+export default app;

@@ -1,0 +1,18 @@
+{
+  "name": "jal-setu",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm ci && npm run build",
+    "dev": "concurrently \"cd frontend && npm run dev\" \"cd backend1 && npm run dev\" \"cd backend2 && python main.py\"",
+    "install-all": "cd frontend && npm install && cd ../backend1 && npm install",
+    "start": "node backend1/src/index.js",
+    "vercel-build": "cd frontend && npm ci && npm run build"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
