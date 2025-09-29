@@ -30,13 +30,5 @@
       "src": "/(.*)",
       "dest": "frontend/dist/$1"
     }
-  ],
-  "functions": {
-    "backend1/src/index.js": {
-      "maxDuration": 30
-    },
-    "backend2/main.py": {
-      "maxDuration": 30
-    }
-  }
+  ]
 }
