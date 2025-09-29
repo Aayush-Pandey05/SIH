@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm ci --force && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "vercel-build": "npm ci --force && vite build"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -46,6 +47,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
     "tw-animate-css": "^1.3.8",
-    "vite": "^7.1.2"
+    "vite": "^5.4.10",
+    "rollup": "^4.21.0"
   }
 }
